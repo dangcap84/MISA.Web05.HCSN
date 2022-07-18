@@ -1,0 +1,80 @@
+.main-button {
+    cursor: pointer;
+    position: relative;
+    border-radius: 3px;
+    border: none;
+    height: 36px;
+    overflow: hidden;
+}
+
+.rectangle-button:hover {
+    background-color: #228aa5;
+}
+
+.rectangle-button:active {
+    background-color: #3ac0e3;
+}
+
+.rectangle-button {
+    background-color: #1aa4c8;
+    color: #fff;
+    width: 110px;
+}
+
+.white-rectangle-button {
+    background-color: #fff;
+    color: #000;
+    width: 110px;
+    border: 1px solid #cdcdcd;
+}
+
+.white-speial-rectangle-button {
+    background-color: #f3f0f0;
+    color: #1aa4c8;
+    border: 1px solid #1aa4c8;
+    width: 110px;
+}
+
+.white-speial-rectangle-button:hover {
+    background-color: #cdcdcd;
+}
+
+.white-speial-rectangle-button:active {
+    background-color: #8f8b8b;
+}
+
+.white-rectangle-button:hover {
+    background-color: #cdcdcd;
+}
+
+.white-rectangle-button:active {
+    background-color: #8f8b8b;
+}
+
+.square-button {
+    width: 36px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .16);
+}
+
+.square-button:hover {
+    background-color: #cdcdcd;
+}
+
+.square-button:active {
+    background-color: #8f8b8b;
+}
+
+.export-button {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -278px -101px;
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+}
+
+.discard-button {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -455px -102px;
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+}

@@ -1,0 +1,192 @@
+.main-menu {
+    background-color: #1c3048;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, .16);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: max-content;
+    float: left;
+    height: 100vh;
+}
+
+.navigator-menu .menu-item_general-column {
+    margin-right: 14px;
+    width: 22px;
+    height: 22px;
+}
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    padding: 16px 16px;
+}
+
+.logo-item-text {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.navigator-item-wrap {
+    display: flex;
+    margin-top: 24px;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 16px;
+    text-decoration: none;
+}
+
+.navigato-item-text {
+    color: #97a0ab;
+    width: 150px;
+}
+
+.icon {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -158px -293px;
+    width: 11px;
+    height: 7px;
+    opacity: 0.5;
+}
+
+.menu-item_general-row {
+    width: 22px;
+    height: 22px;
+}
+
+.logo,
+.navigator-item1,
+.navigator-item2,
+.navigator-item3,
+.navigator-item4,
+.navigator-item5,
+.navigator-item6,
+.navigator-item7 {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.logo {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -20px -680px;
+    width: 36px;
+    height: 36px;
+    opacity: 1;
+}
+
+.navigator-menu {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.navigator-item1 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -21px -153px;
+    width: 22px;
+    height: 22px;
+}
+
+.navigator-item2 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -65px -153px;
+    width: 22px;
+    height: 23px;
+}
+
+.navigator-item3 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -110px -153px;
+    width: 21px;
+    height: 23px;
+}
+
+.navigator-item4 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -153px -153px;
+    width: 22px;
+    height: 22px;
+}
+
+.navigator-item5 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -197px -155px;
+    width: 22px;
+    height: 18px;
+}
+
+.navigator-item6 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -241px -153px;
+    width: 22px;
+    height: 22px;
+}
+
+.navigator-item7 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -329px -153px;
+    width: 22px;
+    height: 22px;
+}
+
+.menu-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    top: 94%;
+    left: -1px;
+    border-top: 2px solid #97a0ab;
+    width: 237px;
+    height: 34px;
+}
+
+.footer-icon {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -285px -417px;
+    width: 22px;
+    height: 22px;
+    margin-right: 11px;
+}
+
+.navigator-item-selected {
+    background: #1aa4c8;
+    margin-left: 4px;
+    height: 40px;
+    margin-right: 4px;
+    border-radius: 4px;
+}
+
+.navigator-item-selected .icon {
+    opacity: 1;
+}
+
+.navigator-item-selected .navigato-item-text {
+    color: #fff;
+}
+
+.navigator-item-selected .menu-item_general-column {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -65px -197px;
+    width: 22px;
+    height: 23px;
+    opacity: 1;
+}
+
+
+/* Menu style */
+
+.menu_style .logo-item-text {
+    display: none;
+}
+
+.menu_style .navigato-item-text {
+    display: none;
+}
+
+.menu_style .icon {
+    display: none;
+}
+
+.menu_style {
+    width: max-content;
+    align-items: center;
+}
+
+.menu_style .navigator-item-wrap {
+    padding: 0 0 0 14px;
+}
+
+.menu_style .menu-footer {
+    display: none;
+}

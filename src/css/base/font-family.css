@@ -1,0 +1,14 @@
+@font-face {
+    font-family: MISA Fonts Regular;
+    src: url(../../assets/font/GoogleSans-Regular.otf);
+}
+
+@font-face {
+    font-family: MISA Fonts Bold;
+    src: url(../../assess/font/GoogleSans-Bold.otf);
+}
+
+@font-face {
+    font-family: MISA Fonts Italic;
+    src: url(../../assets/font/GoogleSans-Italic.otf);
+}

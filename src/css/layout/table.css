@@ -1,0 +1,267 @@
+.content-table-title {
+    box-shadow: 0 3px 10px rgb(0 0 0 / 16%);
+    font-size: 13px;
+    border-spacing: 0;
+    border-radius: 3px 3px 0 0;
+    background-color: #f5f5f5;
+}
+
+.content-table-wrap {
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px;
+    background-color: #f4f7ff;
+    height: 516px;
+}
+
+.content-table {
+    font-size: 13px;
+    color: #001031;
+    background-color: #ffffff;
+    box-shadow: 0 10px 10px rgb(0 0 0 / 16%);
+    border-spacing: 0;
+    display: block;
+    height: 424px;
+    overflow-y: auto;
+}
+
+.table-column-title tr {
+    width: calc( 100% - 1em);
+}
+
+.content-table .table-column-infor,
+.table-column-title {
+    display: table;
+    width: 100%;
+    table-layout: fixed
+}
+
+.table-column-title {
+    font-weight: 700;
+    height: 38px;
+    text-align: left;
+}
+
+.table-column-infor:hover {
+    cursor: pointer;
+    background-color: rgba(26, 164, 200, .2);
+}
+
+.row-selected {
+    background-color: rgba(26, 164, 200, .2);
+}
+
+.table-column-infor:hover .icon-wraper {
+    display: inline-flex;
+}
+
+.table-column-infor>td {
+    height: 38px;
+    border-bottom: 1px solid rgb(228, 222, 222);
+}
+
+.icon-wraper {
+    display: none;
+}
+
+.icon-feature {
+    cursor: pointer;
+    margin: 0 8px;
+}
+
+.icon-feature1 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -156px -68px;
+    width: 16px;
+    height: 16px;
+}
+
+.icon-feature2 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -244px -112px;
+    width: 16px;
+    height: 16px;
+}
+
+
+/* footer-table */
+
+.table-footer {
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
+}
+
+.footer-table {
+    border-radius: 0 0 4px 4px;
+}
+
+.footer-table-text,
+.footer-table-combobox,
+.footer-table-page-navigate {
+    display: flex;
+}
+
+.footer-table-text {
+    padding-left: 10px;
+    cursor: default;
+}
+
+.footer-table-text-number {
+    font-weight: 700;
+    padding: 0 5px;
+}
+
+.footer-table-combobox {
+    position: relative;
+    cursor: pointer;
+}
+
+.footer-table-combobox>input {
+    width: 42px;
+    height: 25px;
+    background-color: #ffffff;
+    border-radius: 2.625px;
+    border: 1px solid #afafaf;
+    padding-left: 13px;
+}
+
+.footer-table-combobox-icon {
+    position: absolute;
+    top: 40%;
+    left: 38%;
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -72px -338px;
+    width: 8px;
+    height: 5px;
+}
+
+.footer-table-page-navigate {
+    font-weight: 500;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.footer-table-prepage-icon {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -29px -246px;
+    width: 7px;
+    height: 12px;
+}
+
+.footer-table-nextpage-icon {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -73px -246px;
+    width: 7px;
+    height: 12px;
+}
+
+.footer-table-page-number {
+    padding: 4px 8px;
+}
+
+.footer-table-page-number:hover {
+    background-color: #f5f5f5;
+}
+
+.active-number {
+    background-color: #f5f5f5;
+    font-weight: 700;
+}
+
+.column-style-fix1 {
+    text-align: center;
+    width: 3%;
+}
+
+.column-style-fix2 {
+    text-align: center;
+    width: 3%;
+}
+
+.column-style-fix3 {
+    width: 11%;
+}
+
+.column-style-fix4 {
+    width: 11%;
+}
+
+.column-style-fix5 {
+    width: 11%;
+}
+
+.column-style-fix6 {
+    width: 13%;
+}
+
+.column-style-fix7 {
+    text-align: right;
+    width: 9%;
+}
+
+.column-style-fix8 {
+    text-align: right;
+    width: 9%;
+}
+
+.column-style-fix9 {
+    text-align: right;
+    width: 10%;
+}
+
+.column-style-fix10 {
+    text-align: right;
+    width: 10%;
+}
+
+.column-style-fix11 {
+    text-align: center;
+}
+
+.column-style-fix12 {
+    width: 13%;
+    font-weight: 500;
+}
+
+.column-style-fix13 {
+    width: 6%;
+}
+
+.column-style-fix14 {
+    width: 22%;
+}
+
+.column-style-fix15 {
+    width: 11.3%;
+}
+
+
+/* Text format */
+
+.tabletext-wrap {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+
+/* Scroll bar custom */
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 2px;
+    border-radius: 1px;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #cdd3d6;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

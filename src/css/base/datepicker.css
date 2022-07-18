@@ -1,0 +1,55 @@
+.custom-select {
+    cursor: pointer;
+    color: var(--c-text-accent);
+    margin: 0;
+    display: inline-block;
+}
+
+
+/* Date piker css */
+
+.dp__button {
+    display: none !important;
+}
+
+.dp__input_icon {
+    top: 28% !important;
+    left: 88% !important;
+}
+
+.dp__main {
+    margin-right: 16px;
+    width: 229px;
+    border-radius: 2.5px;
+    border: 1px solid #afafaf;
+}
+
+.dp__clear_icon {
+    display: none !important;
+}
+
+.dp__input_icon_pad {
+    padding-left: 10px !important;
+}
+
+.dp__input {
+    border-radius: 2.5px !important;
+    font-family: sans-serif !important;
+    font-size: 13px !important;
+    border: none !important;
+    padding: 6px 12px;
+}
+
+.dp__select {
+    color: #1aa4c8;
+}
+
+.dp__range_end,
+.dp__range_start,
+.dp__active_date {
+    background: #1aa4c8;
+}
+
+.dp__today {
+    border: 1px solid #1aa4c8;
+}

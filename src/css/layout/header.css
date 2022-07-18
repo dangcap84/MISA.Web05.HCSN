@@ -1,0 +1,83 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px 16px 10px 16px
+}
+
+.header-title {
+    font-weight: 700;
+}
+
+.header-title-menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 412px;
+}
+
+.title-menu-item1,
+.title-menu-item2 {
+    font-weight: 700;
+}
+
+.title-menu-item2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(26, 164, 200, .2);
+    border-radius: 3px;
+    width: 112px;
+    height: 30px;
+    padding: 0 10px;
+}
+
+.title-menu-sub-item3,
+.title-menu-item3,
+.title-menu-item4,
+.title-menu-item5,
+.title-menu-item6,
+.title-menu-item7 {
+    cursor: pointer;
+}
+
+.title-menu-sub-item3 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -204px -332px;
+    width: 8px;
+    height: 16px;
+}
+
+.title-menu-item3 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -332px -109px;
+    width: 16px;
+    height: 20px;
+}
+
+.title-menu-item4 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -199px -23px;
+    width: 18px;
+    height: 18px;
+}
+
+.title-menu-item5 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -67px -67px;
+    width: 18px;
+    height: 18px;
+}
+
+.title-menu-item6 {
+    position: relative;
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -23px -23px;
+    width: 18px;
+    height: 18px;
+}
+
+.title-menu-item7 {
+    position: absolute;
+    left: 20px;
+    top: 7px;
+    background: url(../../assess/icon/qlts-icon.png)no-repeat -72px -338px;
+    width: 8px;
+    height: 5px;
+}

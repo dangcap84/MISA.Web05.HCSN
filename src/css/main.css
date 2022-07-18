@@ -1,0 +1,92 @@
+@import url(./layout/modal.css);
+@import url(./layout/table.css);
+@import url(./base/input.css);
+@import url(./base/button.css);
+@import url(./base/popup.css);
+@import url(./base/toast.css);
+@import url(./base/combobox.css);
+body {
+    font-family: sans-serif;
+    color: #001031;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.display-none {
+    display: none;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.hiden {
+    visibility: hidden;
+}
+
+.container {
+    display: flex;
+    background-color: #f4f7ff;
+    width: 100%;
+    height: 100vh;
+}
+
+.container-wrap {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.ishover {
+    background-color: #C7E0F5;
+}
+
+.loading {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.loading-icon {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.not-valid {
+    margin-bottom: 0;
+    border: 1px solid rgb(240, 73, 73) !important;
+}

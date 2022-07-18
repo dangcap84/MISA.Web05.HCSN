@@ -1,0 +1,23 @@
+.content {
+    background-color: #f4f7ff;
+}
+
+.content-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background-color: #f4f7ff
+}
+
+.content-menu-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 198px;
+}
+
+.content-menu-input {
+    display: flex;
+    align-items: center;
+}
