@@ -9,6 +9,9 @@ import HPostMessage from "@/components/base/HPostMessage.vue";
 import HPutMessage from "@/components/base/HPutMessage.vue";
 import HDeleteMessage from "@/components/base/HDeleteMessage.vue";
 import HErrorMessage from "@/components/base/HErrorMessage.vue";
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
+import ContextMenu from '@imengyu/vue3-context-menu';
+import vClickOutside from "click-outside-vue3"
 
 
 const misaroutes = [
@@ -29,6 +32,8 @@ const router = createRouter({
 // 5. Create and mount the root instance.
 const app = createApp(App);
 app.use(router).mount('#app');
+app.use(ContextMenu);
+app.use(vClickOutside);
 app.component("HLoading", HLoading);
 app.component("HToastMessage", HToastMessage);
 app.component("HPutMessage", HPutMessage);

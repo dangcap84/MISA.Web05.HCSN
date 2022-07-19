@@ -33,13 +33,12 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <!-- <input id="txtdepartmentCode" v-model="fixedAsset.departmentCode" propName="departmentID" type="text" class="input modal-input_style-left" placeholder="Nhập mã bộ phận" :class="{'not-valid': inValid.validDepartmentCode}"> -->
                         <div class="combobox combobox-modal-style">
                             <div class="combobox-selected " :class="{'not-valid': inValid.validDepartmentCode,'onfocus': isShowListDepartments}">
                                 <input @keyup.enter="selectDepartmentsByEnter(departments)" @keyup.up="arrowDepartmentsUp(departments)" @keyup.down="arrowDepartmentsDown(departments)" autocomplete="off" type="text" v-model="fixedAsset.departmentCode" class="selected-item" placeholder="Nhập mã bộ phận" @focusin="departmentsComboboxOnFocus">
                                 <div class="input-icon3"></div>
                                 <div class="combobox-list" :class="{'visible': isShowListDepartments}">
-                                    <div v-for="(dep,index) in departments" :key="dep.departmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" :value="dep.departmentId" @click="listDepartmentsOnClick(dep)">{{dep.departmentCode}} -- {{dep.departmentName}}</div>
+                                    <div v-for="(dep,index) in departments" :key="dep.departmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" :value="dep.departmentId" @click="listDepartmentsOnClick(dep)">{{dep.departmentCode}}{{dep.departmentName}}</div>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +64,7 @@
                                 <input id="cbxTypeOf" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp(fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAsset.fixedAssetCategoryCode" class="selected-item" placeholder="Nhập mã bộ phận" @focusin="fixedAssetCategoriesComboboxOnFocus">
                                 <div class="input-icon3"></div>
                                 <div class="combobox-list" :class="{'visible': isShowListCategoriesAssets}" ref="comboboxMenu">
-                                    <div v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" :value="cat.fixedAssetCategoryId" @click="listfixedAssetCategoriesOnClick(cat)">{{cat.fixedAssetCategoryCode}}--{{cat.fixedAssetCategoryName}}</div>
+                                    <div v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" :value="cat.fixedAssetCategoryId" @click="listfixedAssetCategoriesOnClick(cat)">{{cat.fixedAssetCategoryCode}}{{cat.fixedAssetCategoryName}}</div>
                                 </div>
                             </div>
                         </div>
@@ -413,7 +412,7 @@ export default {
                 //Gán giá trị mặc định số năm sử dụng của loại tài sản
                 me.valueLifeTime = cat[this.arrowCategoriesCounter].lifeTime;
                 //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
-                var num = (1 / cat[this.arrowCategoriesCounter].lifeTime) * 100;
+                var num = (1 / cat[this.arrowCategoriesCounter].lifeTime);
                 //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
                 me.valueDepreciationRate = num.toFixed(2);
                 //Ẩn danh sách
@@ -572,7 +571,7 @@ export default {
                 me.fixedAsset.fixedAssetCategoryName = cat.fixedAssetCategoryName;
                 me.valueLifeTime = cat.lifeTime;
                 //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
-                num = (1 / cat.lifeTime) * 100;
+                num = (1 / cat.lifeTime);
                 //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
                 me.valueDepreciationRate = num.toFixed(2);
                 //Ẩn list
@@ -782,14 +781,14 @@ export default {
             //Ép lại kiểu cho value
             value = parseFloat(value);
             // So sánh giá trị với max
-            this.fixedAsset.depreciationRate = value/100;
+            this.fixedAsset.depreciationRate = value.toFixed(2);
         },
 
         valueCost(p) {
             //convert p sang dạng int
             this.fixedAsset.cost = this.convertIntNumber(p);
             //Công thức tính giá trị hao mòn năm nguyên giá nhân với tỉ lệ hao mòn
-            var total = this.fixedAsset.cost * this.fixedAsset.depreciationRate;
+            var total = this.fixedAsset.cost * this.fixedAsset.depreciationRate / 100;
             this.valueDepreciationValueYear = Math.floor(total);
         },
 
@@ -818,7 +817,7 @@ export default {
         me.valueDepreciationValueYear = me.fixedAsset.depreciationValueYear;
         me.valueQuantity = me.fixedAsset.quantity;
         me.valueLifeTime = me.fixedAsset.lifeTime;
-        me.valueDepreciationRate = me.fixedAsset.depreciationRate * 100;
+        me.valueDepreciationRate = me.fixedAsset.depreciationRate;
         //Đặt giá trị mặc định cho ngày mua và ngày bắt đầu sử dụng
         me.fixedAsset.purchaseDate = new Date();
         me.fixedAsset.productionDate = new Date();

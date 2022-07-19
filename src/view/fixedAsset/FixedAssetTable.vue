@@ -8,7 +8,7 @@
         <div class="combobox">
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
-                <input @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp(fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAssetCategoriesDefaulName" class="selected-item" @focusin="fixedAssetCategoriesComboboxOnFocus" @focusout="fixedAssetCategoriesOutFocus">
+                <input v-click-outside="onClickOutsideCategoriesCombobox" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp(fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAssetCategoriesDefaulName" class="selected-item" @focusin="fixedAssetCategoriesComboboxOnFocus">
                 <div class="input-icon3"></div>
                 <div class="combobox-list" :class="{'visible': isShowListCategoriesAssets}">
                     <div v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" @click="listFixedAssetCategoriesOnClick(cat.fixedAssetCategoryName)">{{cat.fixedAssetCategoryName}}</div>
@@ -18,7 +18,7 @@
         <div class="combobox">
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
-                <input @keyup.enter="selectDepartmentsByEnter(departments)" @keyup.up="arrowDepartmentsUp(departments)" @keyup.down="arrowDepartmentsDown(departments)" autocomplete="off" type="text" v-model="departmentDefaulName" class="selected-item" @focusin="departmentsComboboxOnFocus">
+                <input v-click-outside="onClickOutsideDepartmentsCombobox" @keyup.enter="selectDepartmentsByEnter(departments)" @keydown.tab="tabOutDepartmentsCombobox" @keyup.up="arrowDepartmentsUp(departments)" @keyup.down="arrowDepartmentsDown(departments)" autocomplete="off" type="text" v-model="departmentDefaulName" class="selected-item" @focusin="departmentsComboboxOnFocus">
                 <div class="input-icon3"></div>
                 <div class="combobox-list" :class="{'visible': isShowListDepartments}">
                     <div v-for="(dep,index) in departments" :key="dep.DepartmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" @click="listDepartmentsOnClick(dep.departmentName)">{{dep.departmentName}}</div>
@@ -55,7 +55,7 @@
         </tr>
     </table>
     <table id="tblListEmployees" class="content-table">
-        <tr v-for="(fixedAsset,index) in fixedAssets" :key="fixedAsset.fixedAssetId" class="table-column-infor" @dblclick="rowOnDbClick(fixedAsset)" :class="{'row-selected': checkboxArray[index]}">
+        <tr v-for="(fixedAsset,index) in fixedAssets" :key="fixedAsset.fixedAssetId" class="table-column-infor" @contextmenu="onContextMenu($event,fixedAsset)" @dblclick="rowOnDbClick(fixedAsset)" :class="{'row-selected': checkboxArray[index]}">
             <!-- v-model="checked" -->
             <td class="column-style-fix1"><input class="input-checkbox" v-model="checkboxArray[index]" type="checkbox" @change="selectedRow(fixedAsset, index)"></td>
             <td class="column-style-fix2">{{recordStart+index}}</td>
@@ -81,7 +81,7 @@
             <td class="column-style-fix10">{{formatMoney(fixedAsset.cost - (fixedAsset.lifeTime * fixedAsset.depreciationValueYear))}}</td>
             <td class="column-style-fix11">
                 <div class="icon-wraper">
-                    <div id="addBtn" class="icon-feature icon-feature1" @click="addFixedAssetOnClick"></div>
+                    <div id="addBtn" class="icon-feature icon-feature1" @click="rowOnDbClick(fixedAsset)"></div>
                     <div class="icon-feature icon-feature2" @click="copyAssetOnClick(fixedAsset)"></div>
                 </div>
             </td>
@@ -115,14 +115,13 @@
             </td>
             <td class="column-style-fix15"></td>
             <td class="column-style-fix7">{{formatMoney(this.totalQuantity)}}</td>
-            <td class="column-style-fix8" title="Tổng tiền = tổng nguyên giá * tổng số lượng">{{formatMoney(this.totalPrice)}}</td>
+            <td class="column-style-fix8">{{formatMoney(this.totalPrice)}}</td>
             <td class="column-style-fix9">{{formatMoney(this.totalAccumulated)}}</td>
             <td class="column-style-fix10">{{formatMoney(this.totalRemain)}}</td>
             <td class="column-style-fix11"></td>
         </tr>
     </table>
 </div>
-<!-- Modal -->
 <FixedAssetDetailVue v-if="isshowModal" :fixedAssetSelected="fixedAssetSelected" :editMode="editMode" @closeModal="showModal" @showSuccessMessage="successMessage" @resetTable="resetTable" />
 <HLoading v-if="isLoading" />
 <HToastMessage v-if="isShowSuccess" />
@@ -130,20 +129,27 @@
 </template>
 
 <style lang="css">
-/* Write your own CSS for pagination */
+/* Css của paginate */
 @import url(../../css/base/pagination.css);
+/* Css của context menu */
+@import url(../../css/base/contextmenu.css);
 </style>
 
 <script>
+//Sử dụng axioss
 import axios from "axios";
+//Sử dụng components view FixedAssetDetail
 import FixedAssetDetailVue from "./FixedAssetDetail.vue";
+//Sử dụng thư viện paginate
 import Paginate from "vuejs-paginate-next";
+//Loại bỏ context menu mặc định của gg
+
 
 export default {
     name: "FixedAssetTable",
     components: {
         FixedAssetDetailVue,
-        paginate: Paginate
+        paginate: Paginate,
     },
 
     data() {
@@ -213,6 +219,7 @@ export default {
 
             //tạo mảng đối tượng employees
             fixedAssets: [],
+            assets: [],
 
             //Tạo mảng đối tượng assetCategorys
             fixedAssetCategories: [],
@@ -265,6 +272,39 @@ export default {
         },
 
         /**
+         * Chức năng context menu cho từng tài sản
+         * NDHoang (19/07/2022)
+         */
+        onContextMenu(e, fixedAsset) {
+            e.preventDefault();
+            //Hiện menu
+            this.$contextmenu({
+                x: e.x,
+                y: e.y,
+                items: [
+                    {
+                        label: "Xóa",
+                        onClick: () => {
+                            this.deleteFixedByContextMenu(fixedAsset);
+                        },
+                    },
+                    {
+                        label: "Sửa",
+                        onClick: () => {
+                            this.rowOnDbClick(fixedAsset);
+                        },
+                    },
+                    {
+                        label: "Nhân bản",
+                        onClick: () => {
+                            this.copyAssetOnClick(fixedAsset);
+                        },
+                    },
+                ]
+            });
+        },
+
+        /**
          * Reset Table
          * NDHoang (04/07/2022)
          */
@@ -294,12 +334,10 @@ export default {
                         for (const asset of me.fixedAssets) {
                             me.totalPrice += asset.cost;
                             me.totalQuantity += asset.quantity;
-                            me.totalAccumulated += (asset.depreciationRate) * asset.lifeTime;
-                            me.totalRemain += (asset.cost - ((asset.depreciationRate) * asset.lifeTime));
+                            me.totalAccumulated += asset.depreciationValueYear * asset.lifeTime;
+                            me.totalRemain += asset.cost - (asset.depreciationValueYear * asset.lifeTime);
                             //Tạo mã nhân viên mới
-                            var numStr = asset.fixedAssetCode.slice(3, 7);
-                            numStr = Number(numStr)
-                            if (numStr + 1 > me.max) me.max = numStr + 1;
+                            me.getNewCode();
                         }
                     })
                     .catch(function (res) {
@@ -308,6 +346,19 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        getNewCode() {
+            var me = this;
+            axios.get("http://localhost:64168/api/v1/FixedAssets")
+                .then(function (res) {
+                    me.assets = res.data;
+                    for (const asset of me.assets) {
+                        var numStr = asset.fixedAssetCode.slice(3, 7);
+                        numStr = Number(numStr)
+                        if (numStr + 1 > me.max) me.max = numStr + 1;
+                    }
+                });
         },
 
         /**
@@ -350,8 +401,18 @@ export default {
             }
         },
 
+        //Sự kiên click ra ngoài combobox
+        onClickOutsideCategoriesCombobox () {
+            try {
+                var me = this;
+                me.isShowListCategoriesAssets = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         /**
-         * Sự kiện của các phím sử dụng trong combobox category
+         * Sự kiện của các phím sử dụng trong combobox department
          * NDHoang(22/06/2022)
          */
         // Dùng phím mũi tên xuống để di chuyển lựa chọn
@@ -384,6 +445,25 @@ export default {
                 var me = this;
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        //Sự kiện tab ra ngoài combobox
+        tabOutDepartmentsCombobox() {
+            try {
+                var me = this;
+                me.isShowListDepartments = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Sự kiên click ra ngoài combobox
+        onClickOutsideDepartmentsCombobox () {
+            try {
+                var me = this;
+                me.isShowListDepartments = me.isHide;
             } catch (error) {
                 console.log(error);
             }
@@ -453,9 +533,27 @@ export default {
                         });
                 }
                 //Làm rỗng mảng xóa
-                this.idSelected = [];
-                this.selectedAllRow();
-                this.hideNotice(me.isHide);
+                me.idSelected = [];
+                //Bỏ chọn row
+                me.checkAll = false;
+                me.selectedAllRow();
+                me.hideNotice(me.isHide);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //
+        deleteFixedByContextMenu(fixedAsset){
+            try {
+                var me = this;
+                //Đổi trạng thái của editMode
+                me.idSelected = [];
+                me.editMode = me.deleteMode;
+                me.fixedAssetSelected = fixedAsset;
+                me.idSelected.push(fixedAsset.fixedAssetId);
+                me.deleteOnClick();
+                
             } catch (error) {
                 console.log(error);
             }
@@ -646,10 +744,10 @@ export default {
                 //Bôi đậm dòng được checkc
                 for (let i = 0; i < me.fixedAssets.length; i++) {
                     me.checkboxArray[i] = me.checkAll;
-                    if(me.idSelected.length == 0)
-                    me.idSelected.push(me.fixedAssets[i].fixedAssetId);
+                    if (me.checkAll)
+                        me.idSelected.push(me.fixedAssets[i].fixedAssetId);
                     else
-                    me.idSelected.pop(me.fixedAssets[i].fixedAssetId);
+                        me.idSelected.pop();
                 }
             } catch (error) {
                 console.log(error);
@@ -680,9 +778,7 @@ export default {
                         me.totalAccumulated += (asset.depreciationRate * asset.lifeTime);
                         me.totalRemain += asset.cost - (asset.depreciationRate * asset.lifeTime);
                         //Tạo mã nhân viên mới
-                        var numStr = asset.fixedAssetCode.slice(3, 7);
-                        numStr = Number(numStr)
-                        if (numStr + 1 > me.max) me.max = numStr + 1;
+                        me.getNewCode();
                     }
                 })
                 .catch(function (res) {

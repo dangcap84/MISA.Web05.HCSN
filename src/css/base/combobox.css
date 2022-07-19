@@ -52,6 +52,9 @@
     width: 210px;
     visibility: hidden;
     z-index: 3;
+    height: 142px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .list-page-number-style {
@@ -67,6 +70,7 @@
     box-shadow: 0px -1px 7px 1px rgb(0 0 0 / 16%);
     width: 132%;
     border-radius: 4px 4px 0 0;
+    height: auto;
 }
 
 .combobox-items {
