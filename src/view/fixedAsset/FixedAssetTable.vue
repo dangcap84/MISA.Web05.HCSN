@@ -8,27 +8,29 @@
         <div class="combobox">
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
-                <input v-click-outside="onClickOutsideCategoriesCombobox" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp(fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAssetCategoriesDefaulName" class="selected-item" @focusin="fixedAssetCategoriesComboboxOnFocus">
+                <input v-click-outside="onClickOutsideCategoriesCombobox" placeholder="Loại tài sản" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp($event,fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAssetCategoriesDefaulName" class="selected-item" @focusin="fixedAssetCategoriesComboboxOnFocus">
                 <div class="input-icon3"></div>
-                <div class="combobox-list" :class="{'visible': isShowListCategoriesAssets}">
-                    <div v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" @click="listFixedAssetCategoriesOnClick(cat.fixedAssetCategoryName)">{{cat.fixedAssetCategoryName}}</div>
+                <div ref="comboboxListCategories" class="combobox-list" :class="{'visible': isShowListCategoriesAssets}">
+                    <div ref="optionsListCategories" v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items tabletext-wrap" @click="listFixedAssetCategoriesOnClick(cat.fixedAssetCategoryName)">{{cat.fixedAssetCategoryName}}</div>
                 </div>
             </div>
         </div>
         <div class="combobox">
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
-                <input v-click-outside="onClickOutsideDepartmentsCombobox" @keyup.enter="selectDepartmentsByEnter(departments)" @keydown.tab="tabOutDepartmentsCombobox" @keyup.up="arrowDepartmentsUp(departments)" @keyup.down="arrowDepartmentsDown(departments)" autocomplete="off" type="text" v-model="departmentDefaulName" class="selected-item" @focusin="departmentsComboboxOnFocus">
+                <input v-click-outside="onClickOutsideDepartmentsCombobox" placeholder="Bộ phận sử dụng" @keyup.enter="selectDepartmentsByEnter(departments)" @keydown.tab="tabOutDepartmentsCombobox" @keyup.up="arrowDepartmentsUp(departments)" @keyup.down="arrowDepartmentsDown(departments)" autocomplete="off" type="text" v-model="departmentDefaulName" class="selected-item" @focusin="departmentsComboboxOnFocus">
                 <div class="input-icon3"></div>
-                <div class="combobox-list" :class="{'visible': isShowListDepartments}">
-                    <div v-for="(dep,index) in departments" :key="dep.DepartmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" @click="listDepartmentsOnClick(dep.departmentName)">{{dep.departmentName}}</div>
+                <div ref="comboboxDepartments" class="combobox-list" :class="{'visible': isShowListDepartments}">
+                    <div ref="optionsDepartments" v-for="(dep,index) in departments" :key="dep.DepartmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" @click="listDepartmentsOnClick(dep.departmentName)">
+                    <div class="tabletext-wrap">{{dep.departmentName}}</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="content-menu-button">
         <button id="btnAdd" class="main-button rectangle-button" @click="addFixedAssetOnClick">
-            +Thêm tài sản
+            + Thêm tài sản
         </button>
         <button class="export-button main-button square-button">
         </button>
@@ -77,8 +79,8 @@
             </td>
             <td class="column-style-fix7">{{fixedAsset.quantity}}</td>
             <td class="column-style-fix8">{{formatMoney(fixedAsset.cost)}}</td>
-            <td class="column-style-fix9">{{formatMoney((fixedAsset.lifeTime * fixedAsset.depreciationValueYear))}}</td>
-            <td class="column-style-fix10">{{formatMoney(fixedAsset.cost - (fixedAsset.lifeTime * fixedAsset.depreciationValueYear))}}</td>
+            <td class="column-style-fix9">{{formatMoney(fixedAsset.cost * fixedAsset.depreciationRate)}}</td>
+            <td class="column-style-fix10">{{formatMoney(fixedAsset.cost - fixedAsset.cost * fixedAsset.depreciationRate)}}</td>
             <td class="column-style-fix11">
                 <div class="icon-wraper">
                     <div id="addBtn" class="icon-feature icon-feature1" @click="rowOnDbClick(fixedAsset)"></div>
@@ -99,7 +101,7 @@
             <td class="column-style-fix13">
                 <div class="combobox list-page-number-style">
                     <div class="combobox-selected">
-                        <input autocomplete="off" title="Số ban ghi trên một trang" type="text" v-model="defaultPageSize" class="selected-item" @focusin="totalPageSizeOnFocus">
+                        <input autocomplete="off" title="Số ban ghi trên một trang" type="text" v-model="defaultPageSize" class="selected-item" @focusin="totalPageSizeOnFocus" v-click-outside="onClickOutsidePageNumber">
                         <div class="input-icon3"></div>
                         <div class="combobox-list" :class="{'visible': isShowListPageSize}">
                             <div class="combobox-items" @click="listTotalRecodsOnClick(pageSize1)">{{pageSize1}}</div>
@@ -144,7 +146,6 @@ import FixedAssetDetailVue from "./FixedAssetDetail.vue";
 import Paginate from "vuejs-paginate-next";
 //Loại bỏ context menu mặc định của gg
 
-
 export default {
     name: "FixedAssetTable",
     components: {
@@ -156,6 +157,10 @@ export default {
         return {
             //Khai báo mảng checkboxArray
             checkboxArray: [],
+
+            //Tính toán các giá trị từng dòng
+            accumulated: 0,
+            remain: 0,
 
             //Tính toán các giá trị tổng số
             totalQuantity: 0,
@@ -234,8 +239,8 @@ export default {
             idSelected: [],
 
             //tạo default name
-            departmentDefaulName: "Bộ phận sử dụng",
-            fixedAssetCategoriesDefaulName: "Loại tài sản",
+            departmentDefaulName: '',
+            fixedAssetCategoriesDefaulName: '',
             nullValue: '',
 
             //Biến lưu giá trị mã nhân viên mới
@@ -281,17 +286,22 @@ export default {
             this.$contextmenu({
                 x: e.x,
                 y: e.y,
-                items: [
-                    {
-                        label: "Xóa",
+                items: [{
+                        label: "Thêm",
                         onClick: () => {
-                            this.deleteFixedByContextMenu(fixedAsset);
+                            this.addFixedAssetOnClick();
                         },
                     },
                     {
                         label: "Sửa",
                         onClick: () => {
                             this.rowOnDbClick(fixedAsset);
+                        },
+                    },
+                    {
+                        label: "Xóa",
+                        onClick: () => {
+                            this.deleteFixedByContextMenu(fixedAsset);
                         },
                     },
                     {
@@ -332,10 +342,12 @@ export default {
                         me.totalRemain = 0;
                         //Tính toán lại các giá trị
                         for (const asset of me.fixedAssets) {
+                            asset.depreciationRate = (1 / asset.lifeTime).toFixed(2);
+                            asset.depreciationValueYear = asset.depreciationRate * asset.cost;
                             me.totalPrice += asset.cost;
                             me.totalQuantity += asset.quantity;
-                            me.totalAccumulated += asset.depreciationValueYear * asset.lifeTime;
-                            me.totalRemain += asset.cost - (asset.depreciationValueYear * asset.lifeTime);
+                            me.totalAccumulated +=asset.depreciationValueYear
+                            me.totalRemain += asset.cost - asset.depreciationValueYear;
                             //Tạo mã nhân viên mới
                             me.getNewCode();
                         }
@@ -374,21 +386,31 @@ export default {
                 if (me.arrowCategoriesCounter < me.fixedAssetCategories.length - 1)
                     me.arrowCategoriesCounter++;
                 me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                me.scrollListCategoriesTo();
             } catch (error) {
                 console.log(error);
             }
         },
         // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowListCategoriesUp(cat) {
+        arrowListCategoriesUp(e,cat) {
             try {
+                e.preventDefault();
                 var me = this
                 me.isShowListCategoriesAssets = me.isShow;
                 if (me.arrowCategoriesCounter > 0)
                     me.arrowCategoriesCounter--;
                 me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                me.scrollListCategoriesTo();
             } catch (error) {
                 console.log();
             }
+        },
+
+        //ScrollTo
+        scrollListCategoriesTo() {
+            const itemHeight = this.$refs.optionsListCategories[this.arrowCategoriesCounter].clientHeight;
+            console.log(itemHeight);
+            this.$refs.comboboxListCategories.scrollTop = itemHeight * this.arrowCategoriesCounter - this.$refs.comboboxListCategories.clientHeight / 2;
         },
         //Chọn bằng enter
         selectListCategoriesByEnter() {
@@ -402,7 +424,7 @@ export default {
         },
 
         //Sự kiên click ra ngoài combobox
-        onClickOutsideCategoriesCombobox () {
+        onClickOutsideCategoriesCombobox() {
             try {
                 var me = this;
                 me.isShowListCategoriesAssets = me.isHide;
@@ -420,9 +442,10 @@ export default {
             try {
                 var me = this
                 me.isShowListDepartments = me.isShow;
-                if (me.arrowDepartmentsCounter < me.fixedAssetCategories.length - 1)
+                if (me.arrowDepartmentsCounter < me.departments.length - 1)
                     me.arrowDepartmentsCounter++;
                 me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
+                me.scrollDepartmentsTo();
             } catch (error) {
                 console.log(error);
             }
@@ -435,10 +458,18 @@ export default {
                 if (me.arrowDepartmentsCounter > 0)
                     me.arrowDepartmentsCounter--;
                 me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
+                me.scrollDepartmentsTo();
             } catch (error) {
                 console.log(error);
             }
         },
+
+        //Scroll to
+        scrollDepartmentsTo() {
+            const itemHeight = this.$refs.optionsDepartments[this.arrowDepartmentsCounter].clientHeight;
+            this.$refs.comboboxDepartments.scrollTop = itemHeight * this.arrowDepartmentsCounter - this.$refs.comboboxDepartments.clientHeight / 2;
+        },
+
         //Chọn bằng enter
         selectDepartmentsByEnter() {
             try {
@@ -454,16 +485,27 @@ export default {
             try {
                 var me = this;
                 me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isHide;
             } catch (error) {
                 console.log(error);
             }
         },
 
         //Sự kiên click ra ngoài combobox
-        onClickOutsideDepartmentsCombobox () {
+        onClickOutsideDepartmentsCombobox() {
             try {
                 var me = this;
                 me.isShowListDepartments = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Sự kiên click ra ngoài combobox page number
+        onClickOutsidePageNumber() {
+            try {
+                var me = this;
+                me.isShowListPageSize = me.isHide;
             } catch (error) {
                 console.log(error);
             }
@@ -544,7 +586,7 @@ export default {
         },
 
         //
-        deleteFixedByContextMenu(fixedAsset){
+        deleteFixedByContextMenu(fixedAsset) {
             try {
                 var me = this;
                 //Đổi trạng thái của editMode
@@ -553,7 +595,7 @@ export default {
                 me.fixedAssetSelected = fixedAsset;
                 me.idSelected.push(fixedAsset.fixedAssetId);
                 me.deleteOnClick();
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -741,7 +783,8 @@ export default {
         selectedAllRow() {
             try {
                 var me = this
-                //Bôi đậm dòng được checkc
+                me.idSelected = [];
+                //Bôi đậm dòng được check
                 for (let i = 0; i < me.fixedAssets.length; i++) {
                     me.checkboxArray[i] = me.checkAll;
                     if (me.checkAll)
@@ -773,10 +816,12 @@ export default {
                     me.totalRemain = 0;
                     //Tính toán lại các giá trị
                     for (const asset of me.fixedAssets) {
+                        asset.depreciationRate = (1 / asset.lifeTime).toFixed(2);
+                        asset.depreciationValueYear = asset.depreciationRate * asset.cost;
                         me.totalPrice += asset.cost;
                         me.totalQuantity += asset.quantity;
-                        me.totalAccumulated += (asset.depreciationRate * asset.lifeTime);
-                        me.totalRemain += asset.cost - (asset.depreciationRate * asset.lifeTime);
+                        me.totalAccumulated += asset.depreciationValueYear;
+                        me.totalRemain += asset.cost - asset.depreciationValueYear;
                         //Tạo mã nhân viên mới
                         me.getNewCode();
                     }
@@ -784,6 +829,20 @@ export default {
                 .catch(function (res) {
                     console.log(res);
                 });
+        }
+    },
+
+    computed: {
+        departmentsFilter: function(){
+            return this.departments.filter((department) => {
+                return department.departmentName.match(this.departmentDefaulName);
+            });
+        },
+
+        fixedAssetCategoriesFilter: function(){
+            return this.fixedAssetCategories.filter((Category) => {
+                return Category.fixedAssetCategoryName.match(this.fixedAssetCategoriesDefaulName);
+            });
         }
     },
 
@@ -795,60 +854,28 @@ export default {
         //Khi số trang thay đổi
         page(value) {
             var me = this;
-            //Điều kiện phân trang
-            if (me.departmentDefaulName == "Bộ phận sử dụng" && me.fixedAssetCategoriesDefaulName == "Loại tài sản")
-                me.pagingApi(value, me.defaultPageSize, me.search, me.nullValue, me.nullValue);
-            else if (me.departmentDefaulName == "Bộ phận sử dụng")
-                me.pagingApi(value, me.defaultPageSize, me.search, me.nullValue, me.fixedAssetCategoriesDefaulName);
-            else if (me.fixedAssetCategoriesDefaulName == "Loại tài sản")
-                me.pagingApi(value, me.defaultPageSize, me.search, me.departmentDefaulName, me.nullValue);
-            else
                 me.pagingApi(value, me.defaultPageSize, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
 
         defaultPageSize(value) {
             var me = this;
-            //Điều kiện phân trang
-            if (me.departmentDefaulName == "Bộ phận sử dụng" && me.fixedAssetCategoriesDefaulName == "Loại tài sản")
-                me.pagingApi(me.page, value, me.search, me.nullValue, me.nullValue);
-            else if (me.departmentDefaulName == "Bộ phận sử dụng")
-                me.pagingApi(me.page, value, me.search, me.nullValue, me.fixedAssetCategoriesDefaulName);
-            else if (me.fixedAssetCategoriesDefaulName == "Loại tài sản")
-                me.pagingApi(me.page, value, me.search, me.departmentDefaulName, me.nullValue);
-            else
                 me.pagingApi(me.page, value, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
 
         //Khi ô tìm kiếm thay đổi
         search(value) {
             var me = this;
-            //Điều kiện phân trang
-            if (me.departmentDefaulName == "Bộ phận sử dụng" && me.fixedAssetCategoriesDefaulName == "Loại tài sản")
-                me.pagingApi(me.page, me.defaultPageSize, value, me.nullValue, me.nullValue);
-            else if (me.departmentDefaulName == "Bộ phận sử dụng")
-                me.pagingApi(me.page, me.defaultPageSize, value, me.nullValue, me.fixedAssetCategoriesDefaulName);
-            else if (me.fixedAssetCategoriesDefaulName == "Loại tài sản")
-                me.pagingApi(me.page, me.defaultPageSize, value, me.departmentDefaulName, me.nullValue);
-            else
                 me.pagingApi(me.page, me.defaultPageSize, value, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
 
         //Khi chọn combobox bộ phận sử dụng
         departmentDefaulName(value) {
             var me = this;
-            //Điều kiện phân trang
-            if (me.fixedAssetCategoriesDefaulName == "Loại tài sản")
-                me.pagingApi(me.page, me.defaultPageSize, me.search, value, me.nullValue);
-            else
                 me.pagingApi(me.page, me.defaultPageSize, me.search, value, me.fixedAssetCategoriesDefaulName);
         },
         //Khi chọn combobox loại tài sản
         fixedAssetCategoriesDefaulName(value) {
             var me = this;
-            //Điều kiện phân trang
-            if (me.departmentDefaulName == "Bộ phận sử dụng")
-                me.pagingApi(me.page, me.defaultPageSize, me.search, me.nullValue, value);
-            else
                 me.pagingApi(me.page, me.defaultPageSize, me.search, me.departmentDefaulName, value);
         }
     },

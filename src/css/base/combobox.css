@@ -1,7 +1,7 @@
 .combobox {
     width: 198px;
     position: relative;
-    margin-right: 30px;
+    margin-right: 32px;
 }
 
 .combobox-wrap {
@@ -9,7 +9,7 @@
 }
 
 .combobox-selected {
-    padding: 8px 11px 8px 9px;
+    padding: 8px 6px 8px 14px;
     border: 1px solid #afafaf;
     border-radius: 2.5px;
     background-color: white;
@@ -19,6 +19,16 @@
     align-items: center;
     justify-content: space-between;
     font-size: 13px;
+}
+
+.combobox-selected input::placeholder {
+    font-style: normal;
+    color: #000;
+}
+
+.combobox-modal-style input::placeholder {
+    font-style: italic;
+    color: #B7b7B7;
 }
 
 .combobox-selected:hover {
@@ -61,12 +71,17 @@
     width: 38px;
 }
 
+.list-page-number-style input {
+    font-size: 11px;
+}
+
 .list-page-number-style .combobox-selected {
     padding: 3px 10px;
+    font-size: 11px;
 }
 
 .list-page-number-style .combobox-list {
-    top: -85px;
+    top: -77px;
     box-shadow: 0px -1px 7px 1px rgb(0 0 0 / 16%);
     width: 132%;
     border-radius: 4px 4px 0 0;

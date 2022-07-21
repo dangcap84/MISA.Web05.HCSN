@@ -183,8 +183,8 @@
             <Increment xmlns:q1="http://www.w3.org/2001/XMLSchema" p6:type="q1:int">1</Increment>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>7</SeedValue>
-            <MinValue>1</MinValue>
-            <MaxValue>20</MaxValue>
+            <MinValue>2</MinValue>
+            <MaxValue>9</MaxValue>
             <UseDefault>false</UseDefault>
             <DefaultValue>NULL</DefaultValue>
           </GeneratorOptions>
@@ -232,6 +232,21 @@
         <Column Name="FixedAssetCategoryId">
           <Checked>false</Checked>
           <DataType>CHAR</DataType>
+          <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
+            <AllowEmptyStrings>false</AllowEmptyStrings>
+            <EmptyStringProportion>10</EmptyStringProportion>
+            <AllowNulls>false</AllowNulls>
+            <NullProportion>10</NullProportion>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
+            <SeedValue>8</SeedValue>
+            <Unique>false</Unique>
+            <IsAlwaysUnique>false</IsAlwaysUnique>
+            <Expression>\d{5}</Expression>
+          </GeneratorOptions>
+          <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
+          <GeneratorName>ID (random)</GeneratorName>
+          <GeneratorDescription>54470, 16912, 43814, 06728, 36017, 82433, 95664, ...</GeneratorDescription>
+          <GeneratorCategory>Business</GeneratorCategory>
           <Length>36</Length>
         </Column>
         <Column Name="FixedAssetCategoryCode">
@@ -612,10 +627,10 @@
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <Increment xmlns:q6="http://www.w3.org/2001/XMLSchema" p6:type="q6:int">1</Increment>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>3</SeedValue>
-            <MinValue>1</MinValue>
-            <MaxValue>10</MaxValue>
+            <ValueDistributionMode>Sequential</ValueDistributionMode>
+            <SeedValue>1</SeedValue>
+            <MinValue>5</MinValue>
+            <MaxValue>8</MaxValue>
             <UseDefault>false</UseDefault>
             <DefaultValue>0</DefaultValue>
           </GeneratorOptions>

@@ -14,12 +14,13 @@
 
 .dp__input_icon {
     top: 28% !important;
-    left: 88% !important;
+    left: 92.5% !important;
 }
 
 .dp__main {
     margin-right: 16px;
-    width: 229px;
+    width: 282.5px;
+    height: 36px;
     border-radius: 2.5px;
     border: 1px solid #afafaf;
 }
@@ -37,7 +38,7 @@
     font-family: sans-serif !important;
     font-size: 13px !important;
     border: none !important;
-    padding: 6px 12px;
+    padding: 5px 12px;
 }
 
 .dp__select {

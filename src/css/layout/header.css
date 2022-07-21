@@ -3,7 +3,8 @@
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
-    padding: 10px 16px 10px 16px
+    padding: 10px 16px 10px 16px;
+    font-size: 13px;
 }
 
 .header-title {
@@ -22,15 +23,20 @@
     font-weight: 700;
 }
 
+.title-menu-sub-item1 {
+    font-weight: 500;
+}
+
 .title-menu-item2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: rgba(26, 164, 200, .2);
     border-radius: 3px;
-    width: 112px;
+    width: 92px;
     height: 30px;
     padding: 0 10px;
+    margin: 0 4px;
 }
 
 .title-menu-sub-item3,

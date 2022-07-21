@@ -17,10 +17,10 @@
                     <div class="navigato-item-text">Tài sản</div>
                     <div class="icon icon-special_style"></div>
                 </router-link>
-                <router-link to="/customer" title="Tài sản DH-ĐB" class="navigator-item-wrap">
+                <router-link to="/customer" title="Tài sản Hao trừ / Đặc biệt" class="navigator-item-wrap" style="margin-top:0">
                     <div class="navigator-item3 menu-item_general-column">
                     </div>
-                    <div class="navigato-item-text">Tài sản DH-ĐB</div>
+                    <div class="navigato-item-text">Tài sản HT-ĐB</div>
                     <div class="icon"></div>
                 </router-link>
                 <div class="navigator-item-wrap" title="Công cụ dụng cụ">

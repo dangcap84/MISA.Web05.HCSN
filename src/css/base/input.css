@@ -30,7 +30,7 @@ input::placeholder {
     outline: none;
     overflow: hidden;
     padding-left: 30px;
-    margin-right: 8px;
+    margin-right: 10px;
 }
 
 .search-input {
@@ -91,7 +91,7 @@ input::placeholder {
 .input-icon4 {
     position: absolute;
     top: 27%;
-    right: 30px;
+    right: 26px;
     background: url(../../assess/icon/qlts-icon.png) no-repeat -204px -332px;
     width: 8px;
     height: 16px;

@@ -30,7 +30,7 @@
 
 .navigator-item-wrap {
     display: flex;
-    margin-top: 24px;
+    margin-top: 20px;
     align-items: center;
     justify-content: flex-start;
     padding: 0 16px;
@@ -129,7 +129,7 @@
     top: 94%;
     left: -1px;
     border-top: 2px solid #97a0ab;
-    width: 237px;
+    width: 238px;
     height: 34px;
 }
 
@@ -142,10 +142,9 @@
 
 .navigator-item-selected {
     background: #1aa4c8;
-    margin-left: 4px;
     height: 40px;
-    margin-right: 4px;
     border-radius: 4px;
+    margin: 8px 4px 8px 4px;
 }
 
 .navigator-item-selected .icon {
