@@ -3,15 +3,17 @@
     <div class="content-menu-input">
         <div class="input-icon">
             <div class="input-icon1"></div>
-            <input id="txtSearch" autocomplete="off" v-model="search" type="text" class="input search-input" placeholder="Tìm kiếm theo tên">
+            <input id="txtSearch" autocomplete="off" v-model="search" type="text" class="input search-input" placeholder="Tìm kiếm tài sản">
         </div>
         <div class="combobox">
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
-                <input v-click-outside="onClickOutsideCategoriesCombobox" placeholder="Loại tài sản" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp($event,fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAssetCategoriesDefaulName" class="selected-item" @focusin="fixedAssetCategoriesComboboxOnFocus">
+                <input v-click-outside="onClickOutsideCategoriesCombobox" placeholder="Loại tài sản" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp(fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAssetCategoriesDefaulName" class="selected-item" @focusin="fixedAssetCategoriesComboboxOnFocus">
                 <div class="input-icon3"></div>
                 <div ref="comboboxListCategories" class="combobox-list" :class="{'visible': isShowListCategoriesAssets}">
-                    <div ref="optionsListCategories" v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items tabletext-wrap" @click="listFixedAssetCategoriesOnClick(cat.fixedAssetCategoryName)">{{cat.fixedAssetCategoryName}}</div>
+                    <div ref="optionsListCategories" v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" @click="listFixedAssetCategoriesOnClick(cat.fixedAssetCategoryName)">
+                        <div :title="cat.fixedAssetCategoryName" class="tabletext-wrap">{{cat.fixedAssetCategoryName}}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -22,7 +24,7 @@
                 <div class="input-icon3"></div>
                 <div ref="comboboxDepartments" class="combobox-list" :class="{'visible': isShowListDepartments}">
                     <div ref="optionsDepartments" v-for="(dep,index) in departments" :key="dep.DepartmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" @click="listDepartmentsOnClick(dep.departmentName)">
-                    <div class="tabletext-wrap">{{dep.departmentName}}</div>
+                        <div class="tabletext-wrap">{{dep.departmentName}}</div>
                     </div>
                 </div>
             </div>
@@ -32,9 +34,10 @@
         <button id="btnAdd" class="main-button rectangle-button" @click="addFixedAssetOnClick">
             + Thêm tài sản
         </button>
-        <button class="export-button main-button square-button">
+        <input ref="fileImport" type="file" @change="handleFileUpload( $event )" hidden>
+        <button title="Nhập khẩu dữ liệu excel" class="import-button main-button square-button" @click="importOnClick">
         </button>
-        <button id="btnDelete" class="discard-button main-button square-button" @click="deleteOnClick">
+        <button title="Xóa tài sản được chọn" id="btnDelete" class="discard-button main-button square-button" @click="deleteOnClick">
         </button>
     </div>
 </div>
@@ -126,6 +129,8 @@
 </div>
 <FixedAssetDetailVue v-if="isshowModal" :fixedAssetSelected="fixedAssetSelected" :editMode="editMode" @closeModal="showModal" @showSuccessMessage="successMessage" @resetTable="resetTable" />
 <HLoading v-if="isLoading" />
+<HNoticeMessage v-if="isShowNoticeMessage" @closeNotice="showNoticeMessage" @showDetail="showDetailMessage" :noticeMessage="noticeMessage" />
+<HDetailMessage v-if="isShowDetailMessage" @closeNotice="showDetailMessage" :detailMessage="detailMessage" />
 <HToastMessage v-if="isShowSuccess" />
 <HDeleteMessage v-if="isShowNotice" :messageDelete="messageDelete" @closeNotice="hideNotice" @deleteFixedAsset="deleteFixedAsset" />
 </template>
@@ -144,10 +149,10 @@ import axios from "axios";
 import FixedAssetDetailVue from "./FixedAssetDetail.vue";
 //Sử dụng thư viện paginate
 import Paginate from "vuejs-paginate-next";
-//Loại bỏ context menu mặc định của gg
 
 export default {
     name: "FixedAssetTable",
+    //Tạo components
     components: {
         FixedAssetDetailVue,
         paginate: Paginate,
@@ -158,24 +163,19 @@ export default {
             //Khai báo mảng checkboxArray
             checkboxArray: [],
 
-            //Tính toán các giá trị từng dòng
-            accumulated: 0,
-            remain: 0,
-
             //Tính toán các giá trị tổng số
             totalQuantity: 0,
             totalAccumulated: 0,
             totalRemain: 0,
             totalPrice: 0,
 
-            //Đặt giá trị mặc định cho row
-            rowStyleOnChecked: false,
-
             //Đặt thông số mặc định phân trang
             page: 1,
             totalPage: 20,
             recordStart: 1,
             totalRecord: 0,
+            departmentDefaulName: '',
+            fixedAssetCategoriesDefaulName: '',
 
             //Số lượng bản ghi trên một trang
             defaultPageSize: 10,
@@ -190,6 +190,10 @@ export default {
             isShowListDepartments: false,
             isShowListCategoriesAssets: false,
             isShowListPageSize: false,
+
+            //Mặc định ẩn thông báo
+            isShowNoticeMessage: false,
+            isShowDetailMessage: false,
 
             //Đặt mặc định ẩn modal
             isshowModal: false,
@@ -222,7 +226,7 @@ export default {
             isShow: true,
             isHide: false,
 
-            //tạo mảng đối tượng employees
+            //tạo mảng đối tượng tài sản
             fixedAssets: [],
             assets: [],
 
@@ -238,21 +242,23 @@ export default {
             //tạo mảng lưu id selected
             idSelected: [],
 
-            //tạo default name
-            departmentDefaulName: '',
-            fixedAssetCategoriesDefaulName: '',
-            nullValue: '',
-
             //Biến lưu giá trị mã nhân viên mới
             max: 0,
             minLeght: 7,
 
             //Biến lưu nội dung popup
             messageDelete: '',
+            
+            //Biến lưu nội dung thông báo
+            noticeMessage: [],
+            detailMessage: [],
 
             //Tạo biến lưu arrowCounter
             arrowDepartmentsCounter: 0,
             arrowCategoriesCounter: 0,
+
+            //Tạo biến lưu file
+            file: '',
         }
     },
 
@@ -322,7 +328,7 @@ export default {
             try {
                 var me = this;
                 //Gọi api phân trang
-                axios.get(`http://localhost:64168/api/v1/FixedAssets/filter?pageIndex=${me.page}&pageSize=${me.defaultPageSize}&filter=${me.search}&departmentName=${me.nullValue}&CategoryName=${me.nullValue}`)
+                axios.get(`http://localhost:64168/api/v1/FixedAssets/filter?pageIndex=${me.page}&pageSize=${me.defaultPageSize}&filter=${me.search}&departmentName=${me.departmentDefaulName}&CategoryName=${me.fixedAssetCategoriesDefaulName}`)
                     .then(function (res) {
                         //Gán lại giá trị cho đối tượng
                         me.fixedAssets = res.data.data;
@@ -346,7 +352,7 @@ export default {
                             asset.depreciationValueYear = asset.depreciationRate * asset.cost;
                             me.totalPrice += asset.cost;
                             me.totalQuantity += asset.quantity;
-                            me.totalAccumulated +=asset.depreciationValueYear
+                            me.totalAccumulated += asset.depreciationValueYear
                             me.totalRemain += asset.cost - asset.depreciationValueYear;
                             //Tạo mã nhân viên mới
                             me.getNewCode();
@@ -360,155 +366,22 @@ export default {
             }
         },
 
+        /**
+         * Lấy mã tài sản mới
+         * NDHoang (04/07/2022)
+         */
         getNewCode() {
             var me = this;
             axios.get("http://localhost:64168/api/v1/FixedAssets")
                 .then(function (res) {
                     me.assets = res.data;
+                    //Duyệt tất cả tài sản, lấy ra mã tài sản lớn nhất rồi cộng thêm 1
                     for (const asset of me.assets) {
                         var numStr = asset.fixedAssetCode.slice(3, 7);
                         numStr = Number(numStr)
                         if (numStr + 1 > me.max) me.max = numStr + 1;
                     }
                 });
-        },
-
-        /**
-         * Sự kiện của các phím sử dụng trong combobox category
-         * NDHoang(22/06/2022)
-         */
-
-        // Dùng phím mũi tên xuống để di chuyển lựa chọn
-        arrowListCategoriesDown(cat) {
-            try {
-                var me = this
-                me.isShowListCategoriesAssets = me.isShow;
-                if (me.arrowCategoriesCounter < me.fixedAssetCategories.length - 1)
-                    me.arrowCategoriesCounter++;
-                me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
-                me.scrollListCategoriesTo();
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowListCategoriesUp(e,cat) {
-            try {
-                e.preventDefault();
-                var me = this
-                me.isShowListCategoriesAssets = me.isShow;
-                if (me.arrowCategoriesCounter > 0)
-                    me.arrowCategoriesCounter--;
-                me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
-                me.scrollListCategoriesTo();
-            } catch (error) {
-                console.log();
-            }
-        },
-
-        //ScrollTo
-        scrollListCategoriesTo() {
-            const itemHeight = this.$refs.optionsListCategories[this.arrowCategoriesCounter].clientHeight;
-            console.log(itemHeight);
-            this.$refs.comboboxListCategories.scrollTop = itemHeight * this.arrowCategoriesCounter - this.$refs.comboboxListCategories.clientHeight / 2;
-        },
-        //Chọn bằng enter
-        selectListCategoriesByEnter() {
-            try {
-                var me = this;
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Sự kiên click ra ngoài combobox
-        onClickOutsideCategoriesCombobox() {
-            try {
-                var me = this;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        /**
-         * Sự kiện của các phím sử dụng trong combobox department
-         * NDHoang(22/06/2022)
-         */
-        // Dùng phím mũi tên xuống để di chuyển lựa chọn
-        arrowDepartmentsDown(dep) {
-            try {
-                var me = this
-                me.isShowListDepartments = me.isShow;
-                if (me.arrowDepartmentsCounter < me.departments.length - 1)
-                    me.arrowDepartmentsCounter++;
-                me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
-                me.scrollDepartmentsTo();
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowDepartmentsUp(dep) {
-            try {
-                var me = this
-                me.isShowListDepartments = me.isShow;
-                if (me.arrowDepartmentsCounter > 0)
-                    me.arrowDepartmentsCounter--;
-                me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
-                me.scrollDepartmentsTo();
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Scroll to
-        scrollDepartmentsTo() {
-            const itemHeight = this.$refs.optionsDepartments[this.arrowDepartmentsCounter].clientHeight;
-            this.$refs.comboboxDepartments.scrollTop = itemHeight * this.arrowDepartmentsCounter - this.$refs.comboboxDepartments.clientHeight / 2;
-        },
-
-        //Chọn bằng enter
-        selectDepartmentsByEnter() {
-            try {
-                var me = this;
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        //Sự kiện tab ra ngoài combobox
-        tabOutDepartmentsCombobox() {
-            try {
-                var me = this;
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Sự kiên click ra ngoài combobox
-        onClickOutsideDepartmentsCombobox() {
-            try {
-                var me = this;
-                me.isShowListDepartments = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Sự kiên click ra ngoài combobox page number
-        onClickOutsidePageNumber() {
-            try {
-                var me = this;
-                me.isShowListPageSize = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
         },
 
         /**
@@ -524,7 +397,7 @@ export default {
                 me.showModal(me.isShow);
                 //Làm rỗng fixedAssetSelected
                 me.fixedAssetSelected = {};
-
+                //Format lại mã tài sản rồi gán lại
                 var newCode = 'TS-' + me.max;
                 while (newCode.length < me.minLeght) {
                     newCode = newCode.slice(0, 3) + '0' + newCode.slice(3);
@@ -536,20 +409,121 @@ export default {
         },
 
         /**
+         * xử lí file đầu vào
+         * NDHoang (19/07/2022)
+         */
+        handleFileUpload(event) {
+            try {
+                var me = this
+                //Khởi tạo đối tượng file từ input
+                me.file = event.target.files[0];
+                //Khởi tạo biến kiểu formData chuẩn bị import
+                let formData = new FormData();
+                //Truyền đối tượng file vào FormData
+                formData.append('fileImport', me.file);
+                //Gọi API import
+                axios.post("http://localhost:64168/api/v1/fixedAssets/import", formData)
+                    .then(function (res) {
+                        if (res) {
+                            //Đếm số lượng bản ghi import
+                            var couterImport = 0;
+                            var couterUnImport = 0;
+                            //Làm rỗng mảng detail
+                            me.detailMessage = [];
+                            //Duyệt tất cả data
+                            for(let data of res.data){
+                                if(data.isValidImport == true){
+                                    couterImport ++;
+                                }
+                                else  {
+                                    couterUnImport++;
+                                    //duyệt tất cả data lỗi
+                                    if(couterUnImport > 0){
+                                        for(let errorImport of data.listErrorImport)
+                                        me.detailMessage.push("Tài sản " + `${data.fixedAssetCode}` + `: ${errorImport}` );
+                                    }
+                                }
+                            }
+                            //Nếu thành công tất cả gán lại giá trị cho detailMessage
+                            if(couterImport == res.data.length){
+                                me.detailMessage.push("Dữ liệu nhập khẩu hợp lệ");
+                            }
+                            //Làm rỗng mảng noticeMessage
+                            me.noticeMessage = [];
+                            //Gán thông báo
+                            me.noticeMessage.push("Có " + `${couterImport}` + " tài sản được nhập khẩu thành công");
+                            me.noticeMessage.push("Có " + `${couterUnImport}` + " tài sản nhập khẩu thất bại");
+                            //Hiện thông náo
+                            me.showNoticeMessage(me.isShow);
+                            //Loading
+                            me.isLoading = me.isShow;
+                            //Gán lại giá trị rỗng cho file target
+                            me.resetTable();
+                        }
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Hiện thông báo
+         * NDHoang(22/06/2022)
+         */
+        //Cảnh báo lỗi
+        showNoticeMessage(noticeMessage) {
+            try {
+                var me = this;
+                //Hiện thông báo nếu errorNotice = true
+                me.isShowNoticeMessage = noticeMessage;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        //Hiện thông báo chi tiết
+        showDetailMessage(detailMessage) {
+            try {
+                var me = this;
+                //Hiện thông báo nếu detailMessage = true
+                me.isShowDetailMessage = detailMessage;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Chọn file import
+         * NDHoang (19/06/2022)
+         */
+        importOnClick() {
+            try {
+                var me = this;
+                //Làm rỗng value của input file
+                me.$refs.fileImport.value = "";
+                //Click import hiển thị cửa số chọn file
+                me.$refs.fileImport.click();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
          * Kiểm tra mảng cần xóa
          * NDHoang (19/06/2022)
          */
         deleteOnClick() {
             try {
+                //Điều kiện xóa
                 if (this.idSelected.length == 0) {
                     return;
                 } else if (this.idSelected.length == 1) {
-                    this.messageDelete = `Bạn có muốn xóa tài sản <<${this.fixedAssetSelected.fixedAssetCode}-${this.fixedAssetSelected.fixedAssetName}>>`;
+                    this.messageDelete = "Bạn có muốn xóa tài sản << "  + `${this.fixedAssetSelected.fixedAssetCode}-${this.fixedAssetSelected.fixedAssetName}` + " >>";
                 } else if (this.idSelected.length < 10) {
                     this.messageDelete = '0' + this.idSelected.length + ' tài sản đã được chọn. Bạn có muốn xóa các tài sản này ra khỏi danh sách?';
                 } else {
                     this.messageDelete = `${this.idSelected.length}   Tài sản đã được chọn. Bạn có muốn xóa các tài sản này ra khỏi danh sách?`;
                 }
+                //Ẩn thông báo
                 this.hideNotice(this.isShow);
             } catch (error) {
                 console.log(error);
@@ -576,101 +550,31 @@ export default {
                 }
                 //Làm rỗng mảng xóa
                 me.idSelected = [];
-                //Bỏ chọn row
+                //Bỏ chọn tất cả row
                 me.checkAll = false;
                 me.selectedAllRow();
+                //Ẩn thông báo
                 me.hideNotice(me.isHide);
             } catch (error) {
                 console.log(error);
             }
         },
 
-        //
+        //Xóa bằng context menu
         deleteFixedByContextMenu(fixedAsset) {
             try {
                 var me = this;
-                //Đổi trạng thái của editMode
+                //Gán lại mảng rỗng
                 me.idSelected = [];
+                //Đổi trạng thái của editMode
                 me.editMode = me.deleteMode;
+                //Gán đối tượng selected
                 me.fixedAssetSelected = fixedAsset;
+                //Thêm id vào mảng
                 me.idSelected.push(fixedAsset.fixedAssetId);
+                //Gọi hàm delete
                 me.deleteOnClick();
 
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        /**
-         * Sự kiện onfocus input combobox
-         * NDHoang (19/06/2022)
-         */
-        //Focus on combobox loại tài sản
-        fixedAssetCategoriesComboboxOnFocus() {
-            try {
-                var me = this;
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isShow;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Focus on combobox Bộ phận sử dụng
-        departmentsComboboxOnFocus() {
-            try {
-                var me = this;
-                me.isShowListCategoriesAssets = me.isHide;
-                me.isShowListDepartments = me.isShow;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Focus on combobox PageSize
-        totalPageSizeOnFocus() {
-            try {
-                var me = this;
-                me.isShowListPageSize = me.isShow;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        /**
-         * Sự kiện combobox item on click
-         * NDHoang (23/06/2022)
-         */
-        //Click vào combobox bộ phận sử dụng items
-        listDepartmentsOnClick(departmentName) {
-            try {
-                var me = this;
-                me.departmentDefaulName = departmentName;
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Click vào combobox loại tài sản items
-        listFixedAssetCategoriesOnClick(fixedAssetCategoryName) {
-            try {
-                var me = this;
-                me.fixedAssetCategoriesDefaulName = fixedAssetCategoryName;
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Click vào combobox pageSize items
-        listTotalRecodsOnClick(Size) {
-            try {
-                var me = this;
-                me.defaultPageSize = Size;
-                me.isShowListPageSize = me.isHide;
             } catch (error) {
                 console.log(error);
             }
@@ -683,7 +587,9 @@ export default {
         rowOnDbClick(fixedAsset) {
             try {
                 var me = this;
+                //Gán lại đối tượng selected
                 me.fixedAssetSelected = fixedAsset;
+                //Hiện modal
                 me.showModal(me.isShow);
                 //Đổi form mode
                 me.editMode = me.updateMode;
@@ -700,11 +606,14 @@ export default {
         copyAssetOnClick(fixedAsset) {
             try {
                 var me = this;
+                //Gán lại đối tượng selected
                 me.fixedAssetSelected = fixedAsset;
+                //Truyền lại giá trị cho newCode
                 var newCode = 'TS-' + me.max;
                 while (newCode.length < me.minLeght) {
                     newCode = newCode.slice(0, 3) + '0' + newCode.slice(3);
                 }
+                //Gán mã tài sản bằng newCode
                 me.fixedAssetSelected.fixedAssetCode = newCode;
                 me.showModal(me.isShow);
                 //Đổi form mode
@@ -716,7 +625,94 @@ export default {
         },
 
         /**
-         * Hàm gán lại giá trị cho isshowModal
+         * Hàm high line row
+         * NDHoang(22/06/2022)
+         */
+        selectedRow(fixedAsset, index) {
+            try {
+                var me = this
+                //Điều kiện
+                if (me.checkboxArray[index] == me.isChecked) {
+                    //Bôi đậm dòng được check
+                    me.isHighLine = me.isChecked;
+                    //Gán lại giá trị selected
+                    me.fixedAssetSelected = fixedAsset;
+                    //Thêm id vào mảng
+                    me.idSelected.push(fixedAsset.fixedAssetId);
+                    if(me.idSelected.length == me.fixedAssets.length){
+                        me.checkAll = me.isShow;
+                    }
+                } else {
+                    me.isHighLine = false;
+                    //Xóa phần tử không check ra khỏi mảng
+                    me.idSelected.splice(index, 1);
+                    //Bỏ check all
+                    me.checkAll = me.isHide;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Hàm high line row
+         * NDHoang(22/06/2022)
+         */
+        selectedAllRow() {
+            try {
+                var me = this
+                //Làm rỗng mảng
+                me.idSelected = [];
+                //Bôi đậm dòng được check
+                for (let i = 0; i < me.fixedAssets.length; i++) {
+                    me.checkboxArray[i] = me.checkAll;
+                    if (me.checkAll)
+                        me.idSelected.push(me.fixedAssets[i].fixedAssetId);
+                    else
+                        me.idSelected.pop();
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Hàm gọi api phân trang
+         * NDHoang(22/06/2022)
+         */
+        pagingApi(pageIndex, pageSize, search, departmentName, categoryName) {
+            var me = this;
+            //Gọi api phân trang
+            axios.get(`http://localhost:64168/api/v1/FixedAssets/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&filter=${search}&departmentName=${departmentName}&CategoryName=${categoryName}`)
+                .then(function (res) {
+                    me.fixedAssets = res.data.data;
+                    me.totalPage = Math.ceil(res.data.totalRecord / pageSize);
+                    me.totalRecord = res.data.totalRecord;
+                    me.recordStart = res.data.recordStart;
+                    //Gán lại các giá trị để tính giá trị mới
+                    me.totalPrice = 0;
+                    me.totalQuantity = 0;
+                    me.totalAccumulated = 0;
+                    me.totalRemain = 0;
+                    //Tính toán lại các giá trị
+                    for (const asset of me.fixedAssets) {
+                        asset.depreciationRate = (1 / asset.lifeTime).toFixed(2);
+                        asset.depreciationValueYear = asset.depreciationRate * asset.cost;
+                        me.totalPrice += asset.cost;
+                        me.totalQuantity += asset.quantity;
+                        me.totalAccumulated += asset.depreciationValueYear;
+                        me.totalRemain += asset.cost - asset.depreciationValueYear;
+                        //Tạo mã tài sản mới
+                        me.getNewCode();
+                    }
+                })
+                .catch(function (res) {
+                    console.log(res);
+                });
+        },
+
+        /**
+         * Hàm gán ẩn hiện modal
          * NDHoang(22/06/2022)
          */
         showModal(showModal) {
@@ -755,91 +751,261 @@ export default {
         },
 
         /**
-         * Hàm high line row
+         * Sự kiện của các phím sử dụng trong combobox category
          * NDHoang(22/06/2022)
          */
-        selectedRow(fixedAsset, index) {
+
+        // Dùng phím mũi tên xuống để di chuyển lựa chọn
+        arrowListCategoriesDown(cat) {
             try {
                 var me = this
-                if (me.checkboxArray[index] == me.isChecked) {
-                    //Bôi đậm dòng được check
-                    me.isHighLine = me.isChecked;
-                    me.fixedAssetSelected = fixedAsset;
-                    me.idSelected.push(fixedAsset.fixedAssetId);
-                } else {
-                    me.isHighLine = false;
-                    //Xóa phần tử không check ra khỏi mảng
-                    me.idSelected.splice(index, 1);
-                }
+                //Hiện danh sách loại tài sản
+                me.isShowListCategoriesAssets = me.isShow;
+                //Điều kiện chọn
+                if (me.arrowCategoriesCounter < me.fixedAssetCategories.length - 1)
+                    me.arrowCategoriesCounter++;
+                //Autocomplete
+                me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                //Gọi hàm scroll
+                me.scrollListCategoriesTo();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        // Dùng phím mũi tên lên để di chuyển lựa chọn
+        arrowListCategoriesUp(cat) {
+            try {
+                var me = this
+                //Hiện danh sách tài sản
+                me.isShowListCategoriesAssets = me.isShow;
+                //Điều kiện chọn
+                if (me.arrowCategoriesCounter > 0)
+                    me.arrowCategoriesCounter--;
+                //Autocomplete
+                me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                //Gọi hàm scroll
+                me.scrollListCategoriesTo();
+            } catch (error) {
+                console.log();
+            }
+        },
+
+        //ScrollTo
+        scrollListCategoriesTo() {
+            //Tạo biến ghi lại chiều cao của danh sách
+            const itemHeight = this.$refs.optionsListCategories[this.arrowCategoriesCounter].clientHeight;
+            //Cuộn theo arrowCounter
+            this.$refs.comboboxListCategories.scrollTop = itemHeight * this.arrowCategoriesCounter - this.$refs.comboboxListCategories.clientHeight / 2;
+        },
+
+        //Chọn bằng enter
+        selectListCategoriesByEnter() {
+            try {
+                var me = this;
+                //Ẩn danh sách
+                me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Sự kiên click ra ngoài combobox
+        onClickOutsideCategoriesCombobox() {
+            try {
+                var me = this;
+                //Ẩn danh sách
+                me.isShowListCategoriesAssets = me.isHide;
             } catch (error) {
                 console.log(error);
             }
         },
 
         /**
-         * Hàm high line row
+         * Sự kiện của các phím sử dụng trong combobox department
          * NDHoang(22/06/2022)
          */
-        selectedAllRow() {
+        // Dùng phím mũi tên xuống để di chuyển lựa chọn
+        arrowDepartmentsDown(dep) {
             try {
                 var me = this
-                me.idSelected = [];
-                //Bôi đậm dòng được check
-                for (let i = 0; i < me.fixedAssets.length; i++) {
-                    me.checkboxArray[i] = me.checkAll;
-                    if (me.checkAll)
-                        me.idSelected.push(me.fixedAssets[i].fixedAssetId);
-                    else
-                        me.idSelected.pop();
-                }
+                //Hiển thị danh sách
+                me.isShowListDepartments = me.isShow;
+                //Điều kiện chọn
+                if (me.arrowDepartmentsCounter < me.departments.length - 1)
+                    me.arrowDepartmentsCounter++;
+                //Autocomplete
+                me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
+                me.scrollDepartmentsTo();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        // Dùng phím mũi tên lên để di chuyển lựa chọn
+        arrowDepartmentsUp(dep) {
+            try {
+                var me = this
+                //Hiện danh sách
+                me.isShowListDepartments = me.isShow;
+                //Điều kiện chọn
+                if (me.arrowDepartmentsCounter > 0)
+                    me.arrowDepartmentsCounter--;
+                //Autocomplete
+                me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
+                me.scrollDepartmentsTo();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Scroll to
+        scrollDepartmentsTo() {
+            //Tạo biến ghi lại chiều cao của danh sách
+            const itemHeight = this.$refs.optionsDepartments[this.arrowDepartmentsCounter].clientHeight;
+            //cuộn theo couter
+            this.$refs.comboboxDepartments.scrollTop = itemHeight * this.arrowDepartmentsCounter - this.$refs.comboboxDepartments.clientHeight / 2;
+        },
+
+        //Chọn bằng enter
+        selectDepartmentsByEnter() {
+            try {
+                var me = this;
+                //Ẩn list
+                me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        //Sự kiện tab ra ngoài combobox
+        tabOutDepartmentsCombobox() {
+            try {
+                var me = this;
+                //Ẩn list
+                me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Sự kiên click ra ngoài combobox
+        onClickOutsideDepartmentsCombobox() {
+            try {
+                var me = this;
+                //Ẩn list
+                me.isShowListDepartments = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Sự kiên click ra ngoài combobox page number
+        onClickOutsidePageNumber() {
+            try {
+                var me = this;
+                //Ẩn lish
+                me.isShowListPageSize = me.isHide;
             } catch (error) {
                 console.log(error);
             }
         },
 
         /**
-         * Hàm gọi api phân trang
-         * NDHoang(22/06/2022)
+         * Sự kiện onfocus input combobox
+         * NDHoang (19/06/2022)
          */
-        pagingApi(pageIndex, pageSize, search, departmentName, categoryName) {
-            var me = this;
-            axios.get(`http://localhost:64168/api/v1/FixedAssets/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&filter=${search}&departmentName=${departmentName}&CategoryName=${categoryName}`)
-                .then(function (res) {
-                    me.fixedAssets = res.data.data;
-                    me.totalPage = Math.ceil(res.data.totalRecord / pageSize);
-                    me.totalRecord = res.data.totalRecord;
-                    me.recordStart = res.data.recordStart;
-                    //Gán lại các giá trị để tính giá trị mới
-                    me.totalPrice = 0;
-                    me.totalQuantity = 0;
-                    me.totalAccumulated = 0;
-                    me.totalRemain = 0;
-                    //Tính toán lại các giá trị
-                    for (const asset of me.fixedAssets) {
-                        asset.depreciationRate = (1 / asset.lifeTime).toFixed(2);
-                        asset.depreciationValueYear = asset.depreciationRate * asset.cost;
-                        me.totalPrice += asset.cost;
-                        me.totalQuantity += asset.quantity;
-                        me.totalAccumulated += asset.depreciationValueYear;
-                        me.totalRemain += asset.cost - asset.depreciationValueYear;
-                        //Tạo mã nhân viên mới
-                        me.getNewCode();
-                    }
-                })
-                .catch(function (res) {
-                    console.log(res);
-                });
-        }
+        //Focus on combobox loại tài sản
+        fixedAssetCategoriesComboboxOnFocus() {
+            try {
+                var me = this;
+                //Ẩn hiện list
+                me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isShow;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Focus on combobox Bộ phận sử dụng
+        departmentsComboboxOnFocus() {
+            try {
+                var me = this;
+                //Ẩn hiện list
+                me.isShowListCategoriesAssets = me.isHide;
+                me.isShowListDepartments = me.isShow;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Focus on combobox PageSize
+        totalPageSizeOnFocus() {
+            try {
+                var me = this;
+                //Hiện list
+                me.isShowListPageSize = me.isShow;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Sự kiện combobox item on click
+         * NDHoang (23/06/2022)
+         */
+        //Click vào combobox bộ phận sử dụng items
+        listDepartmentsOnClick(departmentName) {
+            try {
+                var me = this;
+                //Gán giá trị
+                me.departmentDefaulName = departmentName;
+                //Ẩn list
+                me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Click vào combobox loại tài sản items
+        listFixedAssetCategoriesOnClick(fixedAssetCategoryName) {
+            try {
+                var me = this;
+                //Gán giá trị
+                me.fixedAssetCategoriesDefaulName = fixedAssetCategoryName;
+                //Ẩn list
+                me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        //Click vào combobox pageSize items
+        listTotalRecodsOnClick(Size) {
+            try {
+                var me = this;
+                //Gán giá trị
+                me.defaultPageSize = Size;
+                //Ẩn list
+                me.isShowListPageSize = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
     },
 
     computed: {
-        departmentsFilter: function(){
+        //Lọc danh sách phòng ban
+        departmentsFilter: function () {
             return this.departments.filter((department) => {
                 return department.departmentName.match(this.departmentDefaulName);
             });
         },
-
-        fixedAssetCategoriesFilter: function(){
+        //Lọc danh sách loại tài sản
+        fixedAssetCategoriesFilter: function () {
             return this.fixedAssetCategories.filter((Category) => {
                 return Category.fixedAssetCategoryName.match(this.fixedAssetCategoriesDefaulName);
             });
@@ -854,29 +1020,35 @@ export default {
         //Khi số trang thay đổi
         page(value) {
             var me = this;
-                me.pagingApi(value, me.defaultPageSize, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
+            //Gọi Api paging
+            me.pagingApi(value, me.defaultPageSize, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
-
+        
+        //Khi pageSize thay đổi
         defaultPageSize(value) {
             var me = this;
-                me.pagingApi(me.page, value, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
+            //Gọi Api paging
+            me.pagingApi(me.page, value, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
 
         //Khi ô tìm kiếm thay đổi
         search(value) {
             var me = this;
-                me.pagingApi(me.page, me.defaultPageSize, value, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
+            //Gọi Api paging
+            me.pagingApi(me.page, me.defaultPageSize, value, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
 
         //Khi chọn combobox bộ phận sử dụng
         departmentDefaulName(value) {
             var me = this;
-                me.pagingApi(me.page, me.defaultPageSize, me.search, value, me.fixedAssetCategoriesDefaulName);
+            //Gọi Api paging
+            me.pagingApi(me.page, me.defaultPageSize, me.search, value, me.fixedAssetCategoriesDefaulName);
         },
         //Khi chọn combobox loại tài sản
         fixedAssetCategoriesDefaulName(value) {
             var me = this;
-                me.pagingApi(me.page, me.defaultPageSize, me.search, me.departmentDefaulName, value);
+            //Gọi Api paging
+            me.pagingApi(me.page, me.defaultPageSize, me.search, me.departmentDefaulName, value);
         }
     },
 
@@ -885,6 +1057,7 @@ export default {
         try {
             var me = this;
             me.isLoading = me.isShow;
+            //Load lại table
             me.resetTable();
             //Lấy danh sách phòng ban
             axios.get("http://localhost:64168/api/v1/Departments")
@@ -908,31 +1081,5 @@ export default {
         }
 
     },
-
-    //3.beforeMount
-    beforeMount() {
-
-    },
-
-    //5.beforeUpdate
-    beforeUpdate() {
-
-    },
-
-    //6.updated
-    updated() {
-
-    },
-
-    //7.beforeUnmount
-    beforeUnmount() {
-
-    },
-
-    //8.unmounted
-    unmounted() {
-
-    },
-
 }
 </script>

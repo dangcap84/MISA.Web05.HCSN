@@ -4,8 +4,8 @@
                 <div class="popup-message-body">
                     <div class="popup-content-wrap">
                         <i class="fas fa-exclamation-triangle error-icon"></i>
-                        <div id="txtErrorMessage" class="popup-message-content" >
-                            <div v-for="error of errorMessage" :key="error" class="popup-message-content-text">{{error}}</div> 
+                        <div class="popup-message-content popup-message-detail-style" >
+                            <div v-for="detail of detailMessage" :key="detail" class="popup-message-content-text">{{detail}}</div> 
                         </div>
                     </div>
                     <div class="popup-footer">
@@ -18,7 +18,7 @@
     export default {
     name: "HErrorMessage",
     props: {
-        errorMessage: {
+        detailMessage: {
             type: Array,
         },
     },

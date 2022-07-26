@@ -9,6 +9,8 @@ import HPostMessage from "@/components/base/HPostMessage.vue";
 import HPutMessage from "@/components/base/HPutMessage.vue";
 import HDeleteMessage from "@/components/base/HDeleteMessage.vue";
 import HErrorMessage from "@/components/base/HErrorMessage.vue";
+import HNoticeMessage from "@/components/base/HNoticeMessage.vue";
+import HDetailMessage from "@/components/base/HDetailMessage.vue";
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 import ContextMenu from '@imengyu/vue3-context-menu';
 import vClickOutside from "click-outside-vue3"
@@ -19,13 +21,11 @@ const misaroutes = [
     { path: '/customer', component: CustomerTableVue },
 ]
 
-// 3. Create the router instance and pass the `routes` option
-// You can pass in additional options here, but let's
-// keep it simple for now.
+//Khởi tạo router
 const router = createRouter({
-    // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
+    //khởi tạo lịch sử duyệt web
     history: createWebHashHistory(),
-    routes: misaroutes, // short for `routes: routes`
+    routes: misaroutes, //Sắp xếp router
 })
 
 
@@ -40,3 +40,5 @@ app.component("HPutMessage", HPutMessage);
 app.component("HDeleteMessage", HDeleteMessage);
 app.component("HPostMessage", HPostMessage);
 app.component("HErrorMessage", HErrorMessage);
+app.component("HNoticeMessage", HNoticeMessage);
+app.component("HDetailMessage", HDetailMessage);

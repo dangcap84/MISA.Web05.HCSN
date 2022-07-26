@@ -1,7 +1,3 @@
-input {
-    cursor: pointer;
-}
-
 input::placeholder {
     font-style: italic;
     color: #B7b7B7;

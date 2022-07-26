@@ -25,6 +25,14 @@
     border: 1px solid #afafaf;
 }
 
+.dp__main:hover {
+    border-color: #1aa4c8;
+}
+
+.dp__main:focus {
+    border-color: #1aa4c8;
+}
+
 .dp__clear_icon {
     display: none !important;
 }

@@ -27,11 +27,26 @@
 .popup-content-wrap {
     display: flex;
     align-items: center;
+    height: 130px;
+    overflow: hidden;
 }
 
 .popup-message-content {
-    padding: 40px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0px 10px;
     font-size: 13px;
+    height: 100px;
+    overflow: overlay;
+}
+
+.popup-message-detail-style {
+    justify-content: flex-start;
+}
+
+.popup-message-content-text {
+    padding: 5px;
 }
 
 .popup-footer {

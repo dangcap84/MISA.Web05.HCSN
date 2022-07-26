@@ -29,26 +29,27 @@
 }
 
 .white-speial-rectangle-button {
-    background-color: #f3f0f0;
+    background-color: #fff;
     color: #1aa4c8;
     border: 1px solid #1aa4c8;
     width: 110px;
 }
 
 .white-speial-rectangle-button:hover {
-    background-color: #cdcdcd;
+    background-color: #90e2f7;
 }
 
 .white-speial-rectangle-button:active {
-    background-color: #8f8b8b;
+    background-color: #fff;
 }
 
 .white-rectangle-button:hover {
-    background-color: #cdcdcd;
+    background-color: #1aa4c8;
+    color: #fff;
 }
 
 .white-rectangle-button:active {
-    background-color: #8f8b8b;
+    background-color: #4aadc5;
 }
 
 .square-button {
@@ -58,14 +59,14 @@
 }
 
 .square-button:hover {
-    background-color: #cdcdcd;
+    background-color: #1aa4c8;
 }
 
 .square-button:active {
-    background-color: #8f8b8b;
+    background-color: #4aadc5;
 }
 
-.export-button {
+.import-button {
     background: url(../../assess/icon/qlts-icon.png) no-repeat -278px -101px;
     width: 36px;
     height: 36px;

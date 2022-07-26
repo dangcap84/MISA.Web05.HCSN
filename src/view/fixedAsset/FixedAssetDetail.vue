@@ -121,7 +121,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker format="dd/MM/yyyy" arrowNavigation locale="vi" placeholder="dd/MM/yyyy" textInput cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
+                        <Datepicker format="dd/MM/yyyy" arrowNavigation locale="vi" placeholder="VD:01/01/2022" textInput cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
@@ -134,7 +134,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker format="dd/MM/yyyy" :disabled-date="(date) => date >= new Date()" arrowNavigation locale="vi" placeholder="dd/MM/yyyy" textInput cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
+                        <Datepicker format="dd/MM/yyyy" arrowNavigation locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
@@ -233,7 +233,8 @@ export default {
             valueQuantity: 0,
             valueLifeTime: 0,
             valueDepreciationRate: 0,
-            modifiedDepreciationRate: this.valueDepreciationRate * 100,
+            //Tạo biến lưu giá trị giả của tỉ lệ
+            fakeValue:0,
 
             //Tạo title Modal
             modalTitle: '',
@@ -247,11 +248,11 @@ export default {
             //tạo mảng loại tài sản
             fixedAssetCategories: [],
 
-            //Set mặc định ẩn list
+            //Đặt mặc định ẩn list
             isShowListDepartments: false,
             isShowListCategoriesAssets: false,
 
-            //Set mặc định ẩn cảnh báo
+            //Đặt mặc định ẩn cảnh báo
             isShowPostNotice: false,
             isShowPutNotice: false,
             isShowErrorNotice: false,
@@ -288,7 +289,7 @@ export default {
             isValid: true,
 
             //Tạo biến chứa error message
-            errorMessage: 'Lỗi xảy ra',
+            errorMessage: [],
 
             //Tạo biến arrow counter
             arrowCategoriesCounter: 0,
@@ -311,26 +312,6 @@ export default {
     },
 
     methods: {
-
-        /**
-         * Xử lý ngày
-         * NDHoang (15/06/2022)
-         * */
-        formatDate(dob) {
-            let dateConvert = new Date(dob);
-            if (dob && (dateConvert instanceof Date && !isNaN(dateConvert.valueOf()))) {
-                // xử lý ngày
-                let date = dateConvert.getDate();
-                date = date < 10 ? `0${date}` : date;
-                // xử lý tháng
-                let month = dateConvert.getMonth();
-                month = month < 10 ? `0${month}` : month;
-                // xử lý năm
-                let year = dateConvert.getFullYear();
-                dob = `${year}-${month}-${date}`;
-                return dob;
-            }
-        },
 
         /**
          * Tắt modal
@@ -381,6 +362,14 @@ export default {
          * NDHoang(22/06/2022)
          */
 
+        //Category autoComplete
+        autoCompleteCategory(id,code,name){
+            var me = this;
+            me.fixedAsset.fixedAssetCategoryId = id;
+            me.fixedAsset.fixedAssetCategoryCode = code;
+            me.fixedAsset.fixedAssetCategoryName = name;
+        },
+
         // Dùng phím mũi tên xuống để di chuyển lựa chọn
         arrowListCategoriesDown(cat) {
             try {
@@ -390,15 +379,14 @@ export default {
                 //So sánh mảng couter với chiều dài của mảng loại tài sản
                 if (me.arrowCategoriesCounter < me.fixedAssetCategories.length - 1)
                     me.arrowCategoriesCounter++;
-                //autocomplete
-                me.fixedAsset.fixedAssetCategoryId = cat[me.arrowCategoriesCounter].fixedAssetCategoryId;
-                me.fixedAsset.fixedAssetCategoryCode = cat[me.arrowCategoriesCounter].fixedAssetCategoryCode;
-                me.fixedAsset.fixedAssetCategoryName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                //Autocomplete
+                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName);
                 me.scrollListCategoriesTo()
             } catch (error) {
                 console.log(error);
             }
         },
+        
         // Dùng phím mũi tên lên để di chuyển lựa chọn
         arrowListCategoriesUp(cat) {
             try {
@@ -406,12 +394,10 @@ export default {
                 //Hiện list danh sách loại tài sản
                 me.isShowListCategoriesAssets = me.isShow;
                 //So sánh mảng couter với chiều dài của mảng loại tài sản
-                if (me.arrowCategoriesCounter > 0)
+                if (me.arrowCategoriesCounter >= 0)
                     me.arrowCategoriesCounter--;
                 //autocomplete
-                me.fixedAsset.fixedAssetCategoryId = cat[me.arrowCategoriesCounter].fixedAssetCategoryId;
-                me.fixedAsset.fixedAssetCategoryCode = cat[me.arrowCategoriesCounter].fixedAssetCategoryCode;
-                me.fixedAsset.fixedAssetCategoryName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName);
                 me.scrollListCategoriesTo()
             } catch (error) {
                 console.log(error);
@@ -431,7 +417,7 @@ export default {
                 //Gán giá trị mặc định số năm sử dụng của loại tài sản
                 me.valueLifeTime = cat[this.arrowCategoriesCounter].lifeTime;
                 //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
-                var num = (1 / cat[this.arrowCategoriesCounter].lifeTime)*100;
+                var num = (1 / cat[this.arrowCategoriesCounter].lifeTime) * 100;
                 //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
                 me.valueDepreciationRate = num.toFixed(2);
                 //Ẩn danh sách
@@ -467,6 +453,14 @@ export default {
          * Sự kiện của các phím sử dụng trong combobox department
          * NDHoang(22/06/2022)
          */
+        
+        //Department autoComplete
+        autoCompleteDepartment(id,code,name){
+            var me = this;
+            me.fixedAsset.departmentId = id;
+            me.fixedAsset.departmentCode = code;
+            me.fixedAsset.departmentName = name;
+        },
 
         // Dùng phím mũi tên xuống để di chuyển lựa chọn
         arrowDepartmentsDown(dep) {
@@ -474,13 +468,11 @@ export default {
                 var me = this;
                 //Hiện list danh sách phòng ban
                 me.isShowListDepartments = me.isShow;
-                //Autocomplete
-                me.fixedAsset.departmentId = dep[me.arrowDepartmentsCounter].departmentId;
-                me.fixedAsset.departmentCode = dep[me.arrowDepartmentsCounter].departmentCode;
-                me.fixedAsset.departmentName = dep[me.arrowDepartmentsCounter].departmentName;
                 //So sánh mảng couter với chiều dài của mảng phòng ban
                 if (me.arrowDepartmentsCounter < me.departments.length - 1)
                     me.arrowDepartmentsCounter++;
+                //Autocomplete
+                me.autoCompleteDepartment(dep[me.arrowDepartmentsCounter].departmentId,dep[me.arrowDepartmentsCounter].departmentCode,dep[me.arrowDepartmentsCounter].departmentName);
                 me.scrollDepartmentsTo();
             } catch (error) {
                 console.log(error);
@@ -492,13 +484,11 @@ export default {
                 var me = this
                 //Hiện list danh sách phòng ban
                 me.isShowListDepartments = me.isShow;
-                //Autocomplete
-                me.fixedAsset.departmentId = dep[me.arrowDepartmentsCounter].departmentId;
-                me.fixedAsset.departmentCode = dep[me.arrowDepartmentsCounter].departmentCode;
-                me.fixedAsset.departmentName = dep[me.arrowDepartmentsCounter].departmentName;
                 //So sánh mảng couter với chiều dài của mảng phòng ban
                 if (me.arrowDepartmentsCounter > 0)
                     me.arrowDepartmentsCounter--;
+                //Autocomplete
+                me.autoCompleteDepartment(dep[me.arrowDepartmentsCounter].departmentId,dep[me.arrowDepartmentsCounter].departmentCode,dep[me.arrowDepartmentsCounter].departmentName);
                 me.scrollDepartmentsTo();
             } catch (error) {
                 console.log(error);
@@ -607,10 +597,8 @@ export default {
         listDepartmentsOnClick(dep) {
             try {
                 var me = this;
-                //Gán các giá trị tương ứng
-                me.fixedAsset.departmentId = dep.departmentId;
-                me.fixedAsset.departmentCode = dep.departmentCode;
-                me.fixedAsset.departmentName = dep.departmentName;
+                //Autocomplete
+                me.autoCompleteDepartment(dep.departmentId,dep.departmentCode,dep.departmentName);
                 //Ẩn list
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;
@@ -625,14 +613,13 @@ export default {
                 var me = this;
                 var num = 0
                 // Gán các giá trị tương ứng
-                me.fixedAsset.fixedAssetCategoryId = cat.fixedAssetCategoryId;
-                me.fixedAsset.fixedAssetCategoryCode = cat.fixedAssetCategoryCode;
-                me.fixedAsset.fixedAssetCategoryName = cat.fixedAssetCategoryName;
+                me.autoCompleteCategory(cat.fixedAssetCategoryId,cat.fixedAssetCategoryCode,cat.fixedAssetCategoryName);
                 me.valueLifeTime = cat.lifeTime;
                 //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
-                num = (1 / cat.lifeTime)*100;
+                num = (1 / cat.lifeTime) * 100;
                 //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
                 me.valueDepreciationRate = num.toFixed(2);
+
                 //Ẩn list
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;
@@ -677,7 +664,9 @@ export default {
                                 .catch(function (error) {
                                     if (error.response) {
                                         //Hiển thị popup lỗi
-                                        me.errorMessage = "Mã tài sản đã tồn tại trong hệ thống";
+                                        me.errorMessage.push("Mã tài sản đã tồn tại trong hệ thống");
+                                        console.log(error.response.data);
+                                        console.log(error.response.status);
                                         me.showErrorNotice(me.isShow);
                                     }
                                 })
@@ -702,7 +691,7 @@ export default {
                                 .catch(function (error) {
                                     if (error.response) {
                                         //Hiển thị popup lỗi
-                                        me.errorMessage = "Mã nhân viên đã tồn tại trong hệ thống";
+                                        me.errorMessage.push("Mã nhân viên đã tồn tại trong hệ thống");
                                         me.showErrorNotice(me.isShow);
                                         console.log(error.response.data);
                                         console.log(error.response.status);
@@ -843,16 +832,18 @@ export default {
             //Ép lại kiểu cho value
             value = parseFloat(value);
             if (value >= 1) {
-                value = value / 100;
+                this.fakeValue = value / 100;
             }
             // So sánh giá trị với max
-            this.fixedAsset.depreciationRate = value.toFixed(2);
+            this.fixedAsset.depreciationRate = this.fakeValue.toFixed(2);
         },
 
         valueCost(p) {
             //convert p sang dạng int
             this.fixedAsset.cost = this.convertIntNumber(p);
             //Công thức tính giá trị hao mòn năm nguyên giá nhân với tỉ lệ hao mòn
+            if(this.fixedAsset.depreciationRate > 1)
+                this.fixedAsset.depreciationRate = this.fixedAsset.depreciationRate/100;
             var total = this.fixedAsset.cost * this.fixedAsset.depreciationRate;
             this.valueDepreciationValueYear = Math.floor(total);
         },
@@ -875,20 +866,24 @@ export default {
 
     created() {
         var me = this;
+        //gán giá trị tài sản được chọn cho cho fixedAsset
+        me.fixedAsset = me.fixedAssetSelected;
+        //Xét trạng thái modal tương ứng
         if (me.editMode == me.insertMode) {
             me.modalTitle = "Thêm tài sản";
+            //Đặt giá trị mặc định cho ngày mua và ngày bắt đầu sử dụng
+            me.fixedAsset.purchaseDate = new Date();
+            me.fixedAsset.productionDate = new Date();
         } else me.modalTitle = "Sửa tài sản";
-        //gán giá trị prop cho data fixedAsset
-        me.fixedAsset = me.fixedAssetSelected;
+
         //gán lại giá trị sang kiểu số cho các giá trị numeric
         me.valueCost = me.fixedAsset.cost;
-        me.valueDepreciationValueYear = me.fixedAsset.depreciationValueYear;
         me.valueQuantity = me.fixedAsset.quantity;
         me.valueLifeTime = me.fixedAsset.lifeTime;
         me.valueDepreciationRate = me.fixedAsset.depreciationRate;
-        //Đặt giá trị mặc định cho ngày mua và ngày bắt đầu sử dụng
-        me.fixedAsset.purchaseDate = new Date();
-        me.fixedAsset.productionDate = new Date();
+        if(me.valueDepreciationRate < 1){
+            me.valueDepreciationRate = (me.valueDepreciationRate*100).toFixed(2);
+        }
 
         //Lấy ra danh sách phòng ban
         axios.get("http://localhost:64168/api/v1/departments")
@@ -907,10 +902,6 @@ export default {
             .catch(function (res) {
                 console.log(res);
             })
-
-        // Gán hàm dateOfBirth (Ngày sinh) = Hàm formatDate để xử lý dữ liệu ngày tháng
-        me.fixedAsset.purchaseDate = me.formatDate(me.fixedAsset.purchaseDate);
-        me.fixedAsset.productionDate = me.formatDate(me.fixedAsset.productionDate);
     },
 
     mounted() {

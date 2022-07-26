@@ -5,10 +5,11 @@
                     <div class="popup-content-wrap">
                         <i class="fas fa-exclamation-triangle error-icon"></i>
                         <div id="txtErrorMessage" class="popup-message-content" >
-                            <div v-for="error of errorMessage" :key="error" class="popup-message-content-text">{{error}}</div> 
+                            <div v-for="error of noticeMessage" :key="error" class="popup-message-content-text">{{error}}</div> 
                         </div>
                     </div>
                     <div class="popup-footer">
+                        <button class="main-button white-speial-rectangle-button modal-button-right" @click="showDetail">Chi tiết</button>
                         <button class="main-button rectangle-button modal-button-right" @click="closeNotice">Đồng ý</button>
                     </div>
                 </div>
@@ -16,9 +17,9 @@
 </template>
 <script>
     export default {
-    name: "HErrorMessage",
+    name: "HNoticeMessage",
     props: {
-        errorMessage: {
+        noticeMessage: {
             type: Array,
         },
     },
@@ -34,8 +35,16 @@
          * NDHoang(07/07/2022)
          */
         closeNotice() {
-            this.$emit('closeNotice', false)
+            this.$emit('closeNotice', false);
         },
+
+        /**
+         * Hiện chi tiết
+         * NDHoang(07/07/2022)
+         */
+        showDetail() {
+            this.$emit('showDetail', true);         
+        }
     },
 
     }

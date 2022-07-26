@@ -34,7 +34,7 @@
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>4</RowsCount>
+          <RowsCount>16</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
@@ -90,8 +90,19 @@
             <SeedValue>2</SeedValue>
             <Unique>true</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>Phòng hành chính|Phòng nhân sự|Phòng kế toán
-|Phòng đào tạo</Expression>
+            <Expression>Phòng Hội trường lớn|Phòng Hội trường họp
+|Phòng Kho|Phòng Bổ túc|Phòng Đào Tạo
+|Phòng Đào tạo 2|Phòng Giám đốc|Phòng Kế toán- Văn thư
+|Phòng Kế toán TS|Phòng Hành chính-Lái xe
+|Phòng Bảo vê|Phòng Hướng nghiệp - Điện
+|Phòng Hướng nghiệp- May|Phòng Hướng nghiệp- Nấu ăn
+|Các phòng học
+
+
+
+
+
+</Expression>
           </GeneratorOptions>
           <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
           <GeneratorName>Department</GeneratorName>
@@ -108,7 +119,7 @@
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>4</RowsCount>
+          <RowsCount>20</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
@@ -164,7 +175,24 @@
             <SeedValue>8</SeedValue>
             <Unique>true</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>Bất động sản|Văn phòng phẩm|Nhu yếu phẩm|Gia dụng</Expression>
+            <Expression>Nhà, công trình xây dựng
+Quyền sở hữu công nghiệp
+Tài sản cố định hữu hình khác
+Biệt thự, công trình xây dựng cấp đặc biệt
+Nhà cấp I
+Nhà cấp II
+Nhà cấp III|Nhà cấp IV|Quyền đối với giống cây trồng
+|Quyền tác giả|Thương hiệu của đơn vị sự nghiệp công lập
+|Quyền sở hữu công nghiệp|Quyền đối với giống cây trồng
+|Cổ vật|Hiện vật trưng bày trong bảo tàng
+|Lăng tẩm|Di tích lịch sử được xếp hạng
+|TSCĐ đặc thù khác|Vật kiến trúc
+|Kho chứa, bể chứa, bãi đỗ, sân phơi, sân chơi, sân chơi thể thao, sân vận động, bể bơi, trường bắn
+|Kè, đập, đê, cống, kênh, mương máng, bến cảng, ụ tàu
+|Kho chứa, bể chứa, bãi đỗ, sân phơi, trường bắn
+|Các vật kiến trúc khác|Xe ô tô|Phương tiện vận tải
+
+</Expression>
           </GeneratorOptions>
           <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
           <GeneratorName>Product Category</GeneratorName>
