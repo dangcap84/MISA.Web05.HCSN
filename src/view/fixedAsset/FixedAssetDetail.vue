@@ -35,10 +35,19 @@
                     <div class="input-icon">
                         <div class="combobox combobox-modal-style">
                             <div class="combobox-selected " :class="{'not-valid': inValid.validDepartmentCode,'onfocus': isShowListDepartments}">
-                                <input ref="txtDepartmentCodeRef" v-click-outside="onClickOutsideDepartmentsCombobox" @keyup.enter="selectDepartmentsByEnter(departments)" @keydown.up="arrowDepartmentsUp(departments)" @keydown.down="arrowDepartmentsDown(departments)" autocomplete="off" type="text" v-model="fixedAsset.departmentCode" class="selected-item" placeholder="Chọn mã bộ phận sử dụng" @focusin="departmentsComboboxOnFocus">
+                                <input ref="txtDepartmentCodeRef" v-click-outside="onClickOutsideDepartmentsCombobox" 
+                                @keyup.enter="selectDepartmentsByEnter()" 
+                                @keydown.up="arrowDepartmentsUp(departmentsFilter)" 
+                                @keydown.down="arrowDepartmentsDown(departmentsFilter)"
+                                @keyup="keyUpHandle" 
+                                autocomplete="off" type="text" 
+                                v-model="fixedAsset.departmentCode" 
+                                class="selected-item" 
+                                placeholder="Chọn mã bộ phận sử dụng" 
+                                @focusin="departmentsComboboxOnFocus">
                                 <div class="input-icon3"></div>
                                 <div ref="comboboxDepartments" class="combobox-list" :class="{'visible': isShowListDepartments}">
-                                    <div ref="optionsDepartments" v-for="(dep,index) in departments" :key="dep.departmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" :value="dep.departmentId" @click="listDepartmentsOnClick(dep)">
+                                    <div ref="optionsDepartments" v-for="(dep,index) in departmentsFilter" :key="dep.departmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" :value="dep.departmentId" @click="listDepartmentsOnClick(dep)">
                                         <div class="">{{dep.departmentCode}}</div>
                                         <div class="tabletext-wrap" style="width: 130px">{{dep.departmentName}}</div>
                                     </div>
@@ -64,10 +73,20 @@
                     <div class="input-icon">
                         <div class="combobox combobox-modal-style">
                             <div class="combobox-selected" :class="{'not-valid': inValid.validFixedAssetCategoryCode,'onfocus': isShowListCategoriesAssets}">
-                                <input ref="txtAssetCategoryRef" v-click-outside="onClickOutsideCategoriesCombobox" id="cbxTypeOf" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keydown.tab="tabOutCategoriesCombobox" @keydown.up="arrowListCategoriesUp(fixedAssetCategories)" @keydown.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAsset.fixedAssetCategoryCode" class="selected-item" placeholder="Chọn mã loại tài sản" @focusin="fixedAssetCategoriesComboboxOnFocus">
+                                <input ref="txtAssetCategoryRef" v-click-outside="onClickOutsideCategoriesCombobox" id="cbxTypeOf" 
+                                @keyup.enter="selectListCategoriesByEnter()" 
+                                @keydown.tab="tabOutCategoriesCombobox" 
+                                @keydown.up="arrowListCategoriesUp(fixedAssetCategoriesFilter)" 
+                                @keydown.down="arrowListCategoriesDown(fixedAssetCategoriesFilter)"
+                                @keyup="keyUpHandle"
+                                autocomplete="off" type="text" 
+                                v-model="fixedAsset.fixedAssetCategoryCode" 
+                                class="selected-item" 
+                                placeholder="Chọn mã loại tài sản" 
+                                @focusin="fixedAssetCategoriesComboboxOnFocus">
                                 <div class="input-icon3"></div>
                                 <div ref="comboboxListCategories" class="combobox-list" :class="{'visible': isShowListCategoriesAssets}">
-                                    <div ref="optionsListCategories" v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" :value="cat.fixedAssetCategoryId" @click="listfixedAssetCategoriesOnClick(cat)">
+                                    <div ref="optionsListCategories" v-for="(cat,index) in fixedAssetCategoriesFilter" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" :value="cat.fixedAssetCategoryId" @click="listfixedAssetCategoriesOnClick(cat)">
                                         <div class="">{{cat.fixedAssetCategoryCode}}</div>
                                         <div class="tabletext-wrap" style="width: 130px">{{cat.fixedAssetCategoryName}}</div>
                                     </div>
@@ -121,7 +140,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker format="dd/MM/yyyy" arrowNavigation locale="vi" placeholder="VD:01/01/2022" textInput cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
+                        <Datepicker ref="txtPurchaseDateRef" format="dd/MM/yyyy" arrowNavigation textInput locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
@@ -134,7 +153,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker format="dd/MM/yyyy" arrowNavigation locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
+                        <Datepicker ref="txtProductionDateRef" format="dd/MM/yyyy" arrowNavigation textInput locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
@@ -244,9 +263,11 @@ export default {
 
             //tạo mảng phòng ban
             departments: [],
+            departmentsFilter: [],
 
             //tạo mảng loại tài sản
             fixedAssetCategories: [],
+            fixedAssetCategoriesFilter: [],
 
             //Đặt mặc định ẩn list
             isShowListDepartments: false,
@@ -363,11 +384,17 @@ export default {
          */
 
         //Category autoComplete
-        autoCompleteCategory(id,code,name){
+        autoCompleteCategory(id,code,name,lifeTime){
             var me = this;
             me.fixedAsset.fixedAssetCategoryId = id;
             me.fixedAsset.fixedAssetCategoryCode = code;
             me.fixedAsset.fixedAssetCategoryName = name;
+            //Gán giá trị mặc định số năm sử dụng của loại tài sản
+                me.valueLifeTime = lifeTime;
+                //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
+                var num = (1 / lifeTime) * 100;
+                //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
+                me.valueDepreciationRate = num.toFixed(2);
         },
 
         // Dùng phím mũi tên xuống để di chuyển lựa chọn
@@ -377,10 +404,10 @@ export default {
                 //Hiện list danh sách loại tài sản
                 me.isShowListCategoriesAssets = me.isShow;
                 //So sánh mảng couter với chiều dài của mảng loại tài sản
-                if (me.arrowCategoriesCounter < me.fixedAssetCategories.length - 1)
+                if (me.arrowCategoriesCounter < me.fixedAssetCategoriesFilter.length - 1)
                     me.arrowCategoriesCounter++;
                 //Autocomplete
-                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName);
+                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName,cat[me.arrowCategoriesCounter].lifeTime);
                 me.scrollListCategoriesTo()
             } catch (error) {
                 console.log(error);
@@ -397,7 +424,7 @@ export default {
                 if (me.arrowCategoriesCounter >= 0)
                     me.arrowCategoriesCounter--;
                 //autocomplete
-                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName);
+                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName,cat[me.arrowCategoriesCounter].lifeTime);
                 me.scrollListCategoriesTo()
             } catch (error) {
                 console.log(error);
@@ -411,15 +438,9 @@ export default {
         },
 
         //Chọn bằng enter
-        selectListCategoriesByEnter(cat) {
+        selectListCategoriesByEnter() {
             try {
                 var me = this;
-                //Gán giá trị mặc định số năm sử dụng của loại tài sản
-                me.valueLifeTime = cat[this.arrowCategoriesCounter].lifeTime;
-                //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
-                var num = (1 / cat[this.arrowCategoriesCounter].lifeTime) * 100;
-                //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
-                me.valueDepreciationRate = num.toFixed(2);
                 //Ẩn danh sách
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;
@@ -469,7 +490,7 @@ export default {
                 //Hiện list danh sách phòng ban
                 me.isShowListDepartments = me.isShow;
                 //So sánh mảng couter với chiều dài của mảng phòng ban
-                if (me.arrowDepartmentsCounter < me.departments.length - 1)
+                if (me.arrowDepartmentsCounter < me.departmentsFilter.length - 1)
                     me.arrowDepartmentsCounter++;
                 //Autocomplete
                 me.autoCompleteDepartment(dep[me.arrowDepartmentsCounter].departmentId,dep[me.arrowDepartmentsCounter].departmentCode,dep[me.arrowDepartmentsCounter].departmentName);
@@ -521,6 +542,67 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        /**
+         * Lọc danh sách list theo input
+         * NDHoang(26/07/2022)
+         */
+        categoriesFilterHandel() {
+            try {
+                var me = this;
+                if(!me.fixedAsset.fixedAssetCategoryCode){
+                    me.fixedAssetCategoriesFilter = me.fixedAssetCategories
+                } else {
+                    me.fixedAssetCategoriesFilter = me.fixedAssetCategories.filter((Category) => {
+                    return Category.fixedAssetCategoryCode.toLowerCase().match(me.fixedAsset.fixedAssetCategoryCode.toLowerCase());
+                    });
+                }
+                return me.fixedAssetCategoriesFilter;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Lọc danh sách list theo input
+         * NDHoang(26/07/2022)
+         */
+        departmentsFilterHandel() {
+            try {
+                var me = this;
+                if(!me.fixedAsset.departmentCode){
+                    me.departmentsFilter = me.departments
+                } else {
+                    me.departmentsFilter = me.departments.filter((department) => {
+                    return department.departmentCode.toLowerCase().match(me.fixedAsset.departmentCode.toLowerCase());
+                    });
+                }
+                return me.departmentsFilter;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Bắt sự kiện phím điều hướng để thực hiện autocomplete
+         * NDHoang(26/07/2022)
+         */
+        keyUpHandle(e) {
+            try {
+                var me = this;
+                var keyCode = e.which;
+                // Thực hiện lọc list nếu giá trị keyCode không phải phím điều hướng lên xuống hoặc enter
+                if (keyCode != 38 && keyCode != 40 && keyCode != 13 && keyCode != 27) {
+                me.arrowDepartmentsCounter = 0;
+                me.arrowCategoriesCounter = 0;
+                me.categoriesFilterHandel();
+                me.departmentsFilterHandel();
+            }
+            } catch (error) {
+                console.log(error);
+            }
+            
         },
 
         /**
@@ -664,9 +746,8 @@ export default {
                                 .catch(function (error) {
                                     if (error.response) {
                                         //Hiển thị popup lỗi
+                                        me.errorMessage = [];
                                         me.errorMessage.push("Mã tài sản đã tồn tại trong hệ thống");
-                                        console.log(error.response.data);
-                                        console.log(error.response.status);
                                         me.showErrorNotice(me.isShow);
                                     }
                                 })
@@ -691,10 +772,11 @@ export default {
                                 .catch(function (error) {
                                     if (error.response) {
                                         //Hiển thị popup lỗi
+                                        me.errorMessage = [];
                                         me.errorMessage.push("Mã nhân viên đã tồn tại trong hệ thống");
-                                        me.showErrorNotice(me.isShow);
                                         console.log(error.response.data);
                                         console.log(error.response.status);
+                                        me.showErrorNotice(me.isShow);
                                     }
                                 })
                                 .then(function (res) {
@@ -720,10 +802,27 @@ export default {
             try {
                 var me = this;
                 me.isValid = true;
+                //Check ngày sử dụng
+                if (!me.fixedAsset.productionDate) {
+                    me.isValid = false;
+                    me.inValid.validProductionDate = true;
+                    me.$refs.txtProductionDateRef.focus();
+                } else {
+                    me.inValid.validProductionDate = false;
+                }
+                //Check ngày mua
+                if (!me.fixedAsset.purchaseDate) {
+                    me.isValid = false;
+                    me.inValid.validPurchaseDate = true;
+                    me.$refs.txtPurchaseDateRef.focus();
+                } else {
+                    me.inValid.validPurchaseDate = false;
+                }
                 //Check mã loại tài sản
                 if (!me.fixedAsset.fixedAssetCategoryCode) {
                     me.isValid = false;
                     me.inValid.validFixedAssetCategoryCode = true;
+                        me.$refs.txtAssetCategoryRef.focus();
                 } else {
                     me.inValid.validFixedAssetCategoryCode = false;
                 }
@@ -731,6 +830,7 @@ export default {
                 if (!me.fixedAsset.departmentCode) {
                     me.isValid = false;
                     me.inValid.validDepartmentCode = true;
+                    me.$refs.txtDepartmentCodeRef.focus();
                 } else {
                     me.inValid.validDepartmentCode = false;
                 }
@@ -785,20 +885,6 @@ export default {
                 } else {
                     me.inValid.validDepreciationValueYear = false;
                 }
-                //Check ngày mua
-                if (!me.fixedAsset.purchaseDate) {
-                    me.isValid = false;
-                    me.inValid.validPurchaseDate = true;
-                } else {
-                    me.inValid.validPurchaseDate = false;
-                }
-                //Check ngày sử dụng
-                if (!me.fixedAsset.productionDate) {
-                    me.isValid = false;
-                    me.inValid.validProductionDate = true;
-                } else {
-                    me.inValid.validProductionDate = false;
-                }
                 if (!me.isValid) {
                     return false;
                 } else return true;
@@ -836,6 +922,8 @@ export default {
             }
             // So sánh giá trị với max
             this.fixedAsset.depreciationRate = this.fakeValue.toFixed(2);
+            var total = this.fixedAsset.cost * this.fixedAsset.depreciationRate;
+            this.valueDepreciationValueYear = Math.floor(total);
         },
 
         valueCost(p) {
@@ -889,6 +977,7 @@ export default {
         axios.get("http://localhost:64168/api/v1/departments")
             .then(function (res) {
                 me.departments = res.data;
+                me.departmentsFilter = me.departments;
             })
             .catch(function (res) {
                 console.log(res);
@@ -898,6 +987,7 @@ export default {
         axios.get("http://localhost:64168/api/v1/fixedAssetCategories")
             .then(function (res) {
                 me.fixedAssetCategories = res.data;
+                me.fixedAssetCategoriesFilter = me.fixedAssetCategories;
             })
             .catch(function (res) {
                 console.log(res);

@@ -13,8 +13,8 @@
 }
 
 .dp__input_icon {
-    top: 28% !important;
-    left: 92.5% !important;
+    top: 26% !important;
+    left: 91.5% !important;
 }
 
 .dp__main {
@@ -22,15 +22,14 @@
     width: 282.5px;
     height: 36px;
     border-radius: 2.5px;
-    border: 1px solid #afafaf;
 }
 
-.dp__main:hover {
-    border-color: #1aa4c8;
+.dp__input:hover {
+    border-color: #1aa4c8 !important;
 }
 
-.dp__main:focus {
-    border-color: #1aa4c8;
+.dp__input:focus {
+    border-color: #1aa4c8 !important;
 }
 
 .dp__clear_icon {
@@ -45,7 +44,7 @@
     border-radius: 2.5px !important;
     font-family: sans-serif !important;
     font-size: 13px !important;
-    border: none !important;
+    border: 1px solid #afafaf !important;
     padding: 5px 12px;
 }
 

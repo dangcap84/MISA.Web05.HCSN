@@ -8,10 +8,19 @@
         <div class="combobox">
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
-                <input v-click-outside="onClickOutsideCategoriesCombobox" placeholder="Loại tài sản" @keyup.enter="selectListCategoriesByEnter(fixedAssetCategories)" @keyup.up="arrowListCategoriesUp(fixedAssetCategories)" @keyup.down="arrowListCategoriesDown(fixedAssetCategories)" autocomplete="off" type="text" v-model="fixedAssetCategoriesDefaulName" class="selected-item" @focusin="fixedAssetCategoriesComboboxOnFocus">
+                <input v-click-outside="onClickOutsideCategoriesCombobox" placeholder="Loại tài sản" 
+                @keyup.enter="selectListCategoriesByEnter(fixedAssetCategoriesFilter)" 
+                @keyup.up="arrowListCategoriesUp(fixedAssetCategoriesFilter)" 
+                @keyup.down="arrowListCategoriesDown(fixedAssetCategoriesFilter)"
+                @keyup="keyUpHandle" 
+                autocomplete="off" 
+                type="text" 
+                v-model="fixedAssetCategoriesDefaulName" 
+                class="selected-item" 
+                @focusin="fixedAssetCategoriesComboboxOnFocus">
                 <div class="input-icon3"></div>
                 <div ref="comboboxListCategories" class="combobox-list" :class="{'visible': isShowListCategoriesAssets}">
-                    <div ref="optionsListCategories" v-for="(cat,index) in fixedAssetCategories" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" @click="listFixedAssetCategoriesOnClick(cat.fixedAssetCategoryName)">
+                    <div ref="optionsListCategories" v-for="(cat,index) in fixedAssetCategoriesFilter" :key="cat.fixedAssetCategoryId" :class="{'ishover': index==arrowCategoriesCounter}" class="combobox-items" @click="listFixedAssetCategoriesOnClick(cat.fixedAssetCategoryName)">
                         <div :title="cat.fixedAssetCategoryName" class="tabletext-wrap">{{cat.fixedAssetCategoryName}}</div>
                     </div>
                 </div>
@@ -20,10 +29,18 @@
         <div class="combobox">
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
-                <input v-click-outside="onClickOutsideDepartmentsCombobox" placeholder="Bộ phận sử dụng" @keyup.enter="selectDepartmentsByEnter(departments)" @keydown.tab="tabOutDepartmentsCombobox" @keyup.up="arrowDepartmentsUp(departments)" @keyup.down="arrowDepartmentsDown(departments)" autocomplete="off" type="text" v-model="departmentDefaulName" class="selected-item" @focusin="departmentsComboboxOnFocus">
+                <input v-click-outside="onClickOutsideDepartmentsCombobox" placeholder="Bộ phận sử dụng" 
+                @keyup.enter="selectDepartmentsByEnter(departmentsFilter)" 
+                @keydown.tab="tabOutDepartmentsCombobox" 
+                @keyup.up="arrowDepartmentsUp(departmentsFilter)" 
+                @keyup.down="arrowDepartmentsDown(departmentsFilter)" 
+                @keyup="keyUpHandle"
+                autocomplete="off" type="text" v-model="departmentDefaulName" 
+                class="selected-item" 
+                @focusin="departmentsComboboxOnFocus">
                 <div class="input-icon3"></div>
                 <div ref="comboboxDepartments" class="combobox-list" :class="{'visible': isShowListDepartments}">
-                    <div ref="optionsDepartments" v-for="(dep,index) in departments" :key="dep.DepartmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" @click="listDepartmentsOnClick(dep.departmentName)">
+                    <div ref="optionsDepartments" v-for="(dep,index) in departmentsFilter" :key="dep.DepartmentId" :class="{'ishover': index==arrowDepartmentsCounter}" class="combobox-items" @click="listDepartmentsOnClick(dep.departmentName)">
                         <div class="tabletext-wrap">{{dep.departmentName}}</div>
                     </div>
                 </div>
@@ -232,12 +249,14 @@ export default {
 
             //Tạo mảng đối tượng assetCategorys
             fixedAssetCategories: [],
+            fixedAssetCategoriesFilter: [],
 
             //tạo đối tượng fixedAssetSelected
             fixedAssetSelected: {},
 
             //tạo mảng đối tượng phòng ban,
             departments: [],
+            departmentsFilter: [],
 
             //tạo mảng lưu id selected
             idSelected: [],
@@ -762,7 +781,7 @@ export default {
                 //Hiện danh sách loại tài sản
                 me.isShowListCategoriesAssets = me.isShow;
                 //Điều kiện chọn
-                if (me.arrowCategoriesCounter < me.fixedAssetCategories.length - 1)
+                if (me.arrowCategoriesCounter < me.fixedAssetCategoriesFilter.length - 1)
                     me.arrowCategoriesCounter++;
                 //Autocomplete
                 me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
@@ -832,7 +851,7 @@ export default {
                 //Hiển thị danh sách
                 me.isShowListDepartments = me.isShow;
                 //Điều kiện chọn
-                if (me.arrowDepartmentsCounter < me.departments.length - 1)
+                if (me.arrowDepartmentsCounter < me.departmentsFilter.length - 1)
                     me.arrowDepartmentsCounter++;
                 //Autocomplete
                 me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
@@ -995,20 +1014,66 @@ export default {
                 console.log(error);
             }
         },
-    },
 
-    computed: {
-        //Lọc danh sách phòng ban
-        departmentsFilter: function () {
-            return this.departments.filter((department) => {
-                return department.departmentName.match(this.departmentDefaulName);
-            });
+        /**
+         * Lọc danh sách list theo input
+         * NDHoang(26/07/2022)
+         */
+        categoriesFilterHandel() {
+            try {
+                var me = this;
+                if(!me.fixedAssetCategoriesDefaulName){
+                    me.fixedAssetCategoriesFilter = me.fixedAssetCategories
+                } else {
+                    me.fixedAssetCategoriesFilter = me.fixedAssetCategories.filter((Category) => {
+                    return Category.fixedAssetCategoryName.toLowerCase().match(me.fixedAssetCategoriesDefaulName.toLowerCase());
+                    });
+                }
+                return me.fixedAssetCategoriesFilter;
+            } catch (error) {
+                console.log(error);
+            }
         },
-        //Lọc danh sách loại tài sản
-        fixedAssetCategoriesFilter: function () {
-            return this.fixedAssetCategories.filter((Category) => {
-                return Category.fixedAssetCategoryName.match(this.fixedAssetCategoriesDefaulName);
-            });
+
+        /**
+         * Lọc danh sách list theo input
+         * NDHoang(26/07/2022)
+         */
+        departmentsFilterHandel() {
+            try {
+                var me = this;
+                if(!me.departmentDefaulName){
+                    me.departmentsFilter = me.departments
+                } else {
+                    me.departmentsFilter = me.departments.filter((department) => {
+                    return department.departmentName.toLowerCase().match(me.departmentDefaulName.toLowerCase());
+                    });
+                }
+                return me.departmentsFilter;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * Bắt sự kiện phím điều hướng để thực hiện autocomplete
+         * NDHoang(26/07/2022)
+         */
+        keyUpHandle(e) {
+            try {
+                var me = this;
+                var keyCode = e.which;
+                // Thực hiện lọc list nếu giá trị keyCode không phải phím điều hướng lên xuống hoặc enter
+                if (keyCode != 38 && keyCode != 40 && keyCode != 13 && keyCode != 27) {
+                me.arrowDepartmentsCounter = 0;
+                me.arrowCategoriesCounter = 0;
+                me.categoriesFilterHandel();
+                me.departmentsFilterHandel();
+            }
+            } catch (error) {
+                console.log(error);
+            }
+            
         }
     },
 
@@ -1063,6 +1128,7 @@ export default {
             axios.get("http://localhost:64168/api/v1/Departments")
                 .then(function (res) {
                     me.departments = res.data;
+                    me.departmentsFilterHandel();
                 })
                 .catch(function (res) {
                     console.log(res);
@@ -1071,10 +1137,12 @@ export default {
             axios.get("http://localhost:64168/api/v1/FixedAssetCategories")
                 .then(function (res) {
                     me.fixedAssetCategories = res.data;
+                    me.categoriesFilterHandel();
                 })
                 .catch(function (res) {
                     console.log(res);
                 })
+            
 
         } catch (error) {
             console.log(error)

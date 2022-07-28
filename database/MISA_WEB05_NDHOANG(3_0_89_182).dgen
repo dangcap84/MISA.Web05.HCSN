@@ -176,12 +176,12 @@
             <Unique>true</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <Expression>Nhà, công trình xây dựng
-Quyền sở hữu công nghiệp
-Tài sản cố định hữu hình khác
-Biệt thự, công trình xây dựng cấp đặc biệt
-Nhà cấp I
-Nhà cấp II
-Nhà cấp III|Nhà cấp IV|Quyền đối với giống cây trồng
+|Quyền sở hữu công nghiệp
+|Tài sản cố định hữu hình khác
+|Biệt thự, công trình xây dựng cấp đặc biệt
+|Nhà cấp I
+|Nhà cấp II
+|Nhà cấp III|Nhà cấp IV|Quyền đối với giống cây trồng
 |Quyền tác giả|Thương hiệu của đơn vị sự nghiệp công lập
 |Quyền sở hữu công nghiệp|Quyền đối với giống cây trồng
 |Cổ vật|Hiện vật trưng bày trong bảo tàng
@@ -416,7 +416,7 @@ Nhà cấp III|Nhà cấp IV|Quyền đối với giống cây trồng
           <GeneratorOptions p6:type="ForeignKeyGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>3</SeedValue>
