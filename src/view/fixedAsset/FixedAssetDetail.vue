@@ -36,10 +36,11 @@
                         <div class="combobox combobox-modal-style">
                             <div class="combobox-selected " :class="{'not-valid': inValid.validDepartmentCode,'onfocus': isShowListDepartments}">
                                 <input ref="txtDepartmentCodeRef" v-click-outside="onClickOutsideDepartmentsCombobox" 
-                                @keyup.enter="selectDepartmentsByEnter()" 
-                                @keydown.up="arrowDepartmentsUp(departmentsFilter)" 
-                                @keydown.down="arrowDepartmentsDown(departmentsFilter)"
-                                @keyup="keyUpHandle" 
+                                @keyup.enter="selectListByEnter"
+                                @keydown.tab="tabOutCombobox"
+                                @keydown.up="arrowListUp(departmentsFilter)" 
+                                @keydown.down="arrowListDown(departmentsFilter)"
+                                @keyup="keyUpHandle($event,departmentsFilter)" 
                                 autocomplete="off" type="text" 
                                 v-model="fixedAsset.departmentCode" 
                                 class="selected-item" 
@@ -74,11 +75,11 @@
                         <div class="combobox combobox-modal-style">
                             <div class="combobox-selected" :class="{'not-valid': inValid.validFixedAssetCategoryCode,'onfocus': isShowListCategoriesAssets}">
                                 <input ref="txtAssetCategoryRef" v-click-outside="onClickOutsideCategoriesCombobox" id="cbxTypeOf" 
-                                @keyup.enter="selectListCategoriesByEnter()" 
-                                @keydown.tab="tabOutCategoriesCombobox" 
-                                @keydown.up="arrowListCategoriesUp(fixedAssetCategoriesFilter)" 
-                                @keydown.down="arrowListCategoriesDown(fixedAssetCategoriesFilter)"
-                                @keyup="keyUpHandle"
+                                @keyup.enter="selectListByEnter" 
+                                @keydown.tab="tabOutCombobox" 
+                                @keydown.up="arrowListUp(fixedAssetCategoriesFilter)" 
+                                @keydown.down="arrowListDown(fixedAssetCategoriesFilter)"
+                                @keyup="keyUpHandle($event,fixedAssetCategoriesFilter)"
                                 autocomplete="off" type="text" 
                                 v-model="fixedAsset.fixedAssetCategoryCode" 
                                 class="selected-item" 
@@ -379,10 +380,9 @@ export default {
         },
 
         /**
-         * Sự kiện của các phím sử dụng trong combobox category
-         * NDHoang(22/06/2022)
+         * Autocomplete
+         * NDHoang(22/07/2022)
          */
-
         //Category autoComplete
         autoCompleteCategory(id,code,name,lifeTime){
             var me = this;
@@ -390,55 +390,115 @@ export default {
             me.fixedAsset.fixedAssetCategoryCode = code;
             me.fixedAsset.fixedAssetCategoryName = name;
             //Gán giá trị mặc định số năm sử dụng của loại tài sản
-                me.valueLifeTime = lifeTime;
-                //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
-                var num = (1 / lifeTime) * 100;
-                //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
-                me.valueDepreciationRate = num.toFixed(2);
+            me.valueLifeTime = lifeTime;
+            //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
+            var num = (1 / lifeTime) * 100;
+            //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
+            me.valueDepreciationRate = num.toFixed(2);
         },
 
+        //Department autoComplete
+        autoCompleteDepartment(id,code,name){
+            var me = this;
+            //Gán giá trị
+            me.fixedAsset.departmentId = id;
+            me.fixedAsset.departmentCode = code;
+            me.fixedAsset.departmentName = name;
+        },
+
+        /**
+         * Sử dụng phím mũi tên
+         * NDHoang(22/07/2022)
+         */
         // Dùng phím mũi tên xuống để di chuyển lựa chọn
-        arrowListCategoriesDown(cat) {
+        arrowListDown(object) {
             try {
-                var me = this
-                //Hiện list danh sách loại tài sản
-                me.isShowListCategoriesAssets = me.isShow;
-                //So sánh mảng couter với chiều dài của mảng loại tài sản
-                if (me.arrowCategoriesCounter < me.fixedAssetCategoriesFilter.length - 1)
-                    me.arrowCategoriesCounter++;
-                //Autocomplete
-                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName,cat[me.arrowCategoriesCounter].lifeTime);
-                me.scrollListCategoriesTo()
+                var me = this;
+                if(object == me.fixedAssetCategoriesFilter){
+                    //Hiện list danh sách loại tài sản
+                    me.isShowListCategoriesAssets = me.isShow;
+                    //So sánh mảng couter với chiều dài của mảng loại tài sản
+                    if (me.arrowCategoriesCounter < object.length - 1)
+                        me.arrowCategoriesCounter++;
+                    //Autocomplete
+                    me.autoCompleteCategory(object[me.arrowCategoriesCounter].fixedAssetCategoryId,object[me.arrowCategoriesCounter].fixedAssetCategoryCode,object[me.arrowCategoriesCounter].fixedAssetCategoryName,object[me.arrowCategoriesCounter].lifeTime);
+                    me.scrollListCategoriesTo()
+                } else {
+                    //Hiện list danh sách phòng ban
+                    me.isShowListDepartments = me.isShow;
+                    //So sánh mảng couter với chiều dài của mảng phòng ban
+                    if (me.arrowDepartmentsCounter < object.length - 1)
+                        me.arrowDepartmentsCounter++;
+                    //Autocomplete
+                    me.autoCompleteDepartment(object[me.arrowDepartmentsCounter].departmentId,object[me.arrowDepartmentsCounter].departmentCode,object[me.arrowDepartmentsCounter].departmentName);
+                    me.scrollDepartmentsTo();
+                }
             } catch (error) {
                 console.log(error);
             }
         },
         
         // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowListCategoriesUp(cat) {
+        arrowListUp(object) {
             try {
-                var me = this
-                //Hiện list danh sách loại tài sản
-                me.isShowListCategoriesAssets = me.isShow;
-                //So sánh mảng couter với chiều dài của mảng loại tài sản
-                if (me.arrowCategoriesCounter >= 0)
-                    me.arrowCategoriesCounter--;
-                //autocomplete
-                me.autoCompleteCategory(cat[me.arrowCategoriesCounter].fixedAssetCategoryId,cat[me.arrowCategoriesCounter].fixedAssetCategoryCode,cat[me.arrowCategoriesCounter].fixedAssetCategoryName,cat[me.arrowCategoriesCounter].lifeTime);
-                me.scrollListCategoriesTo()
+                var me = this;
+                if(object == me.fixedAssetCategoriesFilter){
+                    //Hiện list danh sách loại tài sản
+                    me.isShowListCategoriesAssets = me.isShow;
+                    //So sánh mảng couter với chiều dài của mảng loại tài sản
+                    if (me.arrowCategoriesCounter > 0)
+                        me.arrowCategoriesCounter--;
+                    //Autocomplete
+                    me.autoCompleteCategory(object[me.arrowCategoriesCounter].fixedAssetCategoryId,object[me.arrowCategoriesCounter].fixedAssetCategoryCode,object[me.arrowCategoriesCounter].fixedAssetCategoryName,object[me.arrowCategoriesCounter].lifeTime);
+                    me.scrollListCategoriesTo()
+                } else {
+                    //Hiện list danh sách phòng ban
+                    me.isShowListDepartments = me.isShow;
+                    //So sánh mảng couter với chiều dài của mảng phòng ban
+                    if (me.arrowDepartmentsCounter > 0)
+                        me.arrowDepartmentsCounter--;
+                    //Autocomplete
+                    me.autoCompleteDepartment(object[me.arrowDepartmentsCounter].departmentId,object[me.arrowDepartmentsCounter].departmentCode,object[me.arrowDepartmentsCounter].departmentName);
+                    me.scrollDepartmentsTo();
+                }
             } catch (error) {
                 console.log(error);
             }
         },
 
-        //ScrollTo
+        /**
+         * Cuộn theo phím mũi tên
+         * NDHoang(22/07/2022)
+         */
         scrollListCategoriesTo() {
-            const itemHeight = this.$refs.optionsListCategories[this.arrowCategoriesCounter].clientHeight;
-            this.$refs.comboboxListCategories.scrollTop = itemHeight * this.arrowCategoriesCounter - this.$refs.comboboxListCategories.clientHeight / 2;
+            try {
+                //Lấy chiều cao của list
+                const itemHeight = this.$refs.optionsListCategories[this.arrowCategoriesCounter].clientHeight;
+                //Cuộn
+                this.$refs.comboboxListCategories.scrollTop = itemHeight * this.arrowCategoriesCounter - this.$refs.comboboxListCategories.clientHeight / 2;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
+        
+        scrollDepartmentsTo() {
+            try {
+                //Lấy chiều cao của list
+                const itemHeight = this.$refs.optionsDepartments[this.arrowDepartmentsCounter].clientHeight;
+                //Cuộn
+                this.$refs.comboboxDepartments.scrollTop = itemHeight * this.arrowDepartmentsCounter - this.$refs.comboboxDepartments.clientHeight / 2;
+            }
+            catch (error) {
+                console.log(error);
+            }
         },
 
-        //Chọn bằng enter
-        selectListCategoriesByEnter() {
+        /**
+         * Chọn bằng Enter
+         * NDHoang(22/07/2022)
+         */
+        selectListByEnter() {
             try {
                 var me = this;
                 //Ẩn danh sách
@@ -449,21 +509,15 @@ export default {
             }
         },
 
-        //Sự kiện tab ra ngoài combobox
-        tabOutCategoriesCombobox() {
+        /**
+         * Tab ra ngoài combobox
+         * NDHoang(22/07/2022)
+         */
+        tabOutCombobox() {
             try {
                 var me = this;
+                //Ẩn danh sách
                 me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Sự kiên click ra ngoài combobox
-        onClickOutsideCategoriesCombobox() {
-            try {
-                var me = this;
                 me.isShowListCategoriesAssets = me.isHide;
             } catch (error) {
                 console.log(error);
@@ -471,78 +525,30 @@ export default {
         },
 
         /**
-         * Sự kiện của các phím sử dụng trong combobox department
-         * NDHoang(22/06/2022)
+         * Click ra ngoài combobx
+         * NDHoang(22/07/2022)
          */
-        
-        //Department autoComplete
-        autoCompleteDepartment(id,code,name){
-            var me = this;
-            me.fixedAsset.departmentId = id;
-            me.fixedAsset.departmentCode = code;
-            me.fixedAsset.departmentName = name;
-        },
-
-        // Dùng phím mũi tên xuống để di chuyển lựa chọn
-        arrowDepartmentsDown(dep) {
+        //Sự kiên click ra ngoài combobox loại tài sản
+        onClickOutsideCategoriesCombobox() {
             try {
                 var me = this;
-                //Hiện list danh sách phòng ban
-                me.isShowListDepartments = me.isShow;
-                //So sánh mảng couter với chiều dài của mảng phòng ban
-                if (me.arrowDepartmentsCounter < me.departmentsFilter.length - 1)
-                    me.arrowDepartmentsCounter++;
-                //Autocomplete
-                me.autoCompleteDepartment(dep[me.arrowDepartmentsCounter].departmentId,dep[me.arrowDepartmentsCounter].departmentCode,dep[me.arrowDepartmentsCounter].departmentName);
-                me.scrollDepartmentsTo();
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowDepartmentsUp(dep) {
-            try {
-                var me = this
-                //Hiện list danh sách phòng ban
-                me.isShowListDepartments = me.isShow;
-                //So sánh mảng couter với chiều dài của mảng phòng ban
-                if (me.arrowDepartmentsCounter > 0)
-                    me.arrowDepartmentsCounter--;
-                //Autocomplete
-                me.autoCompleteDepartment(dep[me.arrowDepartmentsCounter].departmentId,dep[me.arrowDepartmentsCounter].departmentCode,dep[me.arrowDepartmentsCounter].departmentName);
-                me.scrollDepartmentsTo();
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Scroll to
-        scrollDepartmentsTo() {
-            const itemHeight = this.$refs.optionsDepartments[this.arrowDepartmentsCounter].clientHeight;
-            this.$refs.comboboxDepartments.scrollTop = itemHeight * this.arrowDepartmentsCounter - this.$refs.comboboxDepartments.clientHeight / 2;
-        },
-
-        //Chọn bằng enter
-        selectDepartmentsByEnter() {
-            try {
-                var me = this;
-                //Ẩn list
-                me.isShowListDepartments = me.isHide;
+                //Ẩn danh sách
                 me.isShowListCategoriesAssets = me.isHide;
             } catch (error) {
                 console.log(error);
             }
         },
 
-        //Sự kiên click ra ngoài combobox
+        //Sự kiên click ra ngoài combobox phòng ban
         onClickOutsideDepartmentsCombobox() {
             try {
                 var me = this;
+                //Ẩn danh sách
                 me.isShowListDepartments = me.isHide;
             } catch (error) {
                 console.log(error);
             }
-        },
+        },    
 
         /**
          * Lọc danh sách list theo input
@@ -588,7 +594,7 @@ export default {
          * Bắt sự kiện phím điều hướng để thực hiện autocomplete
          * NDHoang(26/07/2022)
          */
-        keyUpHandle(e) {
+        keyUpHandle(e,object) {
             try {
                 var me = this;
                 var keyCode = e.which;
@@ -596,8 +602,13 @@ export default {
                 if (keyCode != 38 && keyCode != 40 && keyCode != 13 && keyCode != 27) {
                 me.arrowDepartmentsCounter = 0;
                 me.arrowCategoriesCounter = 0;
-                me.categoriesFilterHandel();
-                me.departmentsFilterHandel();
+                if(object == me.departmentsFilter){
+                    me.isShowListDepartments = me.isShow;
+                    me.departmentsFilterHandel();
+                } else {
+                    me.isShowListCategoriesAssets = me.isShow;
+                    me.categoriesFilterHandel();
+                }
             }
             } catch (error) {
                 console.log(error);
@@ -693,15 +704,8 @@ export default {
         listfixedAssetCategoriesOnClick(cat) {
             try {
                 var me = this;
-                var num = 0
                 // Gán các giá trị tương ứng
-                me.autoCompleteCategory(cat.fixedAssetCategoryId,cat.fixedAssetCategoryCode,cat.fixedAssetCategoryName);
-                me.valueLifeTime = cat.lifeTime;
-                //Tỉ lệ hao mòn bằng 1 chia số năm sử dụng
-                num = (1 / cat.lifeTime) * 100;
-                //Tỉ lệ hao mòn làm tròn tới số thập phân thứ 2
-                me.valueDepreciationRate = num.toFixed(2);
-
+                me.autoCompleteCategory(cat.fixedAssetCategoryId,cat.fixedAssetCategoryCode,cat.fixedAssetCategoryName,cat.lifeTime);
                 //Ẩn list
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;

@@ -55,6 +55,10 @@
     margin-right: 40px !important;
 }
 
+.combobox-modal-style .combobox-selected {
+    padding: 8px 8px 8px 14px;
+}
+
 .combobox-modal-style .combobox-list {
     width: 275px;
     padding-left: 8px;

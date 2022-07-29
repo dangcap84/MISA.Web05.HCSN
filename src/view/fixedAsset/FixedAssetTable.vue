@@ -9,10 +9,11 @@
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
                 <input v-click-outside="onClickOutsideCategoriesCombobox" placeholder="Loại tài sản" 
-                @keyup.enter="selectListCategoriesByEnter(fixedAssetCategoriesFilter)" 
-                @keyup.up="arrowListCategoriesUp(fixedAssetCategoriesFilter)" 
-                @keyup.down="arrowListCategoriesDown(fixedAssetCategoriesFilter)"
-                @keyup="keyUpHandle" 
+                @keyup.enter="selectListByEnter" 
+                @keydown.tab="tabOutCombobox" 
+                @keyup.up="arrowListUp(fixedAssetCategoriesFilter)" 
+                @keyup.down="arrowListDown(fixedAssetCategoriesFilter)"
+                @keyup="keyUpHandle($event,fixedAssetCategoriesFilter)" 
                 autocomplete="off" 
                 type="text" 
                 v-model="fixedAssetCategoriesDefaulName" 
@@ -30,11 +31,11 @@
             <div class="combobox-selected">
                 <div class="input-icon2"></div>
                 <input v-click-outside="onClickOutsideDepartmentsCombobox" placeholder="Bộ phận sử dụng" 
-                @keyup.enter="selectDepartmentsByEnter(departmentsFilter)" 
-                @keydown.tab="tabOutDepartmentsCombobox" 
-                @keyup.up="arrowDepartmentsUp(departmentsFilter)" 
-                @keyup.down="arrowDepartmentsDown(departmentsFilter)" 
-                @keyup="keyUpHandle"
+                @keyup.enter="selectListByEnter" 
+                @keydown.tab="tabOutCombobox" 
+                @keyup.up="arrowListUp(departmentsFilter)" 
+                @keyup.down="arrowListDown(departmentsFilter)" 
+                @keyup="keyUpHandle($event,departmentsFilter)"
                 autocomplete="off" type="text" v-model="departmentDefaulName" 
                 class="selected-item" 
                 @focusin="departmentsComboboxOnFocus">
@@ -775,41 +776,67 @@ export default {
          */
 
         // Dùng phím mũi tên xuống để di chuyển lựa chọn
-        arrowListCategoriesDown(cat) {
+        arrowListDown(object) {
             try {
-                var me = this
+                var me = this;
                 //Hiện danh sách loại tài sản
-                me.isShowListCategoriesAssets = me.isShow;
-                //Điều kiện chọn
-                if (me.arrowCategoriesCounter < me.fixedAssetCategoriesFilter.length - 1)
+                if(object == this.fixedAssetCategoriesFilter){
+                    me.isShowListCategoriesAssets = me.isShow;
+                    //Điều kiện chọn
+                    if (me.arrowCategoriesCounter < object.length - 1)
                     me.arrowCategoriesCounter++;
-                //Autocomplete
-                me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
-                //Gọi hàm scroll
-                me.scrollListCategoriesTo();
+                    //Autocomplete
+                    me.fixedAssetCategoriesDefaulName = object[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                    //Gọi hàm scroll
+                    me.scrollListCategoriesTo();
+                } else {
+                    //Hiển thị danh sách
+                    me.isShowListDepartments = me.isShow;
+                    //Điều kiện chọn
+                    if (me.arrowDepartmentsCounter < object.length - 1)
+                        me.arrowDepartmentsCounter++;
+                    //Autocomplete
+                    me.departmentDefaulName = object[me.arrowDepartmentsCounter].departmentName;
+                    me.scrollDepartmentsTo();
+                }
+                
             } catch (error) {
                 console.log(error);
             }
         },
         // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowListCategoriesUp(cat) {
+        arrowListUp(object) {
             try {
-                var me = this
-                //Hiện danh sách tài sản
-                me.isShowListCategoriesAssets = me.isShow;
-                //Điều kiện chọn
-                if (me.arrowCategoriesCounter > 0)
+                var me = this;
+                //Hiện danh sách loại tài sản
+                if(object == this.fixedAssetCategoriesFilter){
+                    me.isShowListCategoriesAssets = me.isShow;
+                    //Điều kiện chọn
+                    if (me.arrowCategoriesCounter > 0)
                     me.arrowCategoriesCounter--;
-                //Autocomplete
-                me.fixedAssetCategoriesDefaulName = cat[me.arrowCategoriesCounter].fixedAssetCategoryName;
-                //Gọi hàm scroll
-                me.scrollListCategoriesTo();
+                    //Autocomplete
+                    me.fixedAssetCategoriesDefaulName = object[me.arrowCategoriesCounter].fixedAssetCategoryName;
+                    //Gọi hàm scroll
+                    me.scrollListCategoriesTo();
+                } else {
+                    //Hiển thị danh sách
+                    me.isShowListDepartments = me.isShow;
+                    //Điều kiện chọn
+                    if (me.arrowDepartmentsCounter > 0)
+                        me.arrowDepartmentsCounter--;
+                    //Autocomplete
+                    me.departmentDefaulName = object[me.arrowDepartmentsCounter].departmentName;
+                    me.scrollDepartmentsTo();
+                }
             } catch (error) {
                 console.log();
             }
         },
 
-        //ScrollTo
+        /**
+         * Cuộn list bằng phím
+         * NDHoang(22/06/2022)
+         */
         scrollListCategoriesTo() {
             //Tạo biến ghi lại chiều cao của danh sách
             const itemHeight = this.$refs.optionsListCategories[this.arrowCategoriesCounter].clientHeight;
@@ -817,8 +844,18 @@ export default {
             this.$refs.comboboxListCategories.scrollTop = itemHeight * this.arrowCategoriesCounter - this.$refs.comboboxListCategories.clientHeight / 2;
         },
 
-        //Chọn bằng enter
-        selectListCategoriesByEnter() {
+        scrollDepartmentsTo() {
+            //Tạo biến ghi lại chiều cao của danh sách
+            const itemHeight = this.$refs.optionsDepartments[this.arrowDepartmentsCounter].clientHeight;
+            //Cuộn theo arrowCounter
+            this.$refs.comboboxDepartments.scrollTop = itemHeight * this.arrowDepartmentsCounter - this.$refs.comboboxDepartments.clientHeight / 2;
+        },
+
+        /**
+         * Chọn bằng enter
+         * NDHoang(22/06/2022)
+         */
+        selectListByEnter() {
             try {
                 var me = this;
                 //Ẩn danh sách
@@ -829,7 +866,11 @@ export default {
             }
         },
 
-        //Sự kiên click ra ngoài combobox
+        /**
+         * Click ra ngoài combobox
+         * NDHoang(22/06/2022)
+         */
+        //Sự kiên click ra ngoài combobox categories
         onClickOutsideCategoriesCombobox() {
             try {
                 var me = this;
@@ -840,76 +881,7 @@ export default {
             }
         },
 
-        /**
-         * Sự kiện của các phím sử dụng trong combobox department
-         * NDHoang(22/06/2022)
-         */
-        // Dùng phím mũi tên xuống để di chuyển lựa chọn
-        arrowDepartmentsDown(dep) {
-            try {
-                var me = this
-                //Hiển thị danh sách
-                me.isShowListDepartments = me.isShow;
-                //Điều kiện chọn
-                if (me.arrowDepartmentsCounter < me.departmentsFilter.length - 1)
-                    me.arrowDepartmentsCounter++;
-                //Autocomplete
-                me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
-                me.scrollDepartmentsTo();
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowDepartmentsUp(dep) {
-            try {
-                var me = this
-                //Hiện danh sách
-                me.isShowListDepartments = me.isShow;
-                //Điều kiện chọn
-                if (me.arrowDepartmentsCounter > 0)
-                    me.arrowDepartmentsCounter--;
-                //Autocomplete
-                me.departmentDefaulName = dep[me.arrowDepartmentsCounter].departmentName;
-                me.scrollDepartmentsTo();
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Scroll to
-        scrollDepartmentsTo() {
-            //Tạo biến ghi lại chiều cao của danh sách
-            const itemHeight = this.$refs.optionsDepartments[this.arrowDepartmentsCounter].clientHeight;
-            //cuộn theo couter
-            this.$refs.comboboxDepartments.scrollTop = itemHeight * this.arrowDepartmentsCounter - this.$refs.comboboxDepartments.clientHeight / 2;
-        },
-
-        //Chọn bằng enter
-        selectDepartmentsByEnter() {
-            try {
-                var me = this;
-                //Ẩn list
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        //Sự kiện tab ra ngoài combobox
-        tabOutDepartmentsCombobox() {
-            try {
-                var me = this;
-                //Ẩn list
-                me.isShowListDepartments = me.isHide;
-                me.isShowListCategoriesAssets = me.isHide;
-            } catch (error) {
-                console.log(error);
-            }
-        },
-
-        //Sự kiên click ra ngoài combobox
+        //Sự kiên click ra ngoài combobox department
         onClickOutsideDepartmentsCombobox() {
             try {
                 var me = this;
@@ -926,6 +898,21 @@ export default {
                 var me = this;
                 //Ẩn lish
                 me.isShowListPageSize = me.isHide;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        /**
+         * tab ra ngoài combobox
+         * NDHoang(22/06/2022)
+         */
+        tabOutCombobox() {
+            try {
+                var me = this;
+                //Ẩn list
+                me.isShowListDepartments = me.isHide;
+                me.isShowListCategoriesAssets = me.isHide;
             } catch (error) {
                 console.log(error);
             }
@@ -1059,17 +1046,22 @@ export default {
          * Bắt sự kiện phím điều hướng để thực hiện autocomplete
          * NDHoang(26/07/2022)
          */
-        keyUpHandle(e) {
+        keyUpHandle(e,object) {
             try {
                 var me = this;
                 var keyCode = e.which;
                 // Thực hiện lọc list nếu giá trị keyCode không phải phím điều hướng lên xuống hoặc enter
                 if (keyCode != 38 && keyCode != 40 && keyCode != 13 && keyCode != 27) {
-                me.arrowDepartmentsCounter = 0;
-                me.arrowCategoriesCounter = 0;
-                me.categoriesFilterHandel();
-                me.departmentsFilterHandel();
-            }
+                    me.arrowDepartmentsCounter = 0;
+                    me.arrowCategoriesCounter = 0;
+                    if(object == me.departmentsFilter){
+                        me.isShowListDepartments = me.isShow;
+                        me.departmentsFilterHandel();
+                    } else {
+                        me.isShowListCategoriesAssets = me.isShow;
+                        me.categoriesFilterHandel();
+                    }
+                }
             } catch (error) {
                 console.log(error);
             }

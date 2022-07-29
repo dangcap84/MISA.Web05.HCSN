@@ -1,5 +1,5 @@
 .combobox {
-    width: 198px;
+    width: 202px;
     position: relative;
     margin-right: 34px;
 }
@@ -9,7 +9,7 @@
 }
 
 .combobox-selected {
-    padding: 8px 8px 8px 14px;
+    padding: 8px 8px 8px 8px;
     border: 1px solid #afafaf;
     border-radius: 2.5px;
     background-color: white;
