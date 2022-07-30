@@ -1,10 +1,10 @@
 <template>
     <div id="expandMenu" class="main-menu" :class="{'menu_style': expand}">
             <div class="logo-wrap">
-                <div title="click để mở rộng" id="logoOnClick" class="logo" @click="logoOnClick"></div>
+                <div title="click để mở rộng" id="expandMenu" class="logo"></div>
                 <div class="logo-item-text">MISA QLTS</div>
             </div>
-            <div class="navigator-menu">
+            <div class="navigator-menu" @click="expandMenu">
                 <div title="Tổng quan" class="navigator-item-wrap">
                     <div class="navigator-item1 menu-item_general-column">
                     </div>
@@ -64,7 +64,7 @@ export default {
     },
     methods: {
         //mở rộng menu
-        logoOnClick(){
+        expandMenu(){
             this.expand = false;
         },
 

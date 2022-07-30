@@ -38,7 +38,7 @@
                                 <input ref="txtDepartmentCodeRef" v-click-outside="onClickOutsideDepartmentsCombobox" 
                                 @keyup.enter="selectListByEnter"
                                 @keydown.tab="tabOutCombobox"
-                                @keydown.up="arrowListUp(departmentsFilter)" 
+                                @keydown.up="arrowListUp($event,departmentsFilter)" 
                                 @keydown.down="arrowListDown(departmentsFilter)"
                                 @keyup="keyUpHandle($event,departmentsFilter)" 
                                 autocomplete="off" type="text" 
@@ -77,7 +77,7 @@
                                 <input ref="txtAssetCategoryRef" v-click-outside="onClickOutsideCategoriesCombobox" id="cbxTypeOf" 
                                 @keyup.enter="selectListByEnter" 
                                 @keydown.tab="tabOutCombobox" 
-                                @keydown.up="arrowListUp(fixedAssetCategoriesFilter)" 
+                                @keydown.up="arrowListUp($event,fixedAssetCategoriesFilter)" 
                                 @keydown.down="arrowListDown(fixedAssetCategoriesFilter)"
                                 @keyup="keyUpHandle($event,fixedAssetCategoriesFilter)"
                                 autocomplete="off" type="text" 
@@ -141,7 +141,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker ref="txtPurchaseDateRef" format="dd/MM/yyyy" arrowNavigation textInput locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
+                        <Datepicker ref="txtPurchaseDateRef" :maxDate="new Date()" format="dd/MM/yyyy" arrowNavigation textInput locale="vi-VN" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
@@ -154,7 +154,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker ref="txtProductionDateRef" format="dd/MM/yyyy" arrowNavigation textInput locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
+                        <Datepicker ref="txtProductionDateRef" :maxDate="new Date()" format="dd/MM/yyyy" arrowNavigation textInput locale="vi-VN" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
@@ -212,6 +212,8 @@
 
 <script>
 //sử dụng axioss
+import resources from '../../js/resource.js';
+import enums from '../../js/enum.js';
 import axios from 'axios';
 //Sử dụng thư viên V-money
 import {
@@ -259,7 +261,7 @@ export default {
             //Tạo title Modal
             modalTitle: '',
 
-            //tạo đối tượng tài sản
+            //tạo đối tượng tài sản 
             fixedAsset: {},
 
             //tạo mảng phòng ban
@@ -282,11 +284,6 @@ export default {
             //Tạo biến lưu giá trị hiển thị
             isShow: true,
             isHide: false,
-
-            //Tạo biến lưu trạng thái form
-            insertMode: 0,
-            updateMode: 1,
-            deleteMode: 2,
 
             //Tạo đối tượng lưu trữ idSelected
             departmentId: "",
@@ -349,7 +346,7 @@ export default {
             try {
                 var me = this
                 //Xét trạng thái modal
-                if (me.editMode == me.insertMode) {
+                if (me.editMode == enums.editMode.enums.editMode.insertMode) {
                     //Hiện thông báo cho thêm mới
                     me.showPostNotice(me.isShow);
                 } else {
@@ -367,7 +364,7 @@ export default {
             try {
                 var me = this
                 //Xét trạng thái modal
-                if (me.editMode == me.insertMode) {
+                if (me.editMode == enums.editMode.insertMode) {
                     //Hiện thông báo cho thêm mới
                     me.showPostNotice(me.isShow);
                 } else {
@@ -439,8 +436,9 @@ export default {
         },
         
         // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowListUp(object) {
+        arrowListUp(e,object) {
             try {
+                e.preventDefault();
                 var me = this;
                 if(object == me.fixedAssetCategoriesFilter){
                     //Hiện list danh sách loại tài sản
@@ -599,7 +597,7 @@ export default {
                 var me = this;
                 var keyCode = e.which;
                 // Thực hiện lọc list nếu giá trị keyCode không phải phím điều hướng lên xuống hoặc enter
-                if (keyCode != 38 && keyCode != 40 && keyCode != 13 && keyCode != 27) {
+                if (keyCode != enums.keyCode.arrowUp && keyCode != enums.keyCode.arrowDown && keyCode != enums.keyCode.enter && keyCode != enums.keyCode.esc) {
                 me.arrowDepartmentsCounter = 0;
                 me.arrowCategoriesCounter = 0;
                 if(object == me.departmentsFilter){
@@ -743,15 +741,19 @@ export default {
                 //Validate dữ liệu
                 if (!me.validate()) return;
                 else {
-                    if (me.editMode == me.insertMode) {
+                    if (me.editMode == enums.editMode.insertMode) {
                         try {
                             //Post đối tượng
-                            axios.post("http://localhost:64168/api/v1/fixedAssets", newAsset)
+                            axios.post(resources.url.host + "/api/v1/fixedAssets", newAsset)
                                 .catch(function (error) {
                                     if (error.response) {
                                         //Hiển thị popup lỗi
                                         me.errorMessage = [];
-                                        me.errorMessage.push("Mã tài sản đã tồn tại trong hệ thống");
+                                        for(const errorMes of error.response.data.data.Error){
+                                            me.errorMessage.push(errorMes);
+                                        }
+                                        console.log(error.response.data.data);
+                                        console.log(error.response.status);
                                         me.showErrorNotice(me.isShow);
                                     }
                                 })
@@ -772,13 +774,15 @@ export default {
                     else {
                         //Put đối tượng
                         try {
-                            axios.put(`http://localhost:64168/api/v1/fixedAssets`, newAsset)
+                            axios.put(resources.url.host + "/api/v1/fixedAssets", newAsset)
                                 .catch(function (error) {
                                     if (error.response) {
                                         //Hiển thị popup lỗi
                                         me.errorMessage = [];
-                                        me.errorMessage.push("Mã nhân viên đã tồn tại trong hệ thống");
-                                        console.log(error.response.data);
+                                        for(const errorMes of error.response.data.data.Error){
+                                            me.errorMessage.push(errorMes);
+                                        }
+                                        console.log(error.response.data.data);
                                         console.log(error.response.status);
                                         me.showErrorNotice(me.isShow);
                                     }
@@ -961,12 +965,12 @@ export default {
         //gán giá trị tài sản được chọn cho cho fixedAsset
         me.fixedAsset = me.fixedAssetSelected;
         //Xét trạng thái modal tương ứng
-        if (me.editMode == me.insertMode) {
-            me.modalTitle = "Thêm tài sản";
+        if (me.editMode == enums.editMode.insertMode) {
+            me.modalTitle = resources.modalTitle.insertTitle;
             //Đặt giá trị mặc định cho ngày mua và ngày bắt đầu sử dụng
             me.fixedAsset.purchaseDate = new Date();
             me.fixedAsset.productionDate = new Date();
-        } else me.modalTitle = "Sửa tài sản";
+        } else me.modalTitle = resources.modalTitle.updateTitle;
 
         //gán lại giá trị sang kiểu số cho các giá trị numeric
         me.valueCost = me.fixedAsset.cost;
@@ -978,7 +982,7 @@ export default {
         }
 
         //Lấy ra danh sách phòng ban
-        axios.get("http://localhost:64168/api/v1/departments")
+        axios.get(resources.url.host + "/api/v1/departments")
             .then(function (res) {
                 me.departments = res.data;
                 me.departmentsFilter = me.departments;
@@ -988,7 +992,7 @@ export default {
             });
 
         //Lấy ra danh sách loại tài sản
-        axios.get("http://localhost:64168/api/v1/fixedAssetCategories")
+        axios.get(resources.url.host + "/api/v1/fixedAssetCategories")
             .then(function (res) {
                 me.fixedAssetCategories = res.data;
                 me.fixedAssetCategoriesFilter = me.fixedAssetCategories;

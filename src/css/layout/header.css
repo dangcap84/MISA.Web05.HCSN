@@ -15,7 +15,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 412px;
+    width: 385px;
 }
 
 .title-menu-item1,
@@ -81,7 +81,7 @@
 
 .title-menu-item7 {
     position: absolute;
-    left: 22px;
+    left: 20px;
     top: 7px;
     background: url(../../assess/icon/qlts-icon.png)no-repeat -72px -338px;
     width: 8px;

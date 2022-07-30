@@ -11,7 +11,7 @@
                 <input v-click-outside="onClickOutsideCategoriesCombobox" placeholder="Loại tài sản" 
                 @keyup.enter="selectListByEnter" 
                 @keydown.tab="tabOutCombobox" 
-                @keyup.up="arrowListUp(fixedAssetCategoriesFilter)" 
+                @keydown.up="arrowListUp($event,fixedAssetCategoriesFilter)" 
                 @keyup.down="arrowListDown(fixedAssetCategoriesFilter)"
                 @keyup="keyUpHandle($event,fixedAssetCategoriesFilter)" 
                 autocomplete="off" 
@@ -33,10 +33,11 @@
                 <input v-click-outside="onClickOutsideDepartmentsCombobox" placeholder="Bộ phận sử dụng" 
                 @keyup.enter="selectListByEnter" 
                 @keydown.tab="tabOutCombobox" 
-                @keyup.up="arrowListUp(departmentsFilter)" 
+                @keydown.up="arrowListUp($event,departmentsFilter)" 
                 @keyup.down="arrowListDown(departmentsFilter)" 
                 @keyup="keyUpHandle($event,departmentsFilter)"
-                autocomplete="off" type="text" v-model="departmentDefaulName" 
+                autocomplete="off" type="text" 
+                v-model="departmentDefaulName"
                 class="selected-item" 
                 @focusin="departmentsComboboxOnFocus">
                 <div class="input-icon3"></div>
@@ -161,6 +162,8 @@
 </style>
 
 <script>
+import resources from '../../js/resource.js'
+import enums from '../../js/enum.js';
 //Sử dụng axioss
 import axios from "axios";
 //Sử dụng components view FixedAssetDetail
@@ -201,9 +204,6 @@ export default {
             pageSize2: 20,
             pageSize3: 30,
 
-            //Đặt giá trị mặc định cho toastMessage
-            toastMessage: 0,
-
             //Đặt mặc định ẩn list
             isShowListDepartments: false,
             isShowListCategoriesAssets: false,
@@ -224,8 +224,6 @@ export default {
 
             //Đặt mặc định editMode
             editMode: 0,
-            insertMode: 0,
-            updateMode: 1,
             deleteMode: 2,
 
             //Đặt mặc định search rỗng
@@ -263,8 +261,10 @@ export default {
             idSelected: [],
 
             //Biến lưu giá trị mã nhân viên mới
-            max: 0,
-            minLeght: 7,
+            maxCode: 0,
+            minLenght: 7,
+            beginPoint: 0,
+            endPoint:3,
 
             //Biến lưu nội dung popup
             messageDelete: '',
@@ -348,7 +348,7 @@ export default {
             try {
                 var me = this;
                 //Gọi api phân trang
-                axios.get(`http://localhost:64168/api/v1/FixedAssets/filter?pageIndex=${me.page}&pageSize=${me.defaultPageSize}&filter=${me.search}&departmentName=${me.departmentDefaulName}&CategoryName=${me.fixedAssetCategoriesDefaulName}`)
+                axios.get(resources.url.host + `/api/v1/FixedAssets/filter?pageIndex=${me.page}&pageSize=${me.defaultPageSize}&filter=${me.search}&departmentName=${me.departmentDefaulName}&CategoryName=${me.fixedAssetCategoriesDefaulName}`)
                     .then(function (res) {
                         //Gán lại giá trị cho đối tượng
                         me.fixedAssets = res.data.data;
@@ -392,14 +392,14 @@ export default {
          */
         getNewCode() {
             var me = this;
-            axios.get("http://localhost:64168/api/v1/FixedAssets")
+            axios.get(resources.url.host + "/api/v1/FixedAssets")
                 .then(function (res) {
                     me.assets = res.data;
                     //Duyệt tất cả tài sản, lấy ra mã tài sản lớn nhất rồi cộng thêm 1
                     for (const asset of me.assets) {
-                        var numStr = asset.fixedAssetCode.slice(3, 7);
+                        var numStr = asset.fixedAssetCode.slice(me.endPoint, me.minLenght);
                         numStr = Number(numStr)
-                        if (numStr + 1 > me.max) me.max = numStr + 1;
+                        if (numStr + 1 > me.maxCode) me.maxCode = numStr + 1;
                     }
                 });
         },
@@ -412,15 +412,15 @@ export default {
             try {
                 var me = this
                 //Đổi form mode
-                me.editMode = me.insertMode;
+                me.editMode = enums.editMode.insertMode;
                 //Hiển thị Modal
                 me.showModal(me.isShow);
                 //Làm rỗng fixedAssetSelected
                 me.fixedAssetSelected = {};
                 //Format lại mã tài sản rồi gán lại
-                var newCode = 'TS-' + me.max;
-                while (newCode.length < me.minLeght) {
-                    newCode = newCode.slice(0, 3) + '0' + newCode.slice(3);
+                var newCode = 'TS-' + me.maxCode;
+                while (newCode.length < me.minLenght) {
+                    newCode = newCode.slice(me.beginPoint, me.endPoint) + resources.import.isZero + newCode.slice(me.endPoint);
                 }
                 me.fixedAssetSelected.fixedAssetCode = newCode;
             } catch (error) {
@@ -442,7 +442,7 @@ export default {
                 //Truyền đối tượng file vào FormData
                 formData.append('fileImport', me.file);
                 //Gọi API import
-                axios.post("http://localhost:64168/api/v1/fixedAssets/import", formData)
+                axios.post(resources.url.host + "/api/v1/fixedAssets/import", formData)
                     .then(function (res) {
                         if (res) {
                             //Đếm số lượng bản ghi import
@@ -460,19 +460,19 @@ export default {
                                     //duyệt tất cả data lỗi
                                     if(couterUnImport > 0){
                                         for(let errorImport of data.listErrorImport)
-                                        me.detailMessage.push("Tài sản " + `${data.fixedAssetCode}` + `: ${errorImport}` );
+                                        me.detailMessage.push(resources.import.beginText + `${data.fixedAssetCode}` + `: ${errorImport}` );
                                     }
                                 }
                             }
                             //Nếu thành công tất cả gán lại giá trị cho detailMessage
                             if(couterImport == res.data.length){
-                                me.detailMessage.push("Dữ liệu nhập khẩu hợp lệ");
+                                me.detailMessage.push(resources.import.isValid);
                             }
                             //Làm rỗng mảng noticeMessage
                             me.noticeMessage = [];
                             //Gán thông báo
-                            me.noticeMessage.push("Có " + `${couterImport}` + " tài sản được nhập khẩu thành công");
-                            me.noticeMessage.push("Có " + `${couterUnImport}` + " tài sản nhập khẩu thất bại");
+                            me.noticeMessage.push(`${couterImport}` + resources.import.couterImport);
+                            me.noticeMessage.push(`${couterUnImport}` + resources.import.couterUnImport);
                             //Hiện thông náo
                             me.showNoticeMessage(me.isShow);
                             //Loading
@@ -537,11 +537,11 @@ export default {
                 if (this.idSelected.length == 0) {
                     return;
                 } else if (this.idSelected.length == 1) {
-                    this.messageDelete = "Bạn có muốn xóa tài sản << "  + `${this.fixedAssetSelected.fixedAssetCode}-${this.fixedAssetSelected.fixedAssetName}` + " >>";
+                    this.messageDelete = resources.delete.beginText  + `${this.fixedAssetSelected.fixedAssetCode}-${this.fixedAssetSelected.fixedAssetName}` + resources.delete.endText;
                 } else if (this.idSelected.length < 10) {
-                    this.messageDelete = '0' + this.idSelected.length + ' tài sản đã được chọn. Bạn có muốn xóa các tài sản này ra khỏi danh sách?';
+                    this.messageDelete = resources.import.isZero + this.idSelected.length + resources.delete.mutilDelete;
                 } else {
-                    this.messageDelete = `${this.idSelected.length}   Tài sản đã được chọn. Bạn có muốn xóa các tài sản này ra khỏi danh sách?`;
+                    this.messageDelete = `${this.idSelected.length}` + resources.delete.mutilDelete;
                 }
                 //Ẩn thông báo
                 this.hideNotice(this.isShow);
@@ -558,10 +558,10 @@ export default {
             try {
                 var me = this;
                 //Đổi trạng thái của editMode
-                me.editMode = me.deleteMode;
+                me.editMode = enums.editMode.deleteMode;
                 //Xóa tất cả tài sản trong mảng
                 for (let id of me.idSelected) {
-                    axios.delete(`http://localhost:64168/api/v1/FixedAssets/${id}`)
+                    axios.delete(resources.url.host + `/api/v1/FixedAssets/${id}`)
                         .then(function () {
                             me.successMessage(me.isShow);
                             me.isLoading = me.isShow;
@@ -587,7 +587,7 @@ export default {
                 //Gán lại mảng rỗng
                 me.idSelected = [];
                 //Đổi trạng thái của editMode
-                me.editMode = me.deleteMode;
+                me.editMode = enums.editMode.deleteMode;
                 //Gán đối tượng selected
                 me.fixedAssetSelected = fixedAsset;
                 //Thêm id vào mảng
@@ -612,7 +612,7 @@ export default {
                 //Hiện modal
                 me.showModal(me.isShow);
                 //Đổi form mode
-                me.editMode = me.updateMode;
+                me.editMode = enums.editMode.updateMode;
                 //focus vào ô đầu tiên
             } catch (error) {
                 console.log(error);
@@ -629,15 +629,15 @@ export default {
                 //Gán lại đối tượng selected
                 me.fixedAssetSelected = fixedAsset;
                 //Truyền lại giá trị cho newCode
-                var newCode = 'TS-' + me.max;
-                while (newCode.length < me.minLeght) {
-                    newCode = newCode.slice(0, 3) + '0' + newCode.slice(3);
+                var newCode = 'TS-' + me.maxCode;
+                while (newCode.length < me.minLenght) {
+                    newCode = newCode.slice(me.beginPoint, me.endPoint) + resources.import.isZero + newCode.slice(me.endPoint);
                 }
                 //Gán mã tài sản bằng newCode
                 me.fixedAssetSelected.fixedAssetCode = newCode;
                 me.showModal(me.isShow);
                 //Đổi form mode
-                me.editMode = me.insertMode;
+                me.editMode = enums.editMode.insertMode;
                 //focus vào ô đầu tiên
             } catch (error) {
                 console.log(error);
@@ -703,7 +703,7 @@ export default {
         pagingApi(pageIndex, pageSize, search, departmentName, categoryName) {
             var me = this;
             //Gọi api phân trang
-            axios.get(`http://localhost:64168/api/v1/FixedAssets/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&filter=${search}&departmentName=${departmentName}&CategoryName=${categoryName}`)
+            axios.get(resources.url.host + `/api/v1/FixedAssets/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&filter=${search}&departmentName=${departmentName}&CategoryName=${categoryName}`)
                 .then(function (res) {
                     me.fixedAssets = res.data.data;
                     me.totalPage = Math.ceil(res.data.totalRecord / pageSize);
@@ -805,11 +805,12 @@ export default {
             }
         },
         // Dùng phím mũi tên lên để di chuyển lựa chọn
-        arrowListUp(object) {
+        arrowListUp(e,object) {
             try {
+                e.preventDefault();
                 var me = this;
                 //Hiện danh sách loại tài sản
-                if(object == this.fixedAssetCategoriesFilter){
+                if(object == me.fixedAssetCategoriesFilter){
                     me.isShowListCategoriesAssets = me.isShow;
                     //Điều kiện chọn
                     if (me.arrowCategoriesCounter > 0)
@@ -1051,7 +1052,7 @@ export default {
                 var me = this;
                 var keyCode = e.which;
                 // Thực hiện lọc list nếu giá trị keyCode không phải phím điều hướng lên xuống hoặc enter
-                if (keyCode != 38 && keyCode != 40 && keyCode != 13 && keyCode != 27) {
+                if (keyCode != enums.keyCode.arrowUp && keyCode != enums.keyCode.arrowDown && keyCode != enums.keyCode.enter && keyCode != enums.keyCode.esc) {
                     me.arrowDepartmentsCounter = 0;
                     me.arrowCategoriesCounter = 0;
                     if(object == me.departmentsFilter){
@@ -1117,7 +1118,7 @@ export default {
             //Load lại table
             me.resetTable();
             //Lấy danh sách phòng ban
-            axios.get("http://localhost:64168/api/v1/Departments")
+            axios.get(resources.url.host + "/api/v1/Departments")
                 .then(function (res) {
                     me.departments = res.data;
                     me.departmentsFilterHandel();
@@ -1126,7 +1127,7 @@ export default {
                     console.log(res);
                 })
             //Lấy danh sách loại tài sản
-            axios.get("http://localhost:64168/api/v1/FixedAssetCategories")
+            axios.get(resources.url.host + "/api/v1/FixedAssetCategories")
                 .then(function (res) {
                     me.fixedAssetCategories = res.data;
                     me.categoriesFilterHandel();
