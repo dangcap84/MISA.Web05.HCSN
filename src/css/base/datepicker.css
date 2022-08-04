@@ -5,6 +5,10 @@
     display: inline-block;
 }
 
+.dp__calendar_wrap {
+    font-family: sans-serif !important;
+}
+
 
 /* Date piker css */
 

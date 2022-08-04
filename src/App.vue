@@ -10,9 +10,6 @@ import Header from "./components/layout/ConstHeader.vue"
 import Navbar from "./components/layout/ConstNavbar.vue"
 import Content from "./components/layout/ConstContent.vue"
 
-
-
-
 export default {
   name: 'App',
   components: {
@@ -22,5 +19,5 @@ export default {
 </script>
 
 <style>
-@import url(./css/main.css);
+@import url(../src/css/main.css);
 </style>

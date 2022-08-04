@@ -126,13 +126,43 @@
                     <div :class="{'visible': inValid.validCost}" id="txtErrorOriginPrice" class="input-validate-error">Nguyên giá không được để trống</div>
                 </div>
                 <div class="body-input_left validate-text">
+                    <div class="body-input-text">Số năm sử dụng
+                        <div class="red-tag"></div>
+                    </div>
+                    <div class="input-icon">
+                        <input v-model="valueLifeTime" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validLifeTime}">
+                    </div>
+                    <div :class="{'visible': inValid.validLifeTime}" id="txtErrorTimeOfUsing" class="input-validate-error">Số năm sử dụng không được để trống</div>
+                </div>
+            </div>
+            <div class="body-input-row">
+                <div class="body-input_left validate-text">
                     <div class="body-input-text">Tỉ lệ hao mòn (%)
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input v-model="valueDepreciationRate" v-money="float" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validDepreciationRate}">
+                        <input v-model="valueDepreciationRate" v-money="float" type="text" class="input modal-input_style-left input-quality_style modal-input_style-special" :class="{'not-valid': inValid.validDepreciationRate}">
+                        <div class="input-icon4"></div>
                     </div>
                     <div :class="{'visible': inValid.validDepreciationRate}" class="input-validate-error">Tỉ lệ hao mòn(%) không được để trống</div>
+                </div>
+                <div class="body-input_left validate-text">
+                    <div class="body-input-text">Giá trị hao mòn năm
+                        <div class="red-tag"></div>
+                    </div>
+                    <div class="input-icon">
+                        <input v-model="valueDepreciationValueYear" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validDepreciationValueYear}">
+                    </div>
+                    <div :class="{'visible': inValid.validDepreciationValueYear}" class="input-validate-error">Giá trị hao mòn năm không được để trống</div>
+                </div>
+                <div class="body- validate-textinput_left" style="display:none">
+                </div>
+                <div class="body-input_left validate-text">
+                    <div class="body-input-text">Năm theo dõi
+                    </div>
+                    <div class="input-icon">
+                        <input type="text" value="2022" class="input modal-input_style-left input-quality_style input-disable" disabled>
+                    </div>
                 </div>
             </div>
             <div class="body-input-row">
@@ -141,7 +171,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker ref="txtPurchaseDateRef" :maxDate="new Date()" format="dd/MM/yyyy" arrowNavigation textInput locale="vi-VN" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
+                        <Datepicker ref="txtPurchaseDateRef" :maxDate="new Date()" format="dd/MM/yyyy" arrowNavigation textInput locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.purchaseDate" :class="{'not-valid': inValid.validPurchaseDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
@@ -154,43 +184,13 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <Datepicker ref="txtProductionDateRef" :maxDate="new Date()" format="dd/MM/yyyy" arrowNavigation textInput locale="vi-VN" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
+                        <Datepicker ref="txtProductionDateRef" :maxDate="new Date()" format="dd/MM/yyyy" arrowNavigation textInput locale="vi" placeholder="VD:01/01/2022" cancelText="" selectText="Chọn" v-model="fixedAsset.productionDate" :class="{'not-valid': inValid.validProductionDate}">
                             <template #input-icon>
                                 <div class="input-icon5"></div>
                             </template>
                         </Datepicker>
                     </div>
                     <div :class="{'visible': inValid.validProductionDate}" id="txtErrorUsingDate" class="input-validate-error">Ngày bắt đầu sử dụng không được để trống</div>
-                </div>
-                <div class="body-input_left validate-text">
-                    <div class="body-input-text">Năm theo dõi
-                    </div>
-                    <div class="input-icon">
-                        <input type="text" value="2022" class="input modal-input_style-left input-quality_style input-disable" disabled>
-                    </div>
-                </div>
-            </div>
-            <div class="body-input-row">
-                <div class="body-input_left validate-text">
-                    <div class="body-input-text">Số năm sử dụng
-                        <div class="red-tag"></div>
-                    </div>
-                    <div class="input-icon">
-                        <input v-model="valueLifeTime" v-money="money" type="text" class="input modal-input_style-left input-quality_style modal-input_style-special" :class="{'not-valid': inValid.validLifeTime}">
-                        <div class="input-icon4"></div>
-                    </div>
-                    <div :class="{'visible': inValid.validLifeTime}" id="txtErrorTimeOfUsing" class="input-validate-error">Số năm sử dụng không được để trống</div>
-                </div>
-                <div class="body-input_left validate-text">
-                    <div class="body-input-text">Giá trị hao mòn năm
-                        <div class="red-tag"></div>
-                    </div>
-                    <div class="input-icon">
-                        <input v-model="valueDepreciationValueYear" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validDepreciationValueYear}">
-                    </div>
-                    <div :class="{'visible': inValid.validDepreciationValueYear}" class="input-validate-error">Giá trị hao mòn năm không được để trống</div>
-                </div>
-                <div class="body- validate-textinput_left" style="display:none">
                 </div>
             </div>
         </div>
@@ -239,13 +239,13 @@ export default {
             //Tạo đối tượng money của v-money
             money: {
                 decimal: ',',
-                thousands: '.',
+                thousands: resources.currency,
                 precision: 0,
             },
             //Tạo đối tượng v-money kiểu float cho tỉ lệ hao mòn
             float: {
                 decimal: ',',
-                thousands: '.',
+                thousands: resources.currency,
                 precision: 2,
             },
 
@@ -346,7 +346,7 @@ export default {
             try {
                 var me = this
                 //Xét trạng thái modal
-                if (me.editMode == enums.editMode.enums.editMode.insertMode) {
+                if (me.editMode == enums.editMode.insertMode) {
                     //Hiện thông báo cho thêm mới
                     me.showPostNotice(me.isShow);
                 } else {

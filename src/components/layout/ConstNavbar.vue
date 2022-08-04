@@ -23,12 +23,12 @@
                     <div class="navigato-item-text">Tài sản HT-ĐB</div>
                     <div class="icon"></div>
                 </router-link>
-                <div class="navigator-item-wrap" title="Công cụ dụng cụ">
+                <router-link to="/login" class="navigator-item-wrap" title="Công cụ dụng cụ">
                     <div class="navigator-item4 menu-item_general-column">
                     </div>
                     <div class="navigato-item-text">Công cụ dụng cụ</div>
                     <div class="icon"></div>
-                </div>
+                </router-link>
                 <div class="navigator-item-wrap" title="Danh mục">
                     <div class="navigator-item5 menu-item_general-column">
                     </div>

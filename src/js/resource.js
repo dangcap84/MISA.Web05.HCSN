@@ -9,7 +9,7 @@ var resource = {
     },
 
     warning: {
-        fixedAssetCodeDuplicateValue: "Mã tài sản đã tồn tại trong hệ thống",
+        fixedAssetCodeDuplicateValue: "Mã tài sản đã tồn tại trong hệ thống.",
         fixedAssetNameNullValue: "Tên tài sản không được để trống",
         departmentCodeNullValue: "Mã bộ phận không được để trống",
         fixedAssetCategoryCodeNullValue: "Mã loại tài sản không được để trống",
@@ -24,17 +24,19 @@ var resource = {
 
     import: {
         isZero: "0",
-        isValid: "Dữ liệu hợp lệ",
+        isValid: "Dữ liệu hợp lệ.",
         beginText: "Tài sản ",
-        couterImport: " Tài sản được nhập khẩu thành công",
-        couterUnImport: " Tài sản nhập khẩu thất bại"
+        couterImport: " Tài sản được nhập khẩu thành công.",
+        couterUnImport: " Tài sản nhập khẩu thất bại."
     },
 
     delete: {
         beginText: "Bạn có muốn xóa tài sản << ",
-        endText: " >>",
+        endText: " >>?",
         mutilDelete: " tài sản đã được chọn. Bạn có muốn xóa các tài sản này ra khỏi danh sách?",
-    }
+    },
+
+    currency: '.',
 }
 
 export default resource;

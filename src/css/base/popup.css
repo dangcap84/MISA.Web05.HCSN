@@ -22,6 +22,7 @@
     z-index: 4;
     padding: 10px 16px;
     border-radius: 3px;
+    animation: growDown .2s linear forwards;
 }
 
 .popup-content-wrap {

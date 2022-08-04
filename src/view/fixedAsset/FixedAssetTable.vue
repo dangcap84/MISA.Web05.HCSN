@@ -73,7 +73,7 @@
             <td class="column-style-fix6" title="Bộ phận sử dụng">Bộ phận sử dụng</td>
             <td class="column-style-fix7" title="Số lượng">Số lượng</td>
             <td class="column-style-fix8" title="Nguyên Giá">Nguyên giá</td>
-            <td class="column-style-fix9" title="Hao mòn/Khấu hao (Nguyên giá * tỉ lệ hao mòn)">HM/KH lũy kế</td>
+            <td class="column-style-fix9" title="Hao mòn/Khấu hao lũy kế = Nguyên giá * tỉ lệ hao mòn">HM/KH lũy kế</td>
             <td class="column-style-fix10" title="Giá trị còn lại">Giá trị còn lại</td>
             <td class="column-style-fix11" title="Chức năng">Chức năng</td>
         </tr>
@@ -123,7 +123,12 @@
             <td class="column-style-fix13">
                 <div class="combobox list-page-number-style">
                     <div class="combobox-selected">
-                        <input autocomplete="off" title="Số ban ghi trên một trang" type="text" v-model="defaultPageSize" class="selected-item" @focusin="totalPageSizeOnFocus" v-click-outside="onClickOutsidePageNumber">
+                        <input autocomplete="off" title="Số ban ghi trên một trang" type="text" 
+                        v-model="defaultPageSize" class="selected-item" 
+                        @keydown.tab="tabOutCombobox" 
+                        @focusin="totalPageSizeOnFocus"
+                        @keyup.enter="selectListByEnter"
+                        v-click-outside="onClickOutsidePageNumber">
                         <div class="input-icon3"></div>
                         <div class="combobox-list" :class="{'visible': isShowListPageSize}">
                             <div class="combobox-items" @click="listTotalRecodsOnClick(pageSize1)">{{pageSize1}}</div>
@@ -199,7 +204,7 @@ export default {
             fixedAssetCategoriesDefaulName: '',
 
             //Số lượng bản ghi trên một trang
-            defaultPageSize: 10,
+            defaultPageSize: 20,
             pageSize1: 10,
             pageSize2: 20,
             pageSize3: 30,
@@ -257,14 +262,11 @@ export default {
             departments: [],
             departmentsFilter: [],
 
+            //Tạo biến lưu mã tài sản mới
+            newCode: '',
+
             //tạo mảng lưu id selected
             idSelected: [],
-
-            //Biến lưu giá trị mã nhân viên mới
-            maxCode: 0,
-            minLenght: 7,
-            beginPoint: 0,
-            endPoint:3,
 
             //Biến lưu nội dung popup
             messageDelete: '',
@@ -290,13 +292,8 @@ export default {
         formatMoney(money) {
             try {
                 //Làm tròn dữ liệu đầu vào
-                money = Math.floor(money)
-                //Ép kiểu thành currency
-                var price = new Intl.NumberFormat({
-                    style: 'currency',
-                    currency: 'VND'
-                }).format(money);
-                return price;
+                money = String(Math.floor(money))
+                return money.replace(/\B(?=(\d{3})+(?!\d))/g,resources.currency);
             } catch (error) {
                 console.log(error);
             }
@@ -374,9 +371,8 @@ export default {
                             me.totalQuantity += asset.quantity;
                             me.totalAccumulated += asset.depreciationValueYear
                             me.totalRemain += asset.cost - asset.depreciationValueYear;
-                            //Tạo mã nhân viên mới
-                            me.getNewCode();
                         }
+                        me.getNewCode();
                     })
                     .catch(function (res) {
                         console.log(res);
@@ -392,15 +388,9 @@ export default {
          */
         getNewCode() {
             var me = this;
-            axios.get(resources.url.host + "/api/v1/FixedAssets")
+            axios.get(resources.url.host + "/api/v1/FixedAssets/NewFixedAssetCode")
                 .then(function (res) {
-                    me.assets = res.data;
-                    //Duyệt tất cả tài sản, lấy ra mã tài sản lớn nhất rồi cộng thêm 1
-                    for (const asset of me.assets) {
-                        var numStr = asset.fixedAssetCode.slice(me.endPoint, me.minLenght);
-                        numStr = Number(numStr)
-                        if (numStr + 1 > me.maxCode) me.maxCode = numStr + 1;
-                    }
+                    me.newCode = res.data;
                 });
         },
 
@@ -418,11 +408,7 @@ export default {
                 //Làm rỗng fixedAssetSelected
                 me.fixedAssetSelected = {};
                 //Format lại mã tài sản rồi gán lại
-                var newCode = 'TS-' + me.maxCode;
-                while (newCode.length < me.minLenght) {
-                    newCode = newCode.slice(me.beginPoint, me.endPoint) + resources.import.isZero + newCode.slice(me.endPoint);
-                }
-                me.fixedAssetSelected.fixedAssetCode = newCode;
+                me.fixedAssetSelected.fixedAssetCode = me.newCode;
             } catch (error) {
                 console.log(error);
             }
@@ -559,15 +545,14 @@ export default {
                 var me = this;
                 //Đổi trạng thái của editMode
                 me.editMode = enums.editMode.deleteMode;
+                var listIdSelected = me.idSelected.join(',');
                 //Xóa tất cả tài sản trong mảng
-                for (let id of me.idSelected) {
-                    axios.delete(resources.url.host + `/api/v1/FixedAssets/${id}`)
-                        .then(function () {
-                            me.successMessage(me.isShow);
-                            me.isLoading = me.isShow;
-                            me.resetTable();
-                        });
-                }
+                axios.delete(resources.url.host + `/api/v1/FixedAssets/filterId?fixed_Asset_ids=${listIdSelected}`)
+                    .then(function () {
+                        me.successMessage(me.isShow);
+                        me.isLoading = me.isShow;
+                        me.resetTable();
+                    });
                 //Làm rỗng mảng xóa
                 me.idSelected = [];
                 //Bỏ chọn tất cả row
@@ -628,17 +613,11 @@ export default {
                 var me = this;
                 //Gán lại đối tượng selected
                 me.fixedAssetSelected = fixedAsset;
-                //Truyền lại giá trị cho newCode
-                var newCode = 'TS-' + me.maxCode;
-                while (newCode.length < me.minLenght) {
-                    newCode = newCode.slice(me.beginPoint, me.endPoint) + resources.import.isZero + newCode.slice(me.endPoint);
-                }
-                //Gán mã tài sản bằng newCode
-                me.fixedAssetSelected.fixedAssetCode = newCode;
                 me.showModal(me.isShow);
                 //Đổi form mode
                 me.editMode = enums.editMode.insertMode;
-                //focus vào ô đầu tiên
+                //Lấy mã tài sản mới
+                me.fixedAssetSelected.fixedAssetCode = me.newCode;
             } catch (error) {
                 console.log(error);
             }
@@ -722,9 +701,8 @@ export default {
                         me.totalQuantity += asset.quantity;
                         me.totalAccumulated += asset.depreciationValueYear;
                         me.totalRemain += asset.cost - asset.depreciationValueYear;
-                        //Tạo mã tài sản mới
-                        me.getNewCode();
                     }
+                    me.getNewCode();
                 })
                 .catch(function (res) {
                     console.log(res);
@@ -739,6 +717,7 @@ export default {
             try {
                 var me = this
                 me.isshowModal = showModal;
+                me.resetTable();
             } catch (error) {
                 console.log(error);
             }
@@ -862,6 +841,7 @@ export default {
                 //Ẩn danh sách
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;
+                me.isShowListPageSize = me.isHide;
             } catch (error) {
                 console.log(error);
             }
@@ -914,6 +894,7 @@ export default {
                 //Ẩn list
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;
+                me.isShowListPageSize = me.isHide;
             } catch (error) {
                 console.log(error);
             }

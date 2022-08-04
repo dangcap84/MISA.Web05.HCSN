@@ -3,6 +3,7 @@ import App from './App.vue'
 import { createRouter, createWebHashHistory } from 'vue-router';
 import FixedAssetTableVue from "@/view/fixedAsset/FixedAssetTable.vue";
 import CustomerTableVue from "@/view/customer/CustomerTable.vue";
+import LoginPageVue from "@/view/login/LoginPage.vue";
 import HLoading from "@/components/base/HLoading.vue";
 import HToastMessage from "@/components/base/HToastMessage.vue";
 import HPostMessage from "@/components/base/HPostMessage.vue";
@@ -19,6 +20,7 @@ import vClickOutside from "click-outside-vue3"
 const misaroutes = [
     { path: '/', component: FixedAssetTableVue },
     { path: '/customer', component: CustomerTableVue },
+    { path: '/login', component: LoginPageVue },
 ]
 
 //Khởi tạo router

@@ -1,0 +1,97 @@
+.login-wrap {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: url(../../assess/icon/Op3-Background-1920.png);
+    display: flex;
+}
+
+.login-body {
+    width: 770px;
+    display: flex;
+    font-size: 15px;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 16px 30px rgb(0 0 0 / 16%);
+    overflow: hidden;
+    margin: auto;
+    height: 560px;
+}
+
+.login-body-img {
+    width: calc(770px/2);
+    height: 560px;
+    background: url(../../assess/icon/img-login.png);
+}
+
+.login-body-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 479px;
+    padding: 40px;
+}
+
+.logo-body-textwrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-body-inputwrap input {
+    border-radius: 2.5px;
+    border: 1px solid #afafaf;
+    outline: none;
+    width: 263px;
+    height: 42px;
+    padding: 0px 20px;
+}
+
+.input-body-inputwrap input::placeholder {
+    font-style: normal;
+}
+
+.input-body-inputwrap input:hover {
+    border-color: #1aa4c8;
+}
+
+.input-body-inputwrap {
+    display: flex;
+    flex-direction: column;
+    height: 215px;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 24px;
+}
+
+.login-input-logo {
+    background: url(../../assess/icon/Logo\ MISA_VN.svg) no-repeat;
+    width: 117px;
+    height: 50px;
+    margin-bottom: 24px;
+}
+
+.login-input-title {}
+
+.login-input-username {}
+
+.login-input-password {}
+
+.login-input-btnlogin {}
+
+.login-input-forgetpassword {
+    color: #1a73e8;
+}
+
+.login-input-btnlogin {
+    background-color: #1a73e8;
+    font-size: 16px !important;
+    width: 305px;
+    height: 44px;
+    color: #fff;
+}

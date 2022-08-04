@@ -65,6 +65,7 @@
     height: 142px;
     overflow: hidden;
     overflow-y: scroll;
+    transform-origin: top;
 }
 
 .list-page-number-style {
@@ -86,6 +87,7 @@
     width: 132%;
     border-radius: 4px 4px 0 0;
     height: auto;
+    transform-origin: bottom;
 }
 
 .combobox-items {

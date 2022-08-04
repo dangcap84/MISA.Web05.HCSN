@@ -11,6 +11,7 @@ export default {
     }
 }
 </script>
+
 <style>
 @import url(../../css/layout/content.css);
 </style>
