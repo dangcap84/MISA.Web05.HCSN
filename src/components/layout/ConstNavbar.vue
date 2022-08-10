@@ -11,7 +11,7 @@
                     <div class="navigato-item-text">Tổng quan</div>
                     <div class="icon" style="visibility: hidden;"></div>
                 </div>
-                <router-link to="/" title="Tài sản" class="navigator-item-wrap navigator-item-selected">
+                <router-link to="/fixedasset" title="Tài sản" class="navigator-item-wrap navigator-item-selected">
                     <div class="navigator-item2 menu-item_general-column">
                     </div>
                     <div class="navigato-item-text">Tài sản</div>

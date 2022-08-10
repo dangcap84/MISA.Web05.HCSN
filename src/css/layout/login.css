@@ -1,3 +1,8 @@
+a {
+    text-decoration: none;
+    color: #4f4f4f;
+}
+
 .login-wrap {
     position: fixed;
     top: 0;
@@ -54,6 +59,7 @@
 
 .input-body-inputwrap input::placeholder {
     font-style: normal;
+    font-size: 15px;
 }
 
 .input-body-inputwrap input:hover {
@@ -75,14 +81,6 @@
     height: 50px;
     margin-bottom: 24px;
 }
-
-.login-input-title {}
-
-.login-input-username {}
-
-.login-input-password {}
-
-.login-input-btnlogin {}
 
 .login-input-forgetpassword {
     color: #1a73e8;

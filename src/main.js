@@ -1,9 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { createRouter, createWebHashHistory } from 'vue-router';
-import FixedAssetTableVue from "@/view/fixedAsset/FixedAssetTable.vue";
-import CustomerTableVue from "@/view/customer/CustomerTable.vue";
-import LoginPageVue from "@/view/login/LoginPage.vue";
+// import axios from 'axios';
 import HLoading from "@/components/base/HLoading.vue";
 import HToastMessage from "@/components/base/HToastMessage.vue";
 import HPostMessage from "@/components/base/HPostMessage.vue";
@@ -15,27 +12,26 @@ import HDetailMessage from "@/components/base/HDetailMessage.vue";
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 import ContextMenu from '@imengyu/vue3-context-menu';
 import vClickOutside from "click-outside-vue3"
+import router from '@/js/router.js';
+import store from '@/js/store.js';
 
-
-const misaroutes = [
-    { path: '/', component: FixedAssetTableVue },
-    { path: '/customer', component: CustomerTableVue },
-    { path: '/login', component: LoginPageVue },
-]
-
-//Khởi tạo router
-const router = createRouter({
-    //khởi tạo lịch sử duyệt web
-    history: createWebHashHistory(),
-    routes: misaroutes, //Sắp xếp router
-})
-
+// axios.interceptors.response.use(undefined, function(error) {
+//     if (error) {
+//         const originalRequest = error.config;
+//         if (error.response.status === 404 && !originalRequest._retry) {
+//             originalRequest._retry = true;
+//             store.dispatch("logout");
+//             return router.push("/");
+//         }
+//     }
+// });
 
 // 5. Create and mount the root instance.
 const app = createApp(App);
 app.use(router).mount('#app');
 app.use(ContextMenu);
 app.use(vClickOutside);
+app.use(store);
 app.component("HLoading", HLoading);
 app.component("HToastMessage", HToastMessage);
 app.component("HPutMessage", HPutMessage);

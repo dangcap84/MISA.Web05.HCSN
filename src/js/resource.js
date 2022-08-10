@@ -1,11 +1,15 @@
 var resource = {
     url: {
-        host: "http://localhost:64168",
+        host: "http://localhost:5293",
     },
 
     modalTitle: {
         insertTitle: "Thêm tài sản",
         updateTitle: "Sửa tài sản"
+    },
+
+    account: {
+        error: "Sai thông tin tài khoản hoặc mật khẩu."
     },
 
     warning: {

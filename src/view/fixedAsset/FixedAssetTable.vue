@@ -3,7 +3,9 @@
     <div class="content-menu-input">
         <div class="input-icon">
             <div class="input-icon1"></div>
-            <input id="txtSearch" autocomplete="off" v-model="search" type="text" class="input search-input" placeholder="Tìm kiếm tài sản">
+            <input
+                @keyup.enter="selectListByEnter" 
+                id="txtSearch" v-model="search" type="text" class="input search-input" placeholder="Tìm kiếm tài sản">
         </div>
         <div class="combobox">
             <div class="combobox-selected">
@@ -123,7 +125,8 @@
             <td class="column-style-fix13">
                 <div class="combobox list-page-number-style">
                     <div class="combobox-selected">
-                        <input autocomplete="off" title="Số ban ghi trên một trang" type="text" 
+                        <input 
+                        autocomplete="off" title="Số ban ghi trên một trang" type="text" 
                         v-model="defaultPageSize" class="selected-item" 
                         @keydown.tab="tabOutCombobox" 
                         @focusin="totalPageSizeOnFocus"
@@ -842,6 +845,7 @@ export default {
                 me.isShowListDepartments = me.isHide;
                 me.isShowListCategoriesAssets = me.isHide;
                 me.isShowListPageSize = me.isHide;
+                me.pagingApi(me.page, me.defaultPageSize, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
             } catch (error) {
                 console.log(error);
             }
@@ -977,6 +981,8 @@ export default {
                 var me = this;
                 //Gán giá trị
                 me.defaultPageSize = Size;
+                //Gọi Api
+                me.pagingApi(me.page, me.defaultPageSize, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
                 //Ẩn list
                 me.isShowListPageSize = me.isHide;
             } catch (error) {
@@ -1067,6 +1073,7 @@ export default {
         defaultPageSize(value) {
             var me = this;
             //Gọi Api paging
+            if(value == '')
             me.pagingApi(me.page, value, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
 
@@ -1074,6 +1081,7 @@ export default {
         search(value) {
             var me = this;
             //Gọi Api paging
+            if(value == '')
             me.pagingApi(me.page, me.defaultPageSize, value, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         },
 
@@ -1081,12 +1089,14 @@ export default {
         departmentDefaulName(value) {
             var me = this;
             //Gọi Api paging
+            if(value == '')
             me.pagingApi(me.page, me.defaultPageSize, me.search, value, me.fixedAssetCategoriesDefaulName);
         },
         //Khi chọn combobox loại tài sản
         fixedAssetCategoriesDefaulName(value) {
             var me = this;
             //Gọi Api paging
+            if(value == '')
             me.pagingApi(me.page, me.defaultPageSize, me.search, me.departmentDefaulName, value);
         }
     },
