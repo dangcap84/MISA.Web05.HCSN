@@ -37,6 +37,21 @@
     text-decoration: none;
 }
 
+.navigator-subitem-wrap {
+    margin: 0 0 10px 0;
+    color: #97a0ab;
+    border-radius: 4.5px;
+    background: rgba(151, 160, 171, 0.2);
+}
+
+a,
+.navigator-subitem {
+    display: block;
+    padding: 5px 36px 5px 51px;
+    text-decoration: none;
+    color: #97a0ab;
+}
+
 .navigato-item-text {
     color: #97a0ab;
     width: 150px;
@@ -145,6 +160,10 @@
     height: 40px;
     border-radius: 4px;
     margin: 8px 4px 8px 4px;
+}
+
+.navigator-subitem-open {
+    margin: 8px 4px 0px 4px;
 }
 
 .navigator-item-selected .icon {

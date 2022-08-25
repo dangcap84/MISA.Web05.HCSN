@@ -5,7 +5,7 @@
         <div class="login-body-input">
             <div class="logo-body-textwrap">
                 <div class="login-input-logo"></div>
-                <routerLink to="/" class="login-input-title">Đăng nhập để làm việc với <b>MISA QLTS</b></routerLink>
+                <div class="login-input-title">Đăng nhập để làm việc với <b>MISA QLTS</b></div>
             </div>
             <form @submit.prevent="submit" action="" class="input-body-inputwrap">
                 <input v-model="form.username" type="text" placeholder="Username, email hoặc số điện thoại" class="login-input-username">

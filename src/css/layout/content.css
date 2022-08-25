@@ -6,15 +6,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
-    background-color: #f4f7ff
+    padding: 5px 16px;
 }
 
 .content-menu-button {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 202px;
 }
 
 .content-menu-input {

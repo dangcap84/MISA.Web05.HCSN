@@ -5,6 +5,7 @@
     border: none;
     height: 36px;
     overflow: hidden;
+    margin-left: 10px;
 }
 
 .rectangle-button:hover {

@@ -13,7 +13,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input ref="txtAssetCodeRef" v-model="fixedAsset.fixedAssetCode" type="text" class="input modal-input_style-left" placeholder="Nhập mã tài sản" :class="{'not-valid': inValid.validFixedAssetCode}">
+                        <input maxlength="50" ref="txtAssetCodeRef" v-model="fixedAsset.fixedAssetCode" type="text" class="input modal-input_style-left" placeholder="Nhập mã tài sản" :class="{'not-valid': inValid.validFixedAssetCode}">
                     </div>
                     <div :class="{'visible': inValid.validFixedAssetCode}" id="txtErrorEmployeeCode" class="input-validate-error">Mã tài sản không được để trống</div>
                 </div>
@@ -22,7 +22,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input ref="txtAssetNameRef" v-model="fixedAsset.fixedAssetName" type="text" class="input input-modal_style-right" placeholder="Nhập tên tài sản" :class="{'not-valid': inValid.validFixedAssetName}">
+                        <input maxlength="255" ref="txtAssetNameRef" v-model="fixedAsset.fixedAssetName" type="text" class="input input-modal_style-right" placeholder="Nhập tên tài sản" :class="{'not-valid': inValid.validFixedAssetName}">
                     </div>
                     <div :class="{'visible': inValid.validFixedAssetName}" class="input-validate-error">Tên tài sản không được để trống</div>
                 </div>
@@ -35,7 +35,7 @@
                     <div class="input-icon">
                         <div class="combobox combobox-modal-style">
                             <div class="combobox-selected " :class="{'not-valid': inValid.validDepartmentCode,'onfocus': isShowListDepartments}">
-                                <input ref="txtDepartmentCodeRef" v-click-outside="onClickOutsideDepartmentsCombobox" 
+                                <input maxlength="50" ref="txtDepartmentCodeRef" v-click-outside="onClickOutsideDepartmentsCombobox" 
                                 @keyup.enter="selectListByEnter"
                                 @keydown.tab="tabOutCombobox"
                                 @keydown.up="arrowListUp($event,departmentsFilter)" 
@@ -74,7 +74,7 @@
                     <div class="input-icon">
                         <div class="combobox combobox-modal-style">
                             <div class="combobox-selected" :class="{'not-valid': inValid.validFixedAssetCategoryCode,'onfocus': isShowListCategoriesAssets}">
-                                <input ref="txtAssetCategoryRef" v-click-outside="onClickOutsideCategoriesCombobox" id="cbxTypeOf" 
+                                <input maxlength="50" ref="txtAssetCategoryRef" v-click-outside="onClickOutsideCategoriesCombobox" id="cbxTypeOf" 
                                 @keyup.enter="selectListByEnter" 
                                 @keydown.tab="tabOutCombobox" 
                                 @keydown.up="arrowListUp($event,fixedAssetCategoriesFilter)" 
@@ -111,7 +111,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input v-model="valueQuantity" v-money="money" type="text" class="input modal-input_style-left input-quality_style modal-input_style-special" :class="{'not-valid': inValid.validQuantity}">
+                        <input maxlength="14" v-model="valueQuantity" v-money="money" type="text" class="input modal-input_style-left input-quality_style modal-input_style-special" :class="{'not-valid': inValid.validQuantity}">
                         <div class="input-icon4"></div>
                     </div>
                     <div :class="{'visible': inValid.validQuantity}" id="txtErrorQuality" class="input-validate-error">Số lượng không được để trống</div>
@@ -121,7 +121,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input v-model="valueCost" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validCost}">
+                        <input maxlength="14" v-model="valueCost" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validCost}">
                     </div>
                     <div :class="{'visible': inValid.validCost}" id="txtErrorOriginPrice" class="input-validate-error">Nguyên giá không được để trống</div>
                 </div>
@@ -130,7 +130,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input v-model="valueLifeTime" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validLifeTime}">
+                        <input maxlength="4" v-model="valueLifeTime" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validLifeTime}">
                     </div>
                     <div :class="{'visible': inValid.validLifeTime}" id="txtErrorTimeOfUsing" class="input-validate-error">Số năm sử dụng không được để trống</div>
                 </div>
@@ -141,7 +141,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input v-model="valueDepreciationRate" v-money="float" type="text" class="input modal-input_style-left input-quality_style modal-input_style-special" :class="{'not-valid': inValid.validDepreciationRate}">
+                        <input maxlength="4" v-model="valueDepreciationRate" v-money="float" type="text" class="input modal-input_style-left input-quality_style modal-input_style-special" :class="{'not-valid': inValid.validDepreciationRate}">
                         <div class="input-icon4"></div>
                     </div>
                     <div :class="{'visible': inValid.validDepreciationRate}" class="input-validate-error">Tỉ lệ hao mòn(%) không được để trống</div>
@@ -151,7 +151,7 @@
                         <div class="red-tag"></div>
                     </div>
                     <div class="input-icon">
-                        <input v-model="valueDepreciationValueYear" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validDepreciationValueYear}">
+                        <input maxlength="14" v-model="valueDepreciationValueYear" v-money="money" type="text" class="input modal-input_style-left input-quality_style" :class="{'not-valid': inValid.validDepreciationValueYear}">
                     </div>
                     <div :class="{'visible': inValid.validDepreciationValueYear}" class="input-validate-error">Giá trị hao mòn năm không được để trống</div>
                 </div>
@@ -719,6 +719,8 @@ export default {
         saveOnClick() {
             var me = this;
             try {
+                //fix lại giờ của date
+
                 //Tạo đối tượng mới
                 const newAsset = {
                     fixedAssetId: me.fixedAsset.fixedAssetId,
@@ -903,13 +905,21 @@ export default {
         },
 
         /**
-         * Xử lý dữ convert sang int
+         * Xử lý dữ liệu convert sang int
          * NDHoang(05/07/2022)
          */
         convertIntNumber(num) {
             //Ép kiểu cho num
             num = parseInt(String(num).replaceAll(/\D+/g, ''))
             return num;
+        },
+
+        /**
+         * Xử lý dữ convert sang date
+         * NDHoang(05/07/2022)
+         */
+        convertDate(date) {
+            return new Date(date);
         },
 
     },
@@ -964,7 +974,10 @@ export default {
         var me = this;
         //gán giá trị tài sản được chọn cho cho fixedAsset
         me.fixedAsset = me.fixedAssetSelected;
-        //Xét trạng thái modal tương ứng
+        //Gán lại múi giờ cho date
+        me.fixedAsset.purchaseDate = me.convertDate(me.convertDate(me.fixedAsset.purchaseDate).setDate(me.convertDate(me.fixedAsset.purchaseDate).getDate() + 1));
+        me.fixedAsset.productionDate = me.convertDate(me.convertDate(me.fixedAsset.productionDate).setDate(me.convertDate(me.fixedAsset.productionDate).getDate() + 1));
+        // Xét trạng thái modal tương ứng
         if (me.editMode == enums.editMode.insertMode) {
             me.modalTitle = resources.modalTitle.insertTitle;
             //Đặt giá trị mặc định cho ngày mua và ngày bắt đầu sử dụng

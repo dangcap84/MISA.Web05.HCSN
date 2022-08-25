@@ -15,6 +15,8 @@ import vClickOutside from "click-outside-vue3"
 import router from '@/js/router.js';
 import store from '@/js/store.js';
 
+//Khi lỗi 404 xuất hiện vì cookie bị xóa hoặc trình duyệt tắt
+//Trở về trang login
 // axios.interceptors.response.use(undefined, function(error) {
 //     if (error) {
 //         const originalRequest = error.config;

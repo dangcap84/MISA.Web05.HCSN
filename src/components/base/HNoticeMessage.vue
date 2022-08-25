@@ -9,8 +9,8 @@
                         </div>
                     </div>
                     <div class="popup-footer">
-                        <button class="main-button white-speial-rectangle-button modal-button-right" @click="showDetail">Chi tiết</button>
-                        <button class="main-button rectangle-button modal-button-right" @click="closeNotice">Đồng ý</button>
+                        <button class="main-button white-speial-rectangle-button" @click="showDetail">Chi tiết</button>
+                        <button class="main-button rectangle-button" @click="closeNotice">Đồng ý</button>
                     </div>
                 </div>
             </div>

@@ -9,9 +9,9 @@
                         </div>
                     </div>
                     <div class="popup-footer">
-                        <button id="btnAccept" class="main-button white-rectangle-button modal-button-right" @click="closeNotice">Hủy</button>
-                        <button id="btnAccept" class="main-button white-speial-rectangle-button modal-button-right" @click="closeModal">Không lưu</button>
-                        <button id="btnAccept" class="main-button rectangle-button modal-button-right" @click="saveOnClick">Đồng ý</button>
+                        <button id="btnAccept" class="main-button white-rectangle-button" @click="closeNotice">Hủy</button>
+                        <button id="btnAccept" class="main-button white-speial-rectangle-button" @click="closeModal">Không lưu</button>
+                        <button id="btnAccept" class="main-button rectangle-button" @click="saveOnClick">Đồng ý</button>
                     </div>
                 </div>
             </div>

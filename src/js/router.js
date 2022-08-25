@@ -1,5 +1,5 @@
 import FixedAssetTableVue from "@/view/fixedAsset/FixedAssetTable.vue";
-import CustomerTableVue from "@/view/customer/CustomerTable.vue";
+import IncreaseWritingTableVue from "@/view/increaseasset/IncreaseWritingTable.vue";
 import LoginPageVue from "@/view/login/LoginPage.vue";
 import { createRouter, createWebHistory } from 'vue-router';
 import store from './store';
@@ -17,9 +17,9 @@ const routes = [{
         meta: { requiresAuth: true },
     },
     {
-        path: "/customer",
-        name: "Customer",
-        component: CustomerTableVue,
+        path: "/increaseasset",
+        name: "IncreaseAsset",
+        component: IncreaseWritingTableVue,
         meta: { requiresAuth: true },
     },
     {

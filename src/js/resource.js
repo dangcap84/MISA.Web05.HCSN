@@ -5,7 +5,13 @@ var resource = {
 
     modalTitle: {
         insertTitle: "Thêm tài sản",
-        updateTitle: "Sửa tài sản"
+        updateTitle: "Sửa tài sản "
+    },
+
+    modalLicenseTitle: {
+        insertTitle: "Thêm chứng từ ghi tăng",
+        updateTitle: "Sửa chứng từ ghi tăng",
+        chosenAsset: "Chọn tài sản ghi tăng"
     },
 
     account: {
@@ -38,6 +44,12 @@ var resource = {
         beginText: "Bạn có muốn xóa tài sản << ",
         endText: " >>?",
         mutilDelete: " tài sản đã được chọn. Bạn có muốn xóa các tài sản này ra khỏi danh sách?",
+    },
+
+    deleteLicense: {
+        beginText: "Bạn có muốn xóa chứng từ << ",
+        endText: " >>?",
+        mutilDelete: " chứng từ đã được chọn. Bạn có muốn xóa các chứng từ này ra khỏi danh sách?",
     },
 
     currency: '.',

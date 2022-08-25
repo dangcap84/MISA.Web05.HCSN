@@ -9,8 +9,8 @@
             </div>
         </div>
         <div class="popup-footer">
-            <button class="main-button white-rectangle-button modal-button-right" @click="closeNotice">Không</button>
-            <button class="main-button rectangle-button modal-button-right" @click="deleteFixedAsset">Xóa</button>
+            <button class="main-button white-rectangle-button" @click="closeNotice">Không</button>
+            <button class="main-button rectangle-button" @click="deleteFixedAsset">Xóa</button>
         </div>
     </div>
 </div>

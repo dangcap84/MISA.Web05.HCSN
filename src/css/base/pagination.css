@@ -8,7 +8,6 @@
 .page-item {
     display: list-item;
     text-align: -webkit-match-parent;
-    padding-top: 5px;
 }
 
 .ul {
@@ -32,11 +31,12 @@
 }
 
 .active {
+    text-align: center;
     background-color: #f5f5f5;
     border-radius: 3px;
     width: 30px;
-    height: 18px;
-    text-align: center;
+    padding-bottom: 10px;
+    height: 14px;
 }
 
 .prev {

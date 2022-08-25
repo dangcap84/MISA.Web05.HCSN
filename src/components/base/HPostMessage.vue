@@ -5,12 +5,12 @@
                     <div class="popup-content-wrap">
                         <i class="fas fa-exclamation-triangle error-icon"></i>
                         <div id="txtErrorMessage" class="popup-message-content" >
-                            Bạn có muốn hủy bỏ khai báo tài sản này?
+                            Bạn có muốn hủy bỏ khai báo này?
                         </div>
                     </div>
                     <div class="popup-footer">
-                        <button class="main-button white-rectangle-button modal-button-right" @click="closeNotice">Không</button>
-                        <button class="main-button rectangle-button modal-button-right" @click="closeModal">Hủy bỏ</button>
+                        <button class="main-button white-rectangle-button" @click="closeNotice">Không</button>
+                        <button class="main-button rectangle-button" @click="closeModal">Hủy bỏ</button>
                     </div>
                 </div>
             </div>

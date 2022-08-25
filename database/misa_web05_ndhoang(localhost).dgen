@@ -4,18 +4,18 @@
 <DataGenDocument Version="6.1">
   <ConnectionModel>
     <PropertyValue Name="Database">59f90733-4d68-4fdf-82a7-f0fcbf5460aa</PropertyValue>
-    <PropertyValue Name="ConnectionString" xml:space="preserve">User Id=dev;Host=3.0.89.182;Character Set=utf8</PropertyValue>
+    <PropertyValue Name="ConnectionString" xml:space="preserve">User Id=NDHoang;Host=localhost;Character Set=utf8</PropertyValue>
     <PropertyValue Name="ExecutionTimeout">0</PropertyValue>
   </ConnectionModel>
   <Settings>
     <Provider>59f90733-4d68-4fdf-82a7-f0fcbf5460aa</Provider>
-    <AllowNulls>true</AllowNulls>
+    <AllowNulls>false</AllowNulls>
     <IncludeNullsPercent>10</IncludeNullsPercent>
     <AllowEmptyString>false</AllowEmptyString>
     <IncludeEmptyStringPercent>10</IncludeEmptyStringPercent>
-    <DatabaseName>MISA.WEB05.NDHOANG</DatabaseName>
+    <DatabaseName>misa.web05.ndhoang</DatabaseName>
     <PopulationType>RowsCount</PopulationType>
-    <RowsToGenerate>1000</RowsToGenerate>
+    <RowsToGenerate>300</RowsToGenerate>
     <ProportionOfExistingData>10</ProportionOfExistingData>
     <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
     <GenerateUniqueValues>false</GenerateUniqueValues>
@@ -27,14 +27,14 @@
     <ShowDataPreview>true</ShowDataPreview>
   </Settings>
   <Tables>
-    <Table Name="Department">
+    <Table Name="department">
       <Checked>true</Checked>
       <Settings>
         <Truncate>true</Truncate>
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>16</RowsCount>
+          <RowsCount>15</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
@@ -66,7 +66,7 @@
             <EmptyStringProportion>10</EmptyStringProportion>
             <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
-            <ValueDistributionMode>Random</ValueDistributionMode>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>1</SeedValue>
             <Unique>true</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -86,7 +86,7 @@
             <EmptyStringProportion>10</EmptyStringProportion>
             <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
-            <ValueDistributionMode>Random</ValueDistributionMode>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>2</SeedValue>
             <Unique>true</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -94,14 +94,9 @@
 |Phòng Kho|Phòng Bổ túc|Phòng Đào Tạo
 |Phòng Đào tạo 2|Phòng Giám đốc|Phòng Kế toán- Văn thư
 |Phòng Kế toán TS|Phòng Hành chính-Lái xe
-|Phòng Bảo vê|Phòng Hướng nghiệp - Điện
+|Phòng Bảo vệ|Phòng Hướng nghiệp - Điện
 |Phòng Hướng nghiệp- May|Phòng Hướng nghiệp- Nấu ăn
 |Các phòng học
-
-
-
-
-
 </Expression>
           </GeneratorOptions>
           <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
@@ -112,7 +107,7 @@
         </Column>
       </Columns>
     </Table>
-    <Table Name="FixedAssetCategory">
+    <Table Name="fixedassetcategory">
       <Checked>true</Checked>
       <Settings>
         <Truncate>true</Truncate>
@@ -151,9 +146,9 @@
             <EmptyStringProportion>10</EmptyStringProportion>
             <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
-            <ValueDistributionMode>Random</ValueDistributionMode>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>7</SeedValue>
-            <Unique>true</Unique>
+            <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <Expression>LTS-[0-9]{4}</Expression>
           </GeneratorOptions>
@@ -171,9 +166,9 @@
             <EmptyStringProportion>10</EmptyStringProportion>
             <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
-            <ValueDistributionMode>Random</ValueDistributionMode>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>8</SeedValue>
-            <Unique>true</Unique>
+            <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <Expression>Nhà, công trình xây dựng
 |Quyền sở hữu công nghiệp
@@ -191,7 +186,6 @@
 |Kè, đập, đê, cống, kênh, mương máng, bến cảng, ụ tàu
 |Kho chứa, bể chứa, bãi đỗ, sân phơi, trường bắn
 |Các vật kiến trúc khác|Xe ô tô|Phương tiện vận tải
-
 </Expression>
           </GeneratorOptions>
           <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
@@ -219,11 +213,10 @@
           <GeneratorType>MySqlIntegerGenerator</GeneratorType>
           <GeneratorName>int</GeneratorName>
           <GeneratorDescription>fill with 32-bit signed integer values</GeneratorDescription>
-          <Precision>11</Precision>
         </Column>
       </Columns>
     </Table>
-    <Table Name="License">
+    <Table Name="license">
       <Checked>true</Checked>
       <Settings>
         <Truncate>true</Truncate>
@@ -264,7 +257,7 @@
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>9</SeedValue>
-            <Unique>true</Unique>
+            <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <Expression>CT-[0-9]{4}</Expression>
           </GeneratorOptions>
@@ -292,7 +285,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-14T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -327,7 +320,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-14T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -346,36 +339,21 @@
         <Column Name="Description">
           <Checked>true</Checked>
           <DataType>VARCHAR</DataType>
-          <GeneratorOptions p6:type="MySqlLoremIpsumGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
+          <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
-            <EmptyStringProportion>0</EmptyStringProportion>
+            <EmptyStringProportion>10</EmptyStringProportion>
             <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>9</SeedValue>
-            <MinLength>1</MinLength>
-            <MaxLength>499</MaxLength>
-            <MaxAllowedLength>500</MaxAllowedLength>
-            <MinWordsInSentence>3</MinWordsInSentence>
-            <MaxWordsInSentence>9</MaxWordsInSentence>
-            <MinSentences>1</MinSentences>
-            <MaxSentences>10</MaxSentences>
-            <MinParagraphs>1</MinParagraphs>
-            <MaxParagraphs>1</MaxParagraphs>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <PunctuationSigns>,.!?...;</PunctuationSigns>
-            <StartParagraphWithIndent>false</StartParagraphWithIndent>
-            <AddParagraphTags>false</AddParagraphTags>
-            <AddItalicTags>false</AddItalicTags>
-            <AddBoldTags>false</AddBoldTags>
-            <AddSingleLineBreakTags>false</AddSingleLineBreakTags>
-            <AddNewLines>false</AddNewLines>
+            <Expression>($"JobTitles.csv[0]")</Expression>
           </GeneratorOptions>
-          <GeneratorType>MySqlLoremIpsumGenerator</GeneratorType>
-          <GeneratorName>Product Description</GeneratorName>
-          <GeneratorDescription>Sunt id voluptatem eveniet ipsum unde minus volputas assumenda hic. Repellenadus at facilis. Aut id facilis esse harum qui, eligendi at et quae! Et qui ullam., ...</GeneratorDescription>
-          <GeneratorCategory>Product</GeneratorCategory>
+          <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
+          <GeneratorName>Department</GeneratorName>
+          <GeneratorDescription>Marketing, Finance, Research and Development, Manufacturing, Sales, Customer Support, ...</GeneratorDescription>
+          <GeneratorCategory>Business</GeneratorCategory>
           <Length>500</Length>
         </Column>
         <Column Name="Total">
@@ -404,13 +382,13 @@
           <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
             <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>9</SeedValue>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>(($"FirstNamesMale.txt")|($"FirstNamesFemale.txt")) ($"LastNames.txt")</Expression>
+            <Expression>NDHoang</Expression>
           </GeneratorOptions>
           <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
           <GeneratorName>Full Name</GeneratorName>
@@ -422,7 +400,7 @@
           <Checked>true</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -437,7 +415,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-14T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -459,13 +437,13 @@
           <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
             <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>10</SeedValue>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>(($"FirstNamesMale.txt")|($"FirstNamesFemale.txt")) ($"LastNames.txt")</Expression>
+            <Expression>NDHoang</Expression>
           </GeneratorOptions>
           <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
           <GeneratorName>Full Name</GeneratorName>
@@ -477,7 +455,7 @@
           <Checked>true</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -492,7 +470,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-14T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -510,14 +488,14 @@
         </Column>
       </Columns>
     </Table>
-    <Table Name="tbFixedAssetFiter">
+    <Table Name="tbfixedassetfiter">
       <Checked>false</Checked>
       <Settings>
         <Truncate>true</Truncate>
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>1000</RowsCount>
+          <RowsCount>300</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
@@ -527,7 +505,6 @@
         <Column Name="STT">
           <Checked>false</Checked>
           <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
         </Column>
         <Column Name="FixedAssetId">
           <Checked>false</Checked>
@@ -547,21 +524,6 @@
         <Column Name="FixedAssetCategoryId">
           <Checked>false</Checked>
           <DataType>CHAR</DataType>
-          <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowEmptyStrings>false</AllowEmptyStrings>
-            <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>false</AllowNulls>
-            <NullProportion>10</NullProportion>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>8</SeedValue>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>\d{5}</Expression>
-          </GeneratorOptions>
-          <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
-          <GeneratorName>ID (random)</GeneratorName>
-          <GeneratorDescription>54470, 16912, 43814, 06728, 36017, 82433, 95664, ...</GeneratorDescription>
-          <GeneratorCategory>Business</GeneratorCategory>
           <Length>36</Length>
         </Column>
         <Column Name="FixedAssetCategoryCode">
@@ -592,7 +554,6 @@
         <Column Name="Quantity">
           <Checked>false</Checked>
           <DataType>INT</DataType>
-          <Precision>11</Precision>
         </Column>
         <Column Name="Cost">
           <Checked>false</Checked>
@@ -603,7 +564,6 @@
         <Column Name="LifeTime">
           <Checked>false</Checked>
           <DataType>INT</DataType>
-          <Precision>11</Precision>
         </Column>
         <Column Name="DepreciationRate">
           <Checked>false</Checked>
@@ -627,14 +587,14 @@
         </Column>
       </Columns>
     </Table>
-    <Table Name="tbLicenseDetailFiter">
+    <Table Name="tblicensedetailfiter">
       <Checked>false</Checked>
       <Settings>
         <Truncate>true</Truncate>
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>1000</RowsCount>
+          <RowsCount>300</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
@@ -644,7 +604,6 @@
         <Column Name="STT">
           <Checked>false</Checked>
           <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
         </Column>
         <Column Name="LicenseDetailId">
           <Checked>false</Checked>
@@ -692,14 +651,14 @@
         </Column>
       </Columns>
     </Table>
-    <Table Name="tbLicenseFiter">
+    <Table Name="tblicensefiter">
       <Checked>false</Checked>
       <Settings>
         <Truncate>true</Truncate>
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>1000</RowsCount>
+          <RowsCount>300</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
@@ -709,7 +668,6 @@
         <Column Name="STT">
           <Checked>false</Checked>
           <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
         </Column>
         <Column Name="LicenseId">
           <Checked>false</Checked>
@@ -744,7 +702,7 @@
         </Column>
       </Columns>
     </Table>
-    <Table Name="FixedAsset">
+    <Table Name="fixedasset">
       <Checked>true</Checked>
       <Settings>
         <Truncate>true</Truncate>
@@ -857,7 +815,7 @@
           <Length>100</Length>
         </Column>
         <Column Name="DepartmentName">
-          <Checked>true</Checked>
+          <Checked>false</Checked>
           <DataType>VARCHAR</DataType>
           <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
@@ -883,7 +841,7 @@
           <GeneratorOptions p6:type="ForeignKeyGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>4</SeedValue>
@@ -911,7 +869,7 @@
             <SeedValue>3</SeedValue>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>LTS-[0-9]{4}</Expression>
+            <Expression>Accessories|Audible|Automotive|Books|Beauty|Baby|Clothing|Computers|Crafts|Electronics|Food|Furniture|Games|Garden|Gifts|Health|Home|Jewelry|Movies|Music|Patio|Pets|Pharmacy|Office|Outdoors|Shoes|Sports|Tools|Toys</Expression>
           </GeneratorOptions>
           <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
           <GeneratorName>Product Category</GeneratorName>
@@ -920,12 +878,12 @@
           <Length>100</Length>
         </Column>
         <Column Name="FixedAssetCategoryName">
-          <Checked>true</Checked>
+          <Checked>false</Checked>
           <DataType>VARCHAR</DataType>
           <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
             <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>4</SeedValue>
@@ -943,7 +901,7 @@
           <Checked>true</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -958,7 +916,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-14T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -979,7 +937,7 @@
           <DataType>DECIMAL</DataType>
           <GeneratorOptions p6:type="DecimalGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowNulls>false</AllowNulls>
-            <NullProportion>0</NullProportion>
+            <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <Increment xmlns:q3="http://www.w3.org/2001/XMLSchema" p6:type="q3:decimal">1</Increment>
@@ -1017,7 +975,6 @@
           <GeneratorName>Product Quantity</GeneratorName>
           <GeneratorDescription>9, 24, 89, 35, ...</GeneratorDescription>
           <GeneratorCategory>Product</GeneratorCategory>
-          <Precision>11</Precision>
         </Column>
         <Column Name="DepreciationRate">
           <Checked>true</Checked>
@@ -1051,7 +1008,7 @@
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>4</SeedValue>
             <MinValue>1000000</MinValue>
-            <MaxValue>5000000</MaxValue>
+            <MaxValue>4000000</MaxValue>
             <UseDefault>false</UseDefault>
             <DefaultValue>0</DefaultValue>
           </GeneratorOptions>
@@ -1068,8 +1025,8 @@
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <Increment xmlns:q7="http://www.w3.org/2001/XMLSchema" p6:type="q7:int">1</Increment>
-            <ValueDistributionMode>Sequential</ValueDistributionMode>
-            <SeedValue>1</SeedValue>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
+            <SeedValue>3</SeedValue>
             <MinValue>5</MinValue>
             <MaxValue>8</MaxValue>
             <UseDefault>false</UseDefault>
@@ -1078,13 +1035,12 @@
           <GeneratorType>MySqlIntegerGenerator</GeneratorType>
           <GeneratorName>int</GeneratorName>
           <GeneratorDescription>fill with 32-bit signed integer values</GeneratorDescription>
-          <Precision>11</Precision>
         </Column>
         <Column Name="ProductionDate">
           <Checked>true</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -1099,7 +1055,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-14T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -1139,13 +1095,13 @@
           <Checked>true</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <UseDefault>false</UseDefault>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>3</SeedValue>
+            <SeedValue>5</SeedValue>
             <SequentialValueTicks>864000000000</SequentialValueTicks>
             <OffsetFromColumnMaxTimeTicks>10000000</OffsetFromColumnMaxTimeTicks>
             <OffsetFromColumnMinTimeTicks>10000000</OffsetFromColumnMinTimeTicks>
@@ -1154,7 +1110,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-07-13T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -1194,13 +1150,13 @@
           <Checked>true</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
             <UseDefault>false</UseDefault>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>4</SeedValue>
+            <SeedValue>6</SeedValue>
             <SequentialValueTicks>864000000000</SequentialValueTicks>
             <OffsetFromColumnMaxTimeTicks>10000000</OffsetFromColumnMaxTimeTicks>
             <OffsetFromColumnMinTimeTicks>10000000</OffsetFromColumnMinTimeTicks>
@@ -1209,7 +1165,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-07-13T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -1227,7 +1183,7 @@
         </Column>
       </Columns>
     </Table>
-    <Table Name="LicenseDetail">
+    <Table Name="licensedetail">
       <Checked>true</Checked>
       <Settings>
         <Truncate>true</Truncate>
@@ -1303,12 +1259,12 @@
           <Length>36</Length>
         </Column>
         <Column Name="DetailJson">
-          <Checked>true</Checked>
+          <Checked>false</Checked>
           <DataType>TEXT</DataType>
           <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
             <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>13</SeedValue>
@@ -1324,7 +1280,7 @@
           <Checked>false</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -1339,7 +1295,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-21T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -1361,7 +1317,7 @@
           <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
             <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>13</SeedValue>
@@ -1379,7 +1335,7 @@
           <Checked>false</Checked>
           <DataType>DATETIME</DataType>
           <GeneratorOptions p6:type="MySqlDateTimeGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
@@ -1394,7 +1350,7 @@
             <OffsetFromColumnMinDays>0</OffsetFromColumnMinDays>
             <OffsetFromColumnMaxDays>7</OffsetFromColumnMaxDays>
             <MinDate>1970-01-01T00:00:00</MinDate>
-            <MaxDate>2022-08-21T00:00:00+07:00</MaxDate>
+            <MaxDate>2022-08-24T00:00:00+07:00</MaxDate>
             <IsRandomizeDate>true</IsRandomizeDate>
             <MinFraction>0</MinFraction>
             <MaxFraction>0</MaxFraction>
@@ -1416,7 +1372,7 @@
           <GeneratorOptions p6:type="MySqlRegularExpressionGeneratorOptions" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance">
             <AllowEmptyStrings>false</AllowEmptyStrings>
             <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>true</AllowNulls>
+            <AllowNulls>false</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
             <SeedValue>14</SeedValue>
@@ -1434,7 +1390,7 @@
     </Table>
   </Tables>
   <SynchronizationOptions p2:type="DataSyncOptionGroup" xmlns:p2="http://www.w3.org/2001/XMLSchema-instance">
-    <SynchronizationFileName>C:\Users\Hoang\source\repos\vue\hcsnw05\database\DataGeneration_202207112210.sql</SynchronizationFileName>
+    <SynchronizationFileName>C:\Users\Hoang\source\repos\vue\hcsnw05\database\DataGeneration_202208241158.sql</SynchronizationFileName>
     <BulkInsert>false</BulkInsert>
   </SynchronizationOptions>
 </DataGenDocument>

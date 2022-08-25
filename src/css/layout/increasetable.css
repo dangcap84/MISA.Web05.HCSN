@@ -1,0 +1,411 @@
+.display-button {
+    display: flex;
+    margin-left: 20px;
+}
+
+.display-arrow,
+.display-state,
+.multidelete {
+    cursor: pointer;
+    border-radius: 2.5px;
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.display-arrow:hover {
+    background-color: #1aa4c8;
+}
+
+.display-arrow:active {
+    background-color: #4aadc5;
+}
+
+.display-arrow-icon {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -158px -249px;
+    width: 11px;
+    height: 7px;
+}
+
+.display-arrow-icon-sub {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -114px -249px;
+    width: 12px;
+    height: 7px;
+}
+
+.display-state-icon {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -22px -421px;
+    width: 20px;
+    height: 14px;
+}
+
+.display-state-icon-sub {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -110px -420px;
+    width: 20px;
+    height: 15px;
+}
+
+.display-full-icon-sub {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -245px -321px;
+    width: 14px;
+    height: 14px;
+}
+
+.delete-icon {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -463px -111px;
+    width: 18px;
+    height: 18px;
+}
+
+.print-icon {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -331px -67px;
+    width: 18px;
+    height: 18px;
+}
+
+.option-icon {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -383px -26px;
+    width: 3px;
+    height: 13px;
+}
+
+.content-menu-wrap {
+    display: flex;
+    padding: 0 16px;
+    background-color: #f4f7ff;
+}
+
+.content-menu-wrap .content-menu {
+    width: 100%;
+    background-color: #fff;
+}
+
+.content-menu-wrap .search-input {
+    width: 242px;
+}
+
+.increase-footer {
+    border-top: 1px solid rgb(228, 222, 222);
+}
+
+.wrap-increase-style {
+    height: 76vh;
+}
+
+.wrap-increase-style .column-style-fix4 {
+    text-align: center;
+}
+
+.wrap-increase-style .column-style-fix5 {
+    width: 15%;
+    text-align: center;
+}
+
+.wrap-increase-style .column-style-fix8 {
+    width: 15%;
+}
+
+.wrap-increase-style .column-style-fix9 {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.wrap-increase-style .column-style-fix11 {
+    text-align: right;
+}
+
+.wrap-increase-style .icon-feature2 {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -463px -111px;
+    width: 18px;
+    height: 18px;
+}
+
+.wrap-increase-style .footer-table,
+.wrap-increase-style .table-footer {
+    box-shadow: none;
+    border: none;
+}
+
+.wrap-increase-style .content-table {
+    box-shadow: none;
+}
+
+.wrap-increase-style .content-table-title {
+    box-shadow: none;
+}
+
+.content-menu-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.footer-table-increase {
+    margin-top: 5px;
+}
+
+.column-increse1 {
+    width: 0%;
+    padding-left: 10px;
+    font-size: 15px;
+}
+
+.column-increse2 {
+    width: 1%;
+    text-align: center;
+}
+
+.column-increse3 {
+    width: 4%;
+}
+
+.column-increse4 {
+    width: 4%;
+}
+
+.column-increse5 {
+    width: 4%;
+}
+
+.column-increse6 {
+    width: 5%;
+    text-align: right;
+}
+
+.column-increse7 {
+    width: 5%;
+    text-align: right;
+}
+
+.column-increse8 {
+    width: 5%;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.column-increse9 {
+    cursor: pointer;
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -245px -321px;
+    width: 14px;
+    height: 14px;
+}
+
+.display-full-icon-sub {
+    background: url(../../assess/icon/qlts-icon.png) no-repeat -289px -321px;
+    width: 14px;
+    height: 14px;
+}
+
+.column-increse10 {
+    width: 97%;
+    padding-left: 10px;
+    font-size: 15px;
+}
+
+.wrap-subtable-style {
+    height: 28.4vh;
+}
+
+.wrap-subtable-style .content-table {
+    border-radius: 0 0 2.5px 2.5px;
+    box-shadow: none;
+}
+
+.fix-table {
+    height: 50vh;
+}
+
+.full-table {
+    height: 83vh;
+}
+
+
+/* Increase modal */
+
+.increase-modal-style .modal-body {
+    overflow-y: overlay;
+    position: relative;
+    width: 918px;
+    height: 635px;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 0;
+}
+
+.increase-modal-style .modal-body-title {
+    margin: 0;
+    padding: 20px 16px 0px 16px;
+}
+
+.increase-modal-style .table-column-title {
+    height: 32px;
+}
+
+.increase-modal-style .modal-body-title_text {
+    margin-bottom: 19px;
+}
+
+.increase-modal-style .content-table {
+    height: 17vh;
+}
+
+.increase-modal-style .search-input {
+    width: 220px;
+}
+
+.increase-modal-style .modal-footer {
+    position: sticky;
+    width: 912px;
+}
+
+.increase-modal-style .column-style-fix12 {
+    width: 16%;
+}
+
+.increase-modal-style .column-style-fix13 {
+    width: 10%;
+}
+
+.increase-modal-style .column-increse8 {
+    position: relative;
+}
+
+.increase-modal-style .icon-wraper {
+    position: absolute;
+    top: 6px;
+    right: 0;
+}
+
+.increase-modal-style .icon-feature1 {
+    background: url(http://localhost:8080/img/qlts-icon.bf3d0f18.png) no-repeat -152px -64px;
+    width: 25px;
+    height: 25px;
+    background-color: #d1edf4;
+    border-radius: 50%;
+}
+
+.increase-modal-style .icon-feature2 {
+    background: url(http://localhost:8080/img/qlts-icon.bf3d0f18.png) no-repeat -460px -108px;
+    width: 25px;
+    height: 25px;
+    background-color: #d1edf4;
+    border-radius: 50%;
+}
+
+.body-input-wrap {
+    padding: 8px 16px 16px 16px;
+    background-color: #f4f7ff;
+}
+
+.input-row-wrap {
+    padding: 16px;
+    background: #fff;
+    margin: 8px 0;
+}
+
+.horizontal-style {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0;
+}
+
+.validate-text1 {
+    width: 100%;
+}
+
+.modal-input-left {
+    padding-left: 14px;
+    width: 240px;
+}
+
+.modal-input-full {
+    width: 97.3%;
+    padding-left: 14px;
+}
+
+.body-sub-title {
+    font-weight: 700;
+    font-size: 13px;
+}
+
+
+/* Chosen modal */
+
+.chosen-modal-style .modal-body {
+    overflow-y: unset;
+}
+
+.chosen-modal-style .modal-body-title_text {
+    margin: 0;
+}
+
+.chosen-modal-style .modal-body-title {
+    margin-bottom: 20px;
+}
+
+.chosen-modal-style .input-row-wrap {
+    border-top: 1px solid rgb(228, 222, 222);
+}
+
+.chosen-modal-style .content-table {
+    height: 59.1vh;
+}
+
+
+/* Selected Modal */
+
+.selected-modal-style .modal-body {
+    width: 886px;
+}
+
+.selected-modal-style .body-sub-title {
+    margin: 20px 0;
+}
+
+.selected-modal-style .body-input-text {
+    font-size: 13px;
+}
+
+.selected-modal-style .modal-input_style-left,
+.selected-modal-style .combobox-modal-style {
+    width: 338.5px !important;
+}
+
+.selected-modal-style .input-quality_style {
+    width: 176.5px !important;
+}
+
+.selected-modal-style .combobox-modal-style .combobox-list {
+    width: 354px;
+}
+
+.selected-modal-style .combobox-modal-style .combobox-items {
+    width: 319px;
+}
+
+.row-footer {
+    position: sticky;
+    top: 78%;
+}
+
+.input-icon-wrap {
+    display: flex;
+    align-items: center;
+    height: 36px;
+}
+
+.incon-add-row {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -375px -419px;
+    width: 18px;
+    height: 18px;
+    margin-right: 16px;
+}
+
+.incon-remove-row {
+    background: url('../../assess/icon/qlts-icon.png') no-repeat -375px -463px;
+    width: 18px;
+    height: 18px;
+}
