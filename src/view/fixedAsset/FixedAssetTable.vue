@@ -669,9 +669,14 @@ export default {
                     me.fixedAssetSelected = fixedAsset;
                     //Thêm id vào mảng
                     me.idSelected[index] = fixedAsset.fixedAssetId;
-                    if (me.idSelected.length == me.fixedAssets.length) {
-                        me.checkAll = me.isShow;
+                    //Hiện check all
+                    var counter = 0;
+                    for(i =0 ;i < me.idSelected.length; i++){
+                        if(me.idSelected[i]){
+                            counter++;
+                        }
                     }
+                    if(counter == me.fixedAssets.length) me.checkAll = me.isShow;
                 } else {
                     me.isHighLine = false;
                     for (var i = 0; i < me.checkboxArray.length; i++) {

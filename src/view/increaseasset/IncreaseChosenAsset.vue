@@ -175,6 +175,15 @@ export default {
      * Khai báo prop sử dụng bên ngoài
      */
     props: {
+        //Mảng chứa tài sản được chọn
+        listAsset: {
+            type: Array,
+        },
+
+        fixedAssetLicenses: {
+            type: Array,
+        },
+
         editMode: {
             type: Number,
             default: 0, // thêm mới
@@ -409,6 +418,19 @@ export default {
         saveOnClick() {
             var me = this;
             try {
+                if(me.fixedAssetLicenses){
+                    for(var i = me.listAsset.length-1; i >=0;i--){
+                        var oldAsset = {
+                            fixedAssetId : me.listAsset[i].fixedAssetId,
+                            fixedAssetCode: me.listAsset[i].fixedAssetCode,
+                            fixedAssetName: me.listAsset[i].fixedAssetName,
+                            departmentName: me.listAsset[i].departmentName,
+                            cost: me.listAsset[i].cost,
+                            depreciationValueYear: me.listAsset[i].depreciationValueYear,
+                        }
+                        me.idSelected.unshift(oldAsset);
+                    }
+                }
                 me.$emit("getFixedAsset",me.idSelected);
                 me.hideChosen();
             } catch (error) {
@@ -426,6 +448,14 @@ export default {
             axios.get(resources.url.host + `/api/v1/FixedAssets/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&filter=${search}&departmentName=${departmentName}&CategoryName=${categoryName}`)
                 .then(function (res) {
                     me.assets = res.data.data;
+                    //Bỏ tài sản đã có khỏi mảng
+                    for(var i = 0; i < me.assets.length; i++){
+                        for(var j = 0; j < me.listAsset.length; j++){
+                            if(me.assets[i].fixedAssetId == me.listAsset[j].fixedAssetId){
+                                me.assets.splice(i,1);
+                            }
+                        }
+                    }
                     me.totalPage = Math.ceil(res.data.totalRecord / pageSize);
                     me.totalRecord = res.data.totalRecord;
                     me.recordStart = res.data.recordStart;
@@ -485,8 +515,6 @@ export default {
         me.pagingApi(me.page, me.defaultPageSize, me.search, me.departmentDefaulName, me.fixedAssetCategoriesDefaulName);
         //gán giá trị tài sản được chọn cho cho fixedAsset
         me.fixedAsset = me.fixedAssetSelected;
-        //Load lại table
-
         //Xét trạng thái modal tương ứng
         me.modalTitle = resources.modalLicenseTitle.chosenAsset;
     },

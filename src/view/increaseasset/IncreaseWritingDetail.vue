@@ -181,7 +181,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 
 export default {
     name: "EmployeeDetail",
-    emits: ["closeModal", "resetTable", "showSuccessMessage","closeChosen","closeSelected","getLicenseDetailId","getFixedAssetSelected"],
+    emits: ["closeModal", "resetTable", "showSuccessMessage","closeChosen","closeSelected","getLicenseDetailId","getFixedAssetSelected","getListAsset","getFixedAsset"],
     components: {
         Datepicker,
         paginate: Paginate,
@@ -425,20 +425,17 @@ export default {
             me.totalRemain= 0;
             if(me.selectedFixedAssets.length != 0){
                 me.selectedFixedAssets.splice(index, 1);
-                for (const selectedFixedAsset of me.selectedFixedAssets) {
-                    me.totalPrice += selectedFixedAsset.cost;
-                    me.totalAccumulated += selectedFixedAsset.depreciationValueYear;
-                    me.totalRemain += selectedFixedAsset.cost - selectedFixedAsset.depreciationValueYear;
-                }
             }
             else {
                 me.assets.splice(index, 1);
-                for (const asset of me.assets) {
-                    me.totalPrice += asset.cost;
-                    me.totalAccumulated += asset.depreciationValueYear;
-                    me.totalRemain += asset.cost - asset.depreciationValueYear;
-                }
+                me.$emit("getFixedAsset",me.assets);
             }
+            for (const selectedFixedAsset of me.selectedFixedAssets) {
+                me.totalPrice += selectedFixedAsset.cost;
+                me.totalAccumulated += selectedFixedAsset.depreciationValueYear;
+                me.totalRemain += selectedFixedAsset.cost - selectedFixedAsset.depreciationValueYear;
+            }
+            me.pagingApi(me.page, me.defaultPageSize, me.search , me.licenseSelected.licenseId);
         },
 
         /**
@@ -646,7 +643,8 @@ export default {
                         me.totalPage = 1;
                         me.totalRecord = me.selectedDetailFixedAssets.length;
                     }
-                    
+                    //Truyền mảng về trang chính
+                    me.$emit("getListAsset",me.assets);
                     //Gán lại các giá trị để tính giá trị mới
                     me.totalPrice = 0;
                     me.totalAccumulated = 0;
@@ -718,7 +716,6 @@ export default {
         //Set lại múi giờ cho chứng từ
         me.license.useDate = me.convertDate(me.convertDate(me.license.useDate ).setTime(me.convertDate(me.license.useDate ).getTime() + 7*3600000));
         me.license.writeUpdate = me.convertDate(me.convertDate(me.license.writeUpdate ).setTime(me.convertDate(me.license.writeUpdate ).getTime() + 7*3600000));
-        console.log(me.license.useDate);
         //Xét trạng thái modal tương ứng
         if (me.editMode == enums.editMode.insertMode) {
             me.modalTitle = resources.modalLicenseTitle.insertTitle;

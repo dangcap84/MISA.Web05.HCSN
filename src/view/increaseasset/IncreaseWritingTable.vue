@@ -169,8 +169,8 @@
         </tr>
     </table>
 </div>
-<IncreaseWritingDetailVue v-if="isShowModal" :licenseSelected="licenseSelected" :selectedFixedAssets="selectedFixedAssets" :jsonDetailSelected="jsonDetailSelected" @getFixedAssetSelected="getFixedAssetSelected" @getLicenseDetailId="getLicenseDetailId" :editMode="editMode" @closeModal="showModal" @closeChosen="showChosen" @closeSelected="showSelected" @showSuccessMessage="successMessage" @resetTable="resetTable" />
-<IncreaseChosenAssetVue v-if="isShowChosen" :editMode="editMode" @closeChosen="showChosen" @getFixedAsset="getFixedAsset" />
+<IncreaseWritingDetailVue v-if="isShowModal" :licenseSelected="licenseSelected" :selectedFixedAssets="selectedFixedAssets" :jsonDetailSelected="jsonDetailSelected" @getListAsset="getListAsset" @getFixedAsset="getFixedAsset" @getFixedAssetSelected="getFixedAssetSelected" @getLicenseDetailId="getLicenseDetailId" :editMode="editMode" @closeModal="showModal" @closeChosen="showChosen" @closeSelected="showSelected" @showSuccessMessage="successMessage" @resetTable="resetTable" />
+<IncreaseChosenAssetVue v-if="isShowChosen" :editMode="editMode" :fixedAssetLicenses="fixedAssetLicenses" :listAsset="listAsset" @closeChosen="showChosen" @getFixedAsset="getFixedAsset" />
 <IncreaseSelectedDetailVue v-if="isShowSelectedDetail" :licenseSelected="licenseSelected" :licenseDetailIdSelected="licenseDetailIdSelected" :jsonDetailSelected="jsonDetailSelected" :fixedAssetSelected="fixedAssetSelected" :indexRowDetail="indexRowDetail" @getJsonDetail="getJsonDetail" @closeSelected="showSelected" @showSuccessMessage="successMessage" />
 <HLoading v-if="isLoading" />
 <HNoticeMessage v-if="isShowNoticeMessage" @closeNotice="showNoticeMessage" @showDetail="showDetailMessage" :noticeMessage="noticeMessage" />
@@ -282,6 +282,7 @@ export default {
             details: [],
             //Tạo đối tượng lưu fixedAsset
             fixedAssetSelected:{},
+            listAsset: [],
             //Tạo đối tượng lưu detailId
             licenseDetailIdSelected: '',
             indexRowDetail: 0,
@@ -399,6 +400,7 @@ export default {
          */
         getFixedAsset(assetsSelected) {
             this.selectedFixedAssets = assetsSelected;
+            this.listAsset = assetsSelected;
         },
         /**
          * Hứng lấy tài sản được chọn
@@ -610,7 +612,7 @@ export default {
          * Sự kiện kích đúp vào dòng
          * NDHoang (19/06/2022)
          */
-        rowOnDbClick(license) {
+        async rowOnDbClick(license) {
             try {
                 var me = this;
                 //Gán lại đối tượng selected
@@ -883,6 +885,15 @@ export default {
             var me = this;
             me.fixedAssetSelected = fixedAsset;
             me.indexRowDetail = index;
+        },
+
+        /**
+         * Hàm gán lish assets
+         * NDHoang(22/06/2022)
+         */
+        getListAsset(list) {
+            var me = this;
+            me.listAsset = list;
         },
 
 
