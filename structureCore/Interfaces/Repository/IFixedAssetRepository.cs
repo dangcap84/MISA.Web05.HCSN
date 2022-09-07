@@ -43,6 +43,15 @@ namespace MISA.Web05.Interfaces.Repository
         /// NDHoang(26/06/2022)
         object GetPaging(int pageIndex, int pageSize, string? filter = "", string? departmentName = "", string? categoryName = "");
         /// <summary>
+        /// Phân trang loại bỏ tài sản đã chọn trong license
+        /// </summary>
+        /// <param name="pageIndex">Chỉ mục trang hiện tại</param>
+        /// <param name="pageSize">Tổng số tài sản trên 1 trang</param>
+        /// <param name="filter"></param>
+        /// <returns>Danh danh sách tài sản với số trang tương tứng</returns>
+        /// NDHoang(26/06/2022)
+        object GetPagingNoFixedAsset(int pageIndex, int pageSize, Guid[] licenseIds, string? filter = "", string? departmentName = "", string? categoryName = "");
+        /// <summary>
         /// Import
         /// </summary>
         /// <param name="fixedAssets">Danh sách tài sản đầu vào</param>

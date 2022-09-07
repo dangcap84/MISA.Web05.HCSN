@@ -69,6 +69,22 @@ namespace MISA.Web05.Controllers
             }
         }
 
+        [HttpGet ("nolicense")]
+        public IActionResult GetPagingNoFixedAsset(int pageIndex, int pageSize, Guid[] licenseIds, string? filter = "", string? departmentName = "", string? categoryName = "")
+        {
+            try
+            {
+                //Trả kết quả về client:
+                var res = _repository.GetPagingNoFixedAsset(pageIndex, pageSize, licenseIds ,filter, departmentName, categoryName);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+
+                return HandleException(ex);
+            }
+        }
+
         /// <summary>
         /// Lấy toàn bộ dữ liệu tài sản theo id
         /// </summary>

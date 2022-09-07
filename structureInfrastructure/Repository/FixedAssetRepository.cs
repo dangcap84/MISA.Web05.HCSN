@@ -147,6 +147,50 @@ namespace MISA.Web05.Infrastructure.Repository
         }
 
         /// <summary>
+        /// Thực hiên phân trang
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns>Danh sách tài sản theo điều kiện tương ứng</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        /// NDHoang(04/07/2022)
+        public object GetPagingNoFixedAsset(int pageIndex, int pageSize, Guid[] licenseIds, string? filter = "", string? departmentName = "", string? categoryName = "")
+        {
+            using (sqlConnection = new MySqlConnection(connectionString))
+            {
+                var sql = $"Proc_PagingFixedAsset";
+                //Khởi tạo parameters
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@h_Filter", filter);
+                parameters.Add("@h_PageIndex", pageIndex);
+                parameters.Add("@h_DepartmentName", departmentName);
+                parameters.Add("@h_CategoryName", categoryName);
+                parameters.Add("@h_PageSize", pageSize);
+                parameters.Add("@h_TotalRecord", direction: System.Data.ParameterDirection.Output);
+                parameters.Add("@h_RecordStart", direction: System.Data.ParameterDirection.Output);
+                parameters.Add("@h_RecordEnd", direction: System.Data.ParameterDirection.Output);
+
+                var fixedAssets = sqlConnection.Query<FixedAsset>(sql, param: parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+
+
+                //Truyền dữ liệu vào out put
+                int totalRecord = parameters.Get<int>("@h_TotalRecord");
+                int recordStart = parameters.Get<int>("@h_RecordStart");
+                int recordEnd = parameters.Get<int>("@h_RecordEnd");
+                //Đầu ra
+                return new
+                {
+                    TotalRecord = totalRecord,
+                    RecordStart = recordStart,
+                    RecordEnd = recordEnd,
+                    Data = fixedAssets
+                };
+            }
+        }
+
+        /// <summary>
         /// Import
         /// </summary>
         /// <param name="fixedAssets">Danh sách đầu vào</param>

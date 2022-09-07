@@ -107,7 +107,6 @@ namespace MISA.Web05.Infrastructure.Repository
                 var masterRes = sqlConnection.Execute(sqlUpdateMaster, parameter);
 
                 var sqlOldLicenseDetails = $"SELECT * FROM LicenseDetail WHERE LicenseId = @LicenseId";
-
                 var oldLicenseDetails = sqlConnection.Query<LicenseDetail>(sqlOldLicenseDetails, parameter);
                 // Filter từ mảng cũ thành mảng mới vừa được push lên, tài sản nào cũ có rồi thì để nguyên, chưa có thì xóa đi để push cái mới
                 for (int i = 0; i < oldLicenseDetails.Count(); i++)
@@ -127,7 +126,7 @@ namespace MISA.Web05.Infrastructure.Repository
                             break;
                         }
                     }
-                    //xóa tài sản tồn tại ra khỏi mảng cũ rồi thêm cái mới
+                    //Nếu không có tài sản nào trùng thì xóa bỏ mảng tài sản cũ đi
                     if (check == true)
                     {
                         parameter.Add("@FixedAssetId", oldLicenseDetails.ElementAt(i).FixedAssetId);
@@ -135,6 +134,8 @@ namespace MISA.Web05.Infrastructure.Repository
                         var resDeleteOldDetail = sqlConnection.Execute(deleteOldDetail, parameter);
                     }
                 }
+
+                //Nếu có tài sản mới thì thêm vào bảng detail
                 var count = 0;
                 for (int i = 0; i < licenseAdd.licenseDetails.Length; i++)
                 {

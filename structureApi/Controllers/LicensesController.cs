@@ -27,9 +27,9 @@ namespace MISA.Web05.Api.Controllers
         #endregion
         #region Method
         /// <summary>
-        /// Lấy toàn bộ dữ liệu tài sản theo trang
+        /// Lấy toàn bộ dữ liệu chứng từ theo trang
         /// </summary>
-        /// <returns>Danh sách tài sản theo trang</returns>
+        /// <returns>Danh sách Chứng từ theo trang</returns>
         /// NDHoang(05/07/2022)
         [HttpGet("filter")]
         public IActionResult GetPaging(int pageIndex, int pageSize, string? filter = "")
@@ -48,9 +48,9 @@ namespace MISA.Web05.Api.Controllers
         }
 
         /// <summary>
-        /// Lấy toàn bộ dữ liệu tài sản
+        /// Lấy toàn bộ dữ liệu chứng từ
         /// </summary>
-        /// <returns>Danh sách tài sản</returns>
+        /// <returns>Danh sách chứng từ</returns>
         /// NDHoang(05/07/2022)
         [HttpGet]
         public IActionResult Get()
@@ -70,9 +70,9 @@ namespace MISA.Web05.Api.Controllers
         }
 
         /// <summary>
-        /// Lấy toàn bộ dữ liệu tài sản theo id
+        /// Lấy toàn bộ dữ liệu chứng từ theo id
         /// </summary>
-        /// <returns>Tài sản với khóa chính = id</returns>
+        /// <returns>chứng từ với khóa chính = id</returns>
         /// NDHoang(30/06/2022)
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
@@ -109,9 +109,9 @@ namespace MISA.Web05.Api.Controllers
         }
 
         /// <summary>
-        /// Thêm mới tài sản
+        /// Thêm mới chứng từ
         /// </summary>
-        /// <returns>1: Thêm mới thành công một tài sản</returns>
+        /// <returns>1: Thêm mới thành công một chứng từ</returns>
         /// NDHoang(30/06/2022)
         [HttpPost]
         public IActionResult Post(License license)
@@ -131,9 +131,9 @@ namespace MISA.Web05.Api.Controllers
         }
 
         /// <summary>
-        /// Sửa mới tài sản
+        /// Sửa mới chứng từ
         /// </summary>
-        /// <returns>1: Sửa thành công một tài sản</returns>
+        /// <returns>1: Sửa thành công một chứng từ</returns>
         /// NDHoang(30/06/2022)
         [HttpPut]
         public IActionResult Put(License license)
@@ -153,9 +153,9 @@ namespace MISA.Web05.Api.Controllers
         }
 
         /// <summary>
-        /// Xóa tài sản
+        /// Xóa chứng từ
         /// </summary>
-        /// <returns>Số bản ghi xóa thành công một tài sản</returns>
+        /// <returns>Số bản ghi xóa thành công một chứng từ</returns>
         /// NDHoang(30/06/2022)
         [HttpDelete("filterId")]
         public IActionResult Delete(string? licenseIds)
